@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -8,32 +9,58 @@ datasource db {
 }
 
 model User {
-  id       String        @id @default(uuid())
+  id       String @id @default(uuid())
+  userName String
+
   email    String
   provider Provider
   streams  ActiveStreams[]
-
-  upVotes upVotes[]
+  group    Group[]
+  upVotes  upVotes[]
 }
 
 model ActiveStreams {
-  id      String     @id @default(uuid())
-  type    StreamType
-  active  Boolean    @default(true)
-  userId  String
-  user    User       @relation(fields: [userId], references: [id])
-  upVotes upVotes[]
-  url String
-  extractedId  String
+  id          String     @id @default(uuid())
+  type        StreamType
+  active      Boolean    @default(true)
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  upVotes     upVotes[]
+  url         String
+  extractedId String
+  groupId     String    
+  group       Group      @relation(name: "ActiveStreamsToGroup", fields: [groupId], references: [id])
 }
 
 model upVotes {
-  id            String        @id @default(uuid())
-  userID        String
-  streamId      String
-  user          User          @relation(fields: [userID], references: [id])
+  id       String @id @default(uuid())
+  userID   String
+  streamId String
   ActiveStreams ActiveStreams @relation(fields: [streamId], references: [id])
-  @@unique([userID,streamId])
+  User          User?         @relation(fields: [userId], references: [id])
+  userId        String?
+  @@unique([userID, streamId])
+}
+
+model Group {
+  id            String          @id @default(uuid())
+  groupName     String
+  userId        String
+  members       String[]
+  streamId      String
+  type          type
+  description   String
+  user         User            @relation(fields: [userId], references: [id])  
+  admin       String                
+  
+
+  ActiveStreams ActiveStreams[] @relation(name: "ActiveStreamsToGroup")
+}
+
+
+enum type {
+  invite 
+  anyone
 }
 
 enum StreamType {
@@ -44,4 +71,3 @@ enum StreamType {
 enum Provider {
   Google
 }
-
