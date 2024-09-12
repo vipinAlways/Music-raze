@@ -8,9 +8,15 @@ import React from 'react'
 function page() {
 
     const session = useSession()
-    const userProfile =  session?.data?.user?.image ?? 'https://imgs.search.brave.com/PC4fwi9FJFHjkFy_kQz-geTX3f0I2KqY8yEXMhzdjYU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by91/c2VyLXByb2ZpbGUt/aWNvbi1mcm9udC1z/aWRlLXdpdGgtd2hp/dGUtYmFja2dyb3Vu/ZF8xODcyOTktNDAw/MTAuanBnP3NpemU9/NjI2JmV4dD1qcGc'
+
+    if (!session.data?.user?.email) {
+        return 'hello'
+    }
+
+    const userProfile =  session.data.user.image ?? 'https://imgs.search.brave.com/PC4fwi9FJFHjkFy_kQz-geTX3f0I2KqY8yEXMhzdjYU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by91/c2VyLXByb2ZpbGUt/aWNvbi1mcm9udC1z/aWRlLXdpdGgtd2hp/dGUtYmFja2dyb3Vu/ZF8xODcyOTktNDAw/MTAuanBnP3NpemU9/NjI2JmV4dD1qcGc'
 
     const userName = session?.data?.user?.name ?? `user`
+    console.log(userProfile,userName);
   return (
   <div className='flex flex-col gap-16'>
       <div className='flex items-center mt-10 justify-between'>
@@ -53,7 +59,7 @@ function page() {
                 JOINED GROUP
             </Button>
             </Link>
-            <Link href='user-group'>
+            <Link href='/dashboard/user-group'>
             <Button  className='text-xl lg:text-2xl p-6'>
                 YOUR GROUP
             </Button>

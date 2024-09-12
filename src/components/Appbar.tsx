@@ -60,7 +60,7 @@ function Appbar() {
     })
   }
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center h-20 ">
       <div>
         <h1 className="text-lg">Music Raze</h1>
       </div>
@@ -68,7 +68,7 @@ function Appbar() {
         <input
           type="text"
           id="search"
-          className="w-full h-10 px-4 rounded-xl border border-gray-300 focus:outline-none"
+          className=" h-10 px-4 w-80 rounded-xl border border-gray-300 focus:outline-none"
           value={inputValue}
           onChange={handleInputChange}
           onBlur={() => setTimeout(() => setShowOptions(false), 100)}

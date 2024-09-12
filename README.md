@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-and this docker run -p 5432:5432 -e POSTGRES_PASSWORD=randompassword postgres
+and this 
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
