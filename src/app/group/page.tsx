@@ -1,18 +1,12 @@
 'use client'
-import { useQuery } from '@tanstack/react-query'
+import SreachSong from '@/components/SreachSong'
 import React from 'react'
 
-import SreachSong from '@/components/SreachSong'
-
 function page() {
-    // const {data} = useQuery({
-    //     queryKey:['group details'],
-    //     queryFn:async () => Group()
-    // })
   return (
-  <div>
-    <SreachSong/>
-  </div>
+    <div className='w-full'>
+        <SreachSong/>
+    </div>
   )
 }
 

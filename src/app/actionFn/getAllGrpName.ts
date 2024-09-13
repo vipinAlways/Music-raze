@@ -13,17 +13,5 @@ export async function getGroup(id: string) {
     },
   });
 }
-interface SpotifyTrack {
-   id: string;
-   name: string;
-   artists: { name: string }[];
- }
 
- export async function fetchSpotifyProfile(query: string): Promise<SpotifyTrack[]> {
-   const response = await fetch(`/api/spotify?query=${query}`);
-   if (!response.ok) {
-     throw new Error('Network response was not ok');
-   }
-   const data = await response.json();
-   return data; // Ensure this matches the expected format
- }
+

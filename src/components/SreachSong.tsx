@@ -1,70 +1,111 @@
-import React, { useState } from "react";
-import { Input } from "./ui/input";
-import { fetchSpotifyProfile } from "@/app/actionFn/getAllGrpName";
-import { useQuery } from "@tanstack/react-query";
-
-interface SpotifyTrack {
-  id: string;
-  name: string;
-  artists: { name: string }[];
-}
-
-
-interface Results {
-  spotify: SpotifyTrack[];
-
-}
+"use client";
+import React, { useState, useEffect, useContext } from "react";
+import { MusicContext } from "./Context";
 
 function SreachSong() {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Results>({
-    spotify: [],
-   
-  });
-  const handleSearch = async () => {
-    const spotifyResponse = await fetch(`/api/spotify?query=${query}`);
-    const spotifyData = await spotifyResponse.json();
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [accessToken, setAccessToken] = useState<string>("");
+  const [albums, setAlbums] = useState<any[]>([]); 
+  const [debounceSreachInput, setDebouncedSearchInput] = useState<string>('') 
+  const musicContext = useContext(MusicContext);
+  
+  const resultOffset = musicContext?.resultOffset;
+  const setResultOffset = musicContext?.setResultOffset;
 
-    const youtubeResponse = await fetch(`/api/youtube?query=${query}`);
-    const youtubeData = await youtubeResponse.json();
+  
 
-    setResults({ spotify: spotifyData });
-  };
-  const [params, setParams] = useState("");
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["spotifyProfile"],
-    queryFn: async () => fetchSpotifyProfile(query),
-  });
+  useEffect(()=>{
+    const handler = setTimeout(() => {
+      setDebouncedSearchInput(searchInput);
+    }, 500);
+  },[searchInput])
 
-  console.log(data);
+  useEffect(() => {
+    const getToken = async () => {
+      const authParameters = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `grant_type=client_credentials&client_id=fe28da8034844fa691564352578fb783&client_secret=3b6ef9f6e84042c2ad4af782681dd34c`,
+      };
+
+      try {
+        const response = await fetch(
+          "https://accounts.spotify.com/api/token",
+          authParameters
+        );
+        const data = await response.json();
+        setAccessToken(data.access_token);
+      } catch (error) {
+        console.error("Error fetching token:", error);
+      }
+    };
+
+    getToken();
+  }, []);
+
+
+  useEffect(()=>{
+    if (searchInput === '') {
+      setAlbums([])
+    }
+  },[searchInput])
+  useEffect(() => {
+    const getTrack = async () => {
+      if (searchInput && accessToken) {
+        const response = await fetch(
+          `https://api.spotify.com/v1/search?q=${debounceSreachInput}&type=track&offset=${resultOffset}&limit=7`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        
+        const tracks = await response.json();
+        setAlbums(tracks.tracks?.items || []);
+      }
+    };
+    getTrack();
+  }, [debounceSreachInput, accessToken, resultOffset]);
+  console.log(albums);
   return (
-    <div>
-    <input
-      type="text"
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      placeholder="Search for songs"
-    />
-    <button onClick={handleSearch}>Search</button>
+    <div className="w-2/5">
+      <input
+        type="text"
+        name="songName"
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        placeholder="Search for a song..."
+        className="w-full h-12 rounded-lg px-4 py-1.5 text-xl lg:text-2xl border-2 outline-none font-serif"
+      />
 
-    <div>
-      <h2>Spotify Results</h2>
-      {results.spotify.map((track) => (
-        <div key={track.id}>
-          {track.name} by {track.artists.map((artist) => artist.name).join(', ')}
-        </div>
-      ))}
+      <div className="w-full border-2 p-1">
+      {albums.length > 0 ? (
+        albums.map((song, index) => (
+          <div key={index} className="border rounded-lg flex flex-col items-center">
+            <div>
+             {
+              song.album.images[0].url ? <img src={song.album.images[0].url} alt="track img" /> : <img src="" alt="no track" />
+             }
+            </div>
+          <div>
+          <p>{song.name} by {song.artists.map((artist: any) => artist.name).join(", ")}</p>
+            {song.preview_url ? (
+              <audio controls src={song?.preview_url}></audio>
+            ) : (
+              <p>No Hook available</p>
+            )}
+          </div>
+          </div>
+        ))
+      ) : (
+        <div>No songs found</div>
+      )}
+      </div>
 
-      <h2>YouTube Results</h2>
-      {/* {results.youtube.map((video) => (
-        <div key={video.id.videoId}>
-          <a href={`https://www.youtube.com/watch?v=${video.id.videoId}`} target="_blank" rel="noopener noreferrer">
-            {video.snippet.title}
-          </a>
-        </div>
-      ))} */}
     </div>
-  </div>
   );
 }
 
