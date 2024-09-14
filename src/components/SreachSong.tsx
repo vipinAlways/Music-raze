@@ -1,24 +1,22 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
 import { MusicContext } from "./Context";
+import { cn } from "@/lib/utils";
 
 function SreachSong() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [accessToken, setAccessToken] = useState<string>("");
-  const [albums, setAlbums] = useState<any[]>([]); 
-  const [debounceSreachInput, setDebouncedSearchInput] = useState<string>('') 
+  const [albums, setAlbums] = useState<any[]>([]);
+  const [debounceSreachInput, setDebouncedSearchInput] = useState<string>("");
   const musicContext = useContext(MusicContext);
-  
+
   const resultOffset = musicContext?.resultOffset;
-  const setResultOffset = musicContext?.setResultOffset;
 
-  
-
-  useEffect(()=>{
-    const handler = setTimeout(() => {
+  useEffect(() => {
+    setTimeout(() => {
       setDebouncedSearchInput(searchInput);
     }, 500);
-  },[searchInput])
+  }, [searchInput]);
 
   useEffect(() => {
     const getToken = async () => {
@@ -45,33 +43,34 @@ function SreachSong() {
     getToken();
   }, []);
 
-
-  useEffect(()=>{
-    if (searchInput === '') {
-      setAlbums([])
+  useEffect(() => {
+    if (searchInput === "") {
+      setAlbums([]);
     }
-  },[searchInput])
+  }, [searchInput]);
+  
   useEffect(() => {
     const getTrack = async () => {
       if (searchInput && accessToken) {
         const response = await fetch(
-          `https://api.spotify.com/v1/search?q=${debounceSreachInput}&type=track&offset=${resultOffset}&limit=7`,
+          `https://api.spotify.com/v1/search?q=${debounceSreachInput}&type=track&offset=${resultOffset}&limit=12`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           }
         );
-        
+
         const tracks = await response.json();
         setAlbums(tracks.tracks?.items || []);
       }
     };
     getTrack();
   }, [debounceSreachInput, accessToken, resultOffset]);
-  console.log(albums);
+  
+
   return (
-    <div className="w-2/5">
+    <div className="w-2/5 mx-auto flex flex-col items-center gap-2  ">
       <input
         type="text"
         name="songName"
@@ -81,30 +80,59 @@ function SreachSong() {
         className="w-full h-12 rounded-lg px-4 py-1.5 text-xl lg:text-2xl border-2 outline-none font-serif"
       />
 
-      <div className="w-full border-2 p-1">
-      {albums.length > 0 ? (
-        albums.map((song, index) => (
-          <div key={index} className="border rounded-lg flex flex-col items-center">
-            <div>
-             {
-              song.album.images[0].url ? <img src={song.album.images[0].url} alt="track img" /> : <img src="" alt="no track" />
-             }
-            </div>
-          <div>
-          <p>{song.name} by {song.artists.map((artist: any) => artist.name).join(", ")}</p>
-            {song.preview_url ? (
-              <audio controls src={song?.preview_url}></audio>
-            ) : (
-              <p>No Hook available</p>
+      <div
+        className={cn(
+          searchInput === "" && albums.length === 0
+            ? "hidden"
+            : "w-full border-2 p-1 grid grid-cols-1 lg:grid-cols-3 gap-1.5 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md"
+        )}
+      >
+        {albums.length > 0 ? (
+          albums.map((song, index) =>
+            song.preview_url ? (
+              <div
+                key={index}
+                className="w-full flex flex-col items-center justify-around "
+              >
+                <div className="h-40 w-1/2">
+                  {song.album.images[0].url ? (
+                    <img
+                      src={song.album.images[0].url}
+                      alt="track img"
+                      className="object-contain h-full w-full"
+                    />
+                  ) : (
+                    <img
+                      src=""
+                      alt="no track"
+                      className="object-contain h-full w-full"
+                    />
+                  )}
+                </div>
+                <p className="text-sm text-center">
+                  {song.name} by{" "}
+                  {song.artists.map((artist: any) => artist.name).join(", ")}
+                </p>
+                <div className="w-full flex flex-col items-center gap-2">
+                  <audio
+                    controls
+                    src={song?.preview_url}
+                    className="w-full h-10"
+                  ></audio>
+                </div>
+              </div>
+            ) : null
+          )
+        ) : (
+          <div
+            className={cn(
+              searchInput === "" && albums.length === 0 ? "hidden" : "w-full text-center text-xl font-bold"
             )}
+          >
+            No songs found
           </div>
-          </div>
-        ))
-      ) : (
-        <div>No songs found</div>
-      )}
+        )}
       </div>
-
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react'
 import React, { useState } from 'react'
 import {ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ContextProvider } from './Context';
+import { GroupProvider } from './GroupContextType ';
 
 function Provider({children}:{children:React.ReactNode}) {
   const [queryClient] = useState(() => new QueryClient());
@@ -13,7 +14,10 @@ function Provider({children}:{children:React.ReactNode}) {
       <ContextProvider>
 
     <SessionProvider>
+      <GroupProvider>
+
         {children}
+      </GroupProvider>
     </SessionProvider>
       </ContextProvider>
     <ReactQueryDevtools />
