@@ -19,9 +19,9 @@
   }>) {
     return (
       <html lang="en">
-        <body className={`${inter.className} bg-[#FBF2EA]`}>
+        <body className={`${inter.className} `}>
           <Provider>
-            <div className="px-10 py-3">
+            <div className="px-10 ">
             <Appbar/>
               {children}</div>
               <Toaster/>

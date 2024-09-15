@@ -57,16 +57,16 @@ function Appbar() {
       (option) => option.groupName === inputValue
     );
     if (selectedGroup) {
-      setGroupID(selectedGroup.id); // Update the groupID in context
+      setGroupID(selectedGroup.id); 
     }
   };
 
   return (
-    <div className="flex justify-between items-center h-20">
+    <div className="flex justify-between items-center h-20 text-white ">
       <div>
-        <h1 className="text-lg">Music Raze</h1>
+        <h1 className="text-lg lg:text-xl font-serif ">Music Raze</h1>
       </div>
-      <div className="relative w-96 flex items-center gap-2">
+      <div className="relative w-96 max-sm:hidden flex items-center gap-2">
         <input
           type="text"
           id="search"
@@ -108,9 +108,7 @@ function Appbar() {
       </div>
 
       <div className="flex items-center gap-5">
-        <div className="w-32 border rounded-full h-10 flex items-center p-2">
-          <Button className="w-2 h-2 rounded-full">+</Button>
-        </div>
+      
         {session.data?.user ? (
           <Button className="m-2 p-2 font-medium" onClick={() => signOut()}>
             Log out

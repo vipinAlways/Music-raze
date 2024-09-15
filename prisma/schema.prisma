@@ -52,7 +52,7 @@ model Group {
   description   String
   user         User            @relation(fields: [userId], references: [id])  
   admin       String                
-  
+  likes       String[]
 
   ActiveStreams ActiveStreams[] @relation(name: "ActiveStreamsToGroup")
 }
