@@ -19,7 +19,7 @@
   }>) {
     return (
       <html lang="en">
-        <body className={`${inter.className} `}>
+        <body className={`${inter.className} min-h-screen font-serif `}>
           <Provider>
             <div className="px-10 ">
             <Appbar/>

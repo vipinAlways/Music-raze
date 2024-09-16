@@ -2,15 +2,26 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MusicContext } from "./Context";
 import { cn } from "@/lib/utils";
+import VolumeRange from "./VolumeRange";
 
 function SreachSong() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [accessToken, setAccessToken] = useState<string>("");
   const [albums, setAlbums] = useState<any[]>([]);
   const [debounceSreachInput, setDebouncedSearchInput] = useState<string>("");
-  const musicContext = useContext(MusicContext);
+  const [globalVolume, setGlobalVolume] = useState<number>(0.2);
+  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
+  const musicContext = useContext(MusicContext);
   const resultOffset = musicContext?.resultOffset;
+
+  const handlePlay = (audioElement: HTMLAudioElement) => {
+    if (currentAudio && currentAudio !== audioElement) {
+      currentAudio.pause();
+    }
+    audioElement.volume = globalVolume;
+    setCurrentAudio(audioElement);
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -48,7 +59,7 @@ function SreachSong() {
       setAlbums([]);
     }
   }, [searchInput]);
-  
+
   useEffect(() => {
     const getTrack = async () => {
       if (searchInput && accessToken) {
@@ -67,72 +78,82 @@ function SreachSong() {
     };
     getTrack();
   }, [debounceSreachInput, accessToken, resultOffset]);
-  
 
   return (
-    <div className="w-2/5 mx-auto flex flex-col items-center gap-2  ">
-      <input
-        type="text"
-        name="songName"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        placeholder="Search for a song..."
-        className="w-full h-12 rounded-lg px-4 py-1.5 text-xl lg:text-2xl border-2 outline-none font-serif"
-      />
+    <div className="flex items-start">
+      <div className="w-2/5 mx-auto flex flex-col items-center gap-2">
+        <input
+          type="text"
+          name="songName"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search for a song..."
+          className="w-full h-12 rounded-lg px-4 py-1.5 text-xl lg:text-2xl border-2 outline-none font-serif"
+        />
 
-      <div
-        className={cn(
-          searchInput === "" && albums.length === 0
-            ? "hidden"
-            : "w-full border-2 p-1 grid grid-cols-1 lg:grid-cols-3 gap-1.5 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md"
-        )}
-      >
-        {albums.length > 0 ? (
-          albums.map((song, index) =>
-            song.preview_url ? (
-              <div
-                key={index}
-                className="w-full flex flex-col items-center justify-around "
-              >
-                <div className="h-40 w-1/2">
-                  {song.album.images[0].url ? (
-                    <img
-                      src={song.album.images[0].url}
-                      alt="track img"
-                      className="object-contain h-full w-full"
-                    />
-                  ) : (
-                    <img
-                      src=""
-                      alt="no track"
-                      className="object-contain h-full w-full"
-                    />
-                  )}
+        <div
+          className={cn(
+            searchInput === "" && albums.length === 0
+              ? "hidden"
+              : "w-full border-4 border-b-0 border-[#7C3AED] p-1 grid grid-cols-1 lg:grid-cols-3 gap-2 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md"
+          )}
+        >
+          {albums.length > 0 ? (
+            albums.map((song, index) =>
+              song.preview_url ? (
+                <div
+                  key={index}
+                  className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg"
+                >
+                  <div className="h-40 w-full">
+                    {song.album.images[0].url ? (
+                      <img
+                        src={song.album.images[0].url}
+                        alt="track img"
+                        className="object-contain h-full w-full"
+                      />
+                    ) : (
+                      <img
+                        src=""
+                        alt="no track"
+                        className="object-contain h-full w-full"
+                      />
+                    )}
+                  </div>
+                  <p className="text-sm text-center whitespace-nowrap overflow-auto w-full songName">
+                    {song.name} by{" "}
+                    {song.artists.map((artist: any) => artist.name).join(", ")}
+                  </p>
+                  <div className="w-full flex flex-col items-center gap-2">
+                    <audio
+                      controls
+                      src={song?.preview_url}
+                      className="w-full h-10"
+                      onPlay={(e) => handlePlay(e.currentTarget)}
+                    ></audio>
+                  </div>
                 </div>
-                <p className="text-sm text-center">
-                  {song.name} by{" "}
-                  {song.artists.map((artist: any) => artist.name).join(", ")}
-                </p>
-                <div className="w-full flex flex-col items-center gap-2">
-                  <audio
-                    controls
-                    src={song?.preview_url}
-                    className="w-full h-10"
-                  ></audio>
-                </div>
-              </div>
-            ) : null
-          )
-        ) : (
-          <div
-            className={cn(
-              searchInput === "" && albums.length === 0 ? "hidden" : "w-full text-center text-xl font-bold"
-            )}
-          >
-            No songs found
-          </div>
-        )}
+              ) : null
+            )
+          ) : (
+            <div
+              className={cn(
+                searchInput === "" && albums.length === 0
+                  ? "hidden"
+                  : "w-full text-center text-xl font-bold"
+              )}
+            >
+              No songs found
+            </div>
+          )}
+        </div>
       </div>
+      <VolumeRange
+      setCurrentAudio={setCurrentAudio}
+        setGlobalVolume={setGlobalVolume}
+        currentAudio={currentAudio}
+        globalVolume={globalVolume}
+      />
     </div>
   );
 }

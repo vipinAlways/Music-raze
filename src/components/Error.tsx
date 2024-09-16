@@ -4,7 +4,7 @@ import React from 'react'
 function Error() {
   return (
     <div>
-        <div className="flex items-center justify-center h-screen bg-[#FBF2EA] text-black">
+        <div className="flex items-center justify-center h-[60vh]  bg-[#FBF2EA] text-black">
   <div className="text-center">
   
     <h1 className="text-9xl font-bold text-indigo-500">404</h1>
