@@ -6,18 +6,19 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllGrpNames } from "@/app/actionFn/getAllGrpName";
 import Link from "next/link";
+
+import { usePathname, useRouter } from "next/navigation";
 import { useGroup } from "./GroupContextType ";
 
-
 function Appbar() {
+  const pathname =usePathname()
   const session = useSession();
   const [inputValue, setInputValue] = useState<string>("");
   const [filteredOptions, setFilteredOptions] = useState<
     { id: string; groupName: string }[]
   >([]);
   const [showOptions, setShowOptions] = useState<boolean>(false);
-  const { groupID, setGroupID } = useGroup(); 
-
+  const { groupID, setGroupID } = useGroup();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["getgrp-name"],
@@ -31,7 +32,7 @@ function Appbar() {
         { id: "default2", groupName: "hello 2" },
       ];
 
-  // Load data from localStorage on component mount
+
   useEffect(() => {
     const savedInputValue = localStorage.getItem("inputValue");
     const savedGroupID = localStorage.getItem("groupID");
@@ -43,9 +44,13 @@ function Appbar() {
     if (savedGroupID) {
       setGroupID(savedGroupID);
     }
-  }, [setGroupID]);
 
-  
+    if (pathname !== "/group") {
+      setInputValue("");
+      setGroupID("");
+    }
+  }, [setGroupID, pathname]);
+
   useEffect(() => {
     localStorage.setItem("inputValue", inputValue);
   }, [inputValue]);
@@ -81,7 +86,7 @@ function Appbar() {
       (option) => option.groupName === inputValue
     );
     if (selectedGroup) {
-      setGroupID(selectedGroup.id); 
+      setGroupID(selectedGroup.id);
     }
   };
 

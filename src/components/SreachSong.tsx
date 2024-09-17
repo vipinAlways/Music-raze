@@ -80,8 +80,8 @@ function SreachSong() {
   }, [debounceSreachInput, accessToken, resultOffset]);
 
   return (
-    <div className="flex items-start">
-      <div className="w-2/5 mx-auto flex flex-col items-center gap-2">
+    <div className="flex items-start  justify-end">
+      <div className="w-2/5 mx-auto absolute top-2/5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <input
           type="text"
           name="songName"
@@ -95,7 +95,7 @@ function SreachSong() {
           className={cn(
             searchInput === "" && albums.length === 0
               ? "hidden"
-              : "w-full border-4 border-b-0 border-[#7C3AED] p-1 grid grid-cols-1 lg:grid-cols-3 gap-2 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md"
+              : "w-full border-4 border-b-0 border-[#7C3AED] bg-[#7C3AED] opacity-80 p-1 grid grid-cols-1 lg:grid-cols-3 gap-2 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md"
           )}
         >
           {albums.length > 0 ? (

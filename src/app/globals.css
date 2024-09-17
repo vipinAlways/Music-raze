@@ -145,6 +145,10 @@
   display: none
 }
 
+.memberName::-webkit-scrollbar{
+  display: none;
+}
+
 
 
 body {
