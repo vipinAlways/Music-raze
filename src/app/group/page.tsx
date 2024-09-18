@@ -31,7 +31,7 @@ function Page() {
     enabled: !!data?.members ?? "",
   });
 
-  console.log(data);
+  // console.log(data);
   if (isLoading) {
     <Loader />;
   }

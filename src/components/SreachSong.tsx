@@ -7,6 +7,7 @@ import VolumeRange from "./VolumeRange";
 function SreachSong() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [accessToken, setAccessToken] = useState<string>("");
+  // const [clickEvent, setclickEvent] = useState<string>("");
   const [albums, setAlbums] = useState<any[]>([]);
   const [debounceSreachInput, setDebouncedSearchInput] = useState<string>("");
   const [globalVolume, setGlobalVolume] = useState<number>(0.2);
@@ -22,7 +23,27 @@ function SreachSong() {
     audioElement.volume = globalVolume;
     setCurrentAudio(audioElement);
   };
+  
 
+useEffect(() => {
+  const handleKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+     
+      setSearchInput('');
+      
+    }
+  };
+
+  // Add event listener for 'keydown'
+  window.document.addEventListener('keydown', handleKeydown);
+
+  // Cleanup function to remove the event listener when the component unmounts
+  return () => {
+    window.document.removeEventListener('keydown', handleKeydown);
+  };
+}, [searchInput]);
+
+  
   useEffect(() => {
     setTimeout(() => {
       setDebouncedSearchInput(searchInput);
@@ -95,7 +116,7 @@ function SreachSong() {
           className={cn(
             searchInput === "" && albums.length === 0
               ? "hidden"
-              : "w-full border-4 border-b-0 border-[#7C3AED] bg-[#7C3AED] opacity-80 p-1 grid grid-cols-1 lg:grid-cols-3 gap-2 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md"
+              : "w-full border-4 border-b-0 border-[#7C3AED] bg-[#7C3AED] bg-opacity-80 p-1 grid grid-cols-1 lg:grid-cols-3 gap-2 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md"
           )}
         >
           {albums.length > 0 ? (
