@@ -9,10 +9,9 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String          @id @default(uuid())
   userName String
-
-  email    String
+  email    String          @unique
   provider Provider
   streams  ActiveStreams[]
   group    Group[]
@@ -20,38 +19,37 @@ model User {
 }
 
 model ActiveStreams {
-  id          String     @id @default(uuid())
+  id          String          @id @default(uuid())
   type        StreamType
-  active      Boolean    @default(true)
   userId      String
-  user        User       @relation(fields: [userId], references: [id])
-  upVotes     UrlUpVotes[] @relation("ActiveStreamsUpVotes")
+  user        User            @relation(fields: [userId], references: [id])
+  upVotes     UrlUpVotes[]    @relation("ActiveStreamsUpVotes")
   url         Url[]
-  extractedId String
-  groupId     String    
-  group       Group      @relation(name: "ActiveStreamsToGroup", fields: [groupId], references: [id])
+  groupId     String          @unique
+  group       Group           @relation(name: "ActiveStreamsToGroup", fields: [groupId], references: [id])
 }
-
-
 
 model Url {
   id             String          @id @default(uuid()) 
   streamId       String
   activeStream   ActiveStreams   @relation(fields: [streamId], references: [id], onDelete: Cascade)
   url            String
-  upVotes        UrlUpVotes[]    
+  image          String
+  title          String
+  upVotes        UrlUpVotes[]
 }
 
 model UrlUpVotes {
-  id             String       @id @default(uuid())
+  id             String          @id @default(uuid())
   userId         String
   urlId          String
-  streamId       String       // Add streamId to reference the ActiveStreams model
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  url            Url          @relation(fields: [urlId], references: [id], onDelete: Cascade)
-  activeStream   ActiveStreams @relation(fields: [streamId], references: [id], onDelete: Cascade, name: "ActiveStreamsUpVotes") // Inverse relation to ActiveStreams
-  @@unique([userId, urlId])  // Ensures that a user can only upvote a URL once
+  streamId       String          
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url            Url             @relation(fields: [urlId], references: [id], onDelete: Cascade)
+  activeStream   ActiveStreams   @relation(fields: [streamId], references: [id], onDelete: Cascade, name: "ActiveStreamsUpVotes")
+  @@unique([userId, urlId])    
 }
+
 model Group {
   id            String          @id @default(uuid())
   groupName     String
@@ -60,13 +58,11 @@ model Group {
   streamId      String
   type          type
   description   String
-  user         User            @relation(fields: [userId], references: [id])  
-  admin       String                
-  likes       String[]
-
+  user          User            @relation(fields: [userId], references: [id])
+  admin         String
+  likes         String[]
   ActiveStreams ActiveStreams[] @relation(name: "ActiveStreamsToGroup")
 }
-
 
 enum type {
   invite 

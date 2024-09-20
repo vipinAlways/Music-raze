@@ -1,11 +1,14 @@
 'use client'
 import { Songs } from "@/components/SongsScroll";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { cn } from "@/lib/utils";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
 function page() {
+
+  const session =useSession()
   return (
     <div className="grid max-sm:flex max-sm:flex-col max-sm:items-center  grid-cols-2 w-full justify-between h-full pt-7">
       <div className="lg:w-4/5 w-full ">
@@ -27,9 +30,14 @@ function page() {
             alt="Enjoy Life GIF"
             className="object-contain h-44 w-44"
           />
-          <Button onClick={()=>signIn('google', { callbackUrl: '/dashboard' })} className="p-2 py-3 text-xl">
+          <Button onClick={()=>signIn('google', { callbackUrl: '/dashboard' })} className={cn('p-2 py-3 text-xl',session ? "hidden":null)}>
             Join Us
           </Button>
+         <Button className={cn('p-2 py-3 text-xl',session ? null:'hidden')}>
+         <Link href='/dashboard' >
+            Join Us
+          </Link>
+         </Button>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { MusicContext } from "./Context";
 import { cn } from "@/lib/utils";
 import VolumeRange from "./VolumeRange";
+import { Plus } from "lucide-react";
 
 function SreachSong() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -124,9 +125,9 @@ useEffect(() => {
               song.preview_url ? (
                 <div
                   key={index}
-                  className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg"
+                  className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg relative"
                 >
-                  <div className="h-40 w-full">
+                  <div className="h-40 w-full ">
                     {song.album.images[0].url ? (
                       <img
                         src={song.album.images[0].url}
@@ -145,13 +146,8 @@ useEffect(() => {
                     {song.name} by{" "}
                     {song.artists.map((artist: any) => artist.name).join(", ")}
                   </p>
-                  <div className="w-full flex flex-col items-center gap-2">
-                    <audio
-                      controls
-                      src={song?.preview_url}
-                      className="w-full h-10"
-                      onPlay={(e) => handlePlay(e.currentTarget)}
-                    ></audio>
+                  <div className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"   >
+                    <Plus/>
                   </div>
                 </div>
               ) : null
@@ -175,6 +171,9 @@ useEffect(() => {
         currentAudio={currentAudio}
         globalVolume={globalVolume}
       />
+
+
+          
     </div>
   );
 }

@@ -51,7 +51,7 @@ function page() {
                  <Button onClick={()=>setGroupID(group.id)}>
                  <Link
                     href="/group"
-                    className="p-2 rounded-md text-center font-bold"
+                    className="p-2 rounded-md text-center font-bold w-full"
                   >
                     View Group
                   </Link>
