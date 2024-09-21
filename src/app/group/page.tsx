@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getGroup, getMembers, getUser,findStream } from "../actionFn/getAllGrpName";
+import { getGroup, getMembers, getUser } from "../actionFn/getAllGrpName";
 import SreachSong from "@/components/SreachSong";
 import Loader from "@/components/Loader";
 import Link from "next/link";
@@ -10,17 +10,17 @@ import { Button } from "@/components/ui/button";
 import StartStream from "@/components/StartStream";
 
 import { useGroup } from "@/components/GroupContextType ";
+import { findStream } from "./action";
 
 function Page() {
   const { groupID } = useGroup();
-  
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ["group-data", groupID],
     queryFn: () => getGroup(groupID),
     enabled: !!groupID,
   });
-  
+
   const userData = useQuery({
     queryKey: ["admin-data", data?.admin],
     queryFn: () => getUser(data?.admin ?? ""),
@@ -33,17 +33,20 @@ function Page() {
     enabled: !!data?.members,
   });
 
- 
+  const stream = useQuery({
+    queryKey: ['get-stream'],
+    queryFn: async () => findStream({ grpId: groupID }) // Corrected line
+  });
 
   if (isLoading) return <Loader />;
-  console.log('`first`', data?.ActiveStreams)
-  
+  console.log('`first`', data?.ActiveStreams);
+  console.log(stream.data);
   return (
     <div className="flex flex-col gap-9">
       <Button className="w-32">
         <Link href="/dashboard">Back to Dashboard</Link>
       </Button>
-      <SreachSong />
+      <SreachSong currentgrpId = {groupID} />
 
       <div className="flex justify-between lg:pr-28">
         <div className="h-full w-full flex flex-col items-start gap-7">
@@ -65,7 +68,7 @@ function Page() {
         </div>
       </div>
 
-      {(data?.ActiveStreams[0].id )? (
+      {(data?.ActiveStreams[0].id) ? (
         <div className="w-full flex items-center justify-between">
           <div className="flex w-60 flex-col gap-1 h-fit p-1 border rounded-lg">
             <div className="h-60 w-full bg-slate-200 rounded-lg"></div>

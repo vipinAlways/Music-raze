@@ -4,11 +4,15 @@ import { MusicContext } from "./Context";
 import { cn } from "@/lib/utils";
 import VolumeRange from "./VolumeRange";
 import { Plus } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { addUrl } from "@/app/actionFn/getAllGrpName";
 
-function SreachSong() {
+function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [searchInput, setSearchInput] = useState<string>("");
   const [accessToken, setAccessToken] = useState<string>("");
-  // const [clickEvent, setclickEvent] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [songurl, setSongUrl] = useState<string>("");
+  const [image, setImage] = useState<string>("");
   const [albums, setAlbums] = useState<any[]>([]);
   const [debounceSreachInput, setDebouncedSearchInput] = useState<string>("");
   const [globalVolume, setGlobalVolume] = useState<number>(0.2);
@@ -24,31 +28,26 @@ function SreachSong() {
     audioElement.volume = globalVolume;
     setCurrentAudio(audioElement);
   };
-  
 
-useEffect(() => {
-  const handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-     
-      setSearchInput('');
-      
-    }
-  };
-
-  // Add event listener for 'keydown'
-  window.document.addEventListener('keydown', handleKeydown);
-
-  // Cleanup function to remove the event listener when the component unmounts
-  return () => {
-    window.document.removeEventListener('keydown', handleKeydown);
-  };
-}, [searchInput]);
-
-  
   useEffect(() => {
-    setTimeout(() => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSearchInput("");
+      }
+    };
+
+    window.document.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      window.document.removeEventListener("keydown", handleKeydown);
+    };
+  }, [searchInput]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
       setDebouncedSearchInput(searchInput);
     }, 500);
+    return () => clearTimeout(timer);
   }, [searchInput]);
 
   useEffect(() => {
@@ -84,7 +83,7 @@ useEffect(() => {
 
   useEffect(() => {
     const getTrack = async () => {
-      if (searchInput && accessToken) {
+      if (debounceSreachInput && accessToken) {
         const response = await fetch(
           `https://api.spotify.com/v1/search?q=${debounceSreachInput}&type=track&offset=${resultOffset}&limit=12`,
           {
@@ -101,8 +100,24 @@ useEffect(() => {
     getTrack();
   }, [debounceSreachInput, accessToken, resultOffset]);
 
+  const { mutate } = useMutation({
+    mutationKey: ["add-url"],
+    mutationFn: addUrl,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      console.log("URL added successfully");
+    },
+  });
+
+  const handleUrl = () => {
+    // e.preventDefault();
+    mutate({ image, title, link: songurl, groupId: currentgrpId.toString() });
+  };
+
   return (
-    <div className="flex items-start  justify-end">
+    <div className="flex items-start justify-end">
       <div className="w-2/5 mx-auto absolute top-2/5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <input
           type="text"
@@ -127,8 +142,8 @@ useEffect(() => {
                   key={index}
                   className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg relative"
                 >
-                  <div className="h-40 w-full ">
-                    {song.album.images[0].url ? (
+                  <div className="h-40 w-full">
+                    {song.album.images[0]?.url ? (
                       <img
                         src={song.album.images[0].url}
                         alt="track img"
@@ -146,8 +161,17 @@ useEffect(() => {
                     {song.name} by{" "}
                     {song.artists.map((artist: any) => artist.name).join(", ")}
                   </p>
-                  <div className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"   >
-                    <Plus/>
+                  <div
+                    className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
+                    onClick={() => {
+                      setImage(song.album.images[0]?.url);
+                      setTitle(song.name);
+                      setSongUrl(song.preview_url);
+                      handleUrl()
+                      setDebouncedSearchInput('')
+                    }}
+                  >
+                    <Plus />
                   </div>
                 </div>
               ) : null
@@ -166,16 +190,13 @@ useEffect(() => {
         </div>
       </div>
       <VolumeRange
-      setCurrentAudio={setCurrentAudio}
+        setCurrentAudio={setCurrentAudio}
         setGlobalVolume={setGlobalVolume}
         currentAudio={currentAudio}
         globalVolume={globalVolume}
       />
-
-
-          
     </div>
   );
 }
 
-export default SreachSong;
+export default SearchSong;
