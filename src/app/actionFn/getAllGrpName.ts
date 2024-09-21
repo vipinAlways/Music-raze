@@ -37,42 +37,8 @@ export async function getMembers(member: string[]) {
 }
 
 
-export async function createStream({groupId}:{groupId:string}) {
-  try {
 
-      const group = await db.group.findUnique({
-          where:{
-              id:groupId
-          }
-      })
-
-      if(!group){
-          throw new Error('not able to fund group')
-      }
-      return await db.activeStreams.create({
-          data:{
-              groupId:groupId,
-              type:"Spotify",
-              userId:group?.userId
-          }
-      })
-      
-  } catch (error) {
-      console.log(error);
-  }
-}
-
-interface urlTypes{
-  groupId:string
-  link:string
-  image:string
-  title:string
-}
-
-// import { db } from "@/lib/db"; // Assuming db is properly imported
-// import { urlTypes } from "@/types/urlTypes"; // Assuming you have a urlTypes type defined
-
-export async function addUrl({ image, title, groupId, link }: urlTypes) {
+export async function createStream({ groupId }: { groupId: string }) {
   try {
     // Find the group by ID
     const group = await db.group.findUnique({
@@ -85,7 +51,53 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
       throw new Error("Unable to find group");
     }
 
-    // Find the active stream associated with the group
+    // Create the stream associated with the group
+    const createdStream = await db.activeStreams.create({
+      data: {
+        groupId: groupId,
+        type: "Spotify", 
+        userId: group.userId,
+      },
+    });
+
+    // Update the group's streamId with the createdStream ID
+    await db.group.update({
+      where: { id: groupId },
+      data: { streamId: createdStream.id },
+    });
+
+    return createdStream;
+    
+  } catch (error) {
+    console.error("Error creating stream:", error);
+    throw error;
+  }
+}
+
+
+interface urlTypes{
+  groupId:string
+  link:string
+  image:string
+  title:string
+}
+
+
+
+export async function addUrl({ image, title, groupId, link }: urlTypes) {
+  try {
+
+    const group = await db.group.findUnique({
+      where: {
+        id: groupId,
+      },
+    });
+
+    if (!group) {
+      throw new Error("Unable to find group");
+    }
+
+    
     const stream = await db.activeStreams.findUnique({
       where: {
         groupId: groupId,
@@ -96,7 +108,7 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
       throw new Error("Unable to find stream");
     }
 
-    // Create a new URL entry in the database
+
     const newUrl = await db.url.create({
       data: {
         image,
@@ -110,6 +122,6 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
 
   } catch (error) {
     console.error("Error adding URL:", error);
-    throw error; // Re-throw the error to be handled by the calling function
+    throw error; 
   }
 }

@@ -25,10 +25,12 @@ function StartStream({grpid}:{grpid:string}) {
 
     const handleSubmit = (e:React.FormEvent)=>{
 
-      
-
         e.preventDefault()
         mutate({groupId:grpid})
+        setTimeout(() => {
+          window.location.reload()
+        }, 5000);
+          
     }
   return (
     <Button onClick={handleSubmit}>

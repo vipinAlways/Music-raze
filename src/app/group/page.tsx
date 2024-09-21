@@ -35,7 +35,7 @@ function Page() {
 
   const stream = useQuery({
     queryKey: ['get-stream'],
-    queryFn: async () => findStream({ grpId: groupID }) // Corrected line
+    queryFn: async () => findStream({ grpId: groupID })
   });
 
   if (isLoading) return <Loader />;
@@ -68,7 +68,7 @@ function Page() {
         </div>
       </div>
 
-      {(data?.ActiveStreams[0].id) ? (
+      {data?.streamId ? (
         <div className="w-full flex items-center justify-between">
           <div className="flex w-60 flex-col gap-1 h-fit p-1 border rounded-lg">
             <div className="h-60 w-full bg-slate-200 rounded-lg"></div>

@@ -168,7 +168,9 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                       setTitle(song.name);
                       setSongUrl(song.preview_url);
                       handleUrl()
-                      setDebouncedSearchInput('')
+                      setTimeout(() => {
+                        setSearchInput('')
+                      },100 );
                     }}
                   >
                     <Plus />
