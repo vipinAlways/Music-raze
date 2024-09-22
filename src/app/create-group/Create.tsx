@@ -49,20 +49,18 @@ function Create() {
   };
 
   return (
-    <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 h-[calc(100vh-10rem)] w-[60%] flex  items-center justify-center mx-auto rounded-xl">
-    
-
-      <Tabs defaultValue="Create Group" className="w-[50%]">
+    <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 h-[calc(100vh-10rem)] w-[60%] sm:w-4/5 flex  items-center justify-center mx-auto rounded-xl">
+      <Tabs defaultValue="Create Group" className="w-[50%] sm:w-3/5">
         <TabsList className="grid w-full grid-col-1">
           <TabsTrigger value="Create Group">Create Group</TabsTrigger>
-       
         </TabsList>
         <TabsContent value="Create Group">
           <Card>
             <CardHeader>
               <CardTitle>Create Group</CardTitle>
               <CardDescription>
-              Create a group where you can enjoy your favorite music, sharing special moments with your loved ones
+                Create a group where you can enjoy your favorite music, sharing
+                special moments with your loved ones
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -88,7 +86,6 @@ function Create() {
             </CardContent>
             <CardFooter>
               <Button
-                
                 onClick={handleSubmit}
                 disabled={mutation.isPending}
                 aria-busy={mutation.isPending}
@@ -99,9 +96,7 @@ function Create() {
             </CardFooter>
           </Card>
         </TabsContent>
-        <TabsContent value="password">
-        
-        </TabsContent>
+        <TabsContent value="password"></TabsContent>
       </Tabs>
     </div>
   );

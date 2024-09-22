@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 
+
 export async function getAllGrpNames() {
   return await db.group.findMany({});
 }
@@ -108,7 +109,9 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
       throw new Error("Unable to find stream");
     }
 
-
+    if (image === '' && title === '' && link === '') {
+      throw new Error('not able to add this song')
+    }
     const newUrl = await db.url.create({
       data: {
         image,

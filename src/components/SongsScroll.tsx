@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { HTMLAttributes, useEffect, useRef, useState } from 'react';
-import { useInView } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import Container from './Container';
+import { HTMLAttributes, useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
+import { cn } from "@/lib/utils";
+import Container from "./Container";
 
 const SONGS = [
-  '/testimonials/1.jpg',
-  '/testimonials/2.jpg',
-  '/testimonials/3.jpg',
-  '/testimonials/4.jpg',
-  '/testimonials/5.jpg',
-  '/testimonials/6.jpg',
+  "/testimonials/1.jpg",
+  "/testimonials/2.jpg",
+  "/testimonials/3.jpg",
+  "/testimonials/4.jpg",
+  "/testimonials/5.jpg",
+  "/testimonials/6.jpg",
 ];
 
 function splitArray<T>(array: Array<T>, numParts: number) {
@@ -60,8 +60,8 @@ function SongsColumn({
   return (
     <div
       ref={columnRef}
-      className={cn('animate-marquee space-y-8 py-4', className)}
-      style={{ '--marquee-duration': duration } as React.CSSProperties}
+      className={cn("animate-marquee space-y-8 py-4", className)}
+      style={{ "--marquee-duration": duration } as React.CSSProperties}
     >
       {songs.concat(songs).map((imgSrc, reviewIndex) => (
         <Song
@@ -80,12 +80,12 @@ interface ReviewProps extends HTMLAttributes<HTMLDivElement> {
 
 function Song({ imgSrc, className, ...props }: ReviewProps) {
   const POSSIBLE_ANIMATION_DELAYS = [
-    '0s',
-    '0.1s',
-    '0.2s',
-    '0.3s',
-    '0.4s',
-    '0.5s',
+    "0s",
+    "0.1s",
+    "0.2s",
+    "0.3s",
+    "0.4s",
+    "0.5s",
   ];
 
   const animationDelay =
@@ -96,7 +96,7 @@ function Song({ imgSrc, className, ...props }: ReviewProps) {
   return (
     <div
       className={cn(
-        'animate-fade-in rounded-xl lg:h-56 h-28 bg-[#4b2ee0] lg:p-6 p-3 opacity-0 shadow-xl shadow-slate-900/5',
+        "animate-fade-in rounded-xl lg:h-56 h-28  bg-[#4b2ee0] lg:p-6 p-3 opacity-0 shadow-xl shadow-slate-900/5",
         className
       )}
       style={{ animationDelay }}
@@ -118,7 +118,7 @@ function ReviewGrid() {
   return (
     <div
       ref={containerRef}
-      className="relative  grid  lg:max-h-[77vh] max-h-[50vh]   items-start gap-8 overflow-hidden grid-cols-3"
+      className="relative  grid  lg:max-h-[77vh] sm:max-h-[50vh]    items-start gap-8 overflow-hidden grid-cols-3"
     >
       {isInView ? (
         <>
@@ -126,8 +126,8 @@ function ReviewGrid() {
             songs={[...column1, ...column3.flat(), ...column2]}
             reviewClassName={(reviewIndex) =>
               cn({
-                'md:hidden': reviewIndex >= column1.length + column3[0].length,
-                'lg:hidden': reviewIndex >= column1.length,
+                "md:hidden": reviewIndex >= column1.length + column3[0].length,
+                "lg:hidden": reviewIndex >= column1.length,
               })
             }
             msPerPixel={10}
@@ -136,15 +136,11 @@ function ReviewGrid() {
             songs={[...column2, ...column3[1]]}
             className=""
             reviewClassName={(reviewIndex) =>
-              reviewIndex >= column2.length ? 'block' : ''
+              reviewIndex >= column2.length ? "block" : ""
             }
             msPerPixel={15}
           />
-          <SongsColumn
-            songs={column3.flat()}
-            className=""
-            msPerPixel={10}
-          />
+          <SongsColumn songs={column3.flat()} className="" msPerPixel={10} />
         </>
       ) : null}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-slate-500 rounded-lg" />
@@ -155,7 +151,7 @@ function ReviewGrid() {
 
 export function Songs() {
   return (
-    <div className="relative w-full md:px-10 rounded-md">
+    <div className="relative w-full md:px-10 rounded-md ">
       <ReviewGrid />
     </div>
   );

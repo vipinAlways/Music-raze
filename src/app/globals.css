@@ -152,6 +152,9 @@
 .title::-webkit-scrollbar{
   display: none;
 }
+.songqueue::-webkit-scrollbar{
+  display: none;
+}
 
 body {
   background: linear-gradient(40deg, #4b2ee0f7 5%, rgba(120,46,224,0.97) 21%, rgba(70,28,184,1) 35%, rgba(109,28,184,1) 58%);

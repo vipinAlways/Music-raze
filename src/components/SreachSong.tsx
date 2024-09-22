@@ -6,6 +6,7 @@ import VolumeRange from "./VolumeRange";
 import { Plus } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { addUrl } from "@/app/actionFn/getAllGrpName";
+import { useToast } from "@/hooks/use-toast";
 
 function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -16,7 +17,11 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [albums, setAlbums] = useState<any[]>([]);
   const [debounceSreachInput, setDebouncedSearchInput] = useState<string>("");
   const [globalVolume, setGlobalVolume] = useState<number>(0.2);
-  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
+  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
+    null
+  );
+
+  const {toast} =useToast()
 
   const musicContext = useContext(MusicContext);
   const resultOffset = musicContext?.resultOffset;
@@ -104,7 +109,11 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     mutationKey: ["add-url"],
     mutationFn: addUrl,
     onError: (error) => {
-      console.log(error);
+      toast({
+        title:"Error",
+        description:error.message ?? 'error while adding',
+        variant:'destructive'
+      })
     },
     onSuccess: () => {
       console.log("URL added successfully");
@@ -112,7 +121,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   });
 
   const handleUrl = () => {
-    // e.preventDefault();
+    
     mutate({ image, title, link: songurl, groupId: currentgrpId.toString() });
   };
 
@@ -167,10 +176,10 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                       setImage(song.album.images[0]?.url);
                       setTitle(song.name);
                       setSongUrl(song.preview_url);
-                      handleUrl()
+                      handleUrl();
                       setTimeout(() => {
-                        setSearchInput('')
-                      },100 );
+                        setSearchInput("");
+                      }, 100);
                     }}
                   >
                     <Plus />

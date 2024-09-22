@@ -20,13 +20,13 @@ function page() {
  
   return (
     <div className="flex flex-col gap-16 text-slate-200">
-      <div className="flex items-start mt-10  px-7  gap-1flex-1  ">
-        <div className="flex items-center gap-10  h-96  w-2/3 px-10">
-          <div className="rounded-full sm:rounded-full w-96 h-full   p-0.5">
+      <div className="flex items-start mt-10  px-7 sm:px-1.5 gap-1 sm:gap-0 flex-1 justify-between  ">
+        <div className="flex items-center gap-10  h-96  w-2/3 sm:w-3/5  px-10 sm:px-2">
+          <div className="rounded-full flex justify-center items-center sm:rounded-full w-96 sm:w-96 h-full p-0.5">
             <img
               src={userProfile}
               alt="profile picture"
-              className="object-contain  rounded-full max-sm:rounded-full w-full shrink-0 shadow-md"
+              className="object-contain  rounded-full w-full shrink-0 shadow-md"
             />
           </div>
           <div className="flex flex-col  items-center h-60 pt-10 ">
@@ -46,7 +46,7 @@ function page() {
 
         <div>
           <div className="flex flex-col items-center justify-center w-full ">
-            <h1 className="text-xl lg:text-3xl bg-[#7C3AED] p-3 rounded-lg items-start w-80 text-center">Favorite Songs</h1>
+            <h1 className="text-xl lg:text-3xl bg-[#7C3AED] p-3 rounded-lg items-start w-80 sm:w-60 text-center">Favorite Songs</h1>
             <div>
               <ul>
                 {

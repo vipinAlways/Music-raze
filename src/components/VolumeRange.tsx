@@ -27,8 +27,8 @@ function VolumeRange({
   };
 
   return (
-   <div className='h-3 w-80  flex  flex-col gap-2 items-start text-slate-200'>
-    <label className='lg:text-xl text-lg' htmlFor="volume">Volume</label>
+   <div className='h-3 w-80  flex  flex-col gap-2  items-start sm:items-end text-slate-200'>
+    <label className='lg:text-xl text-lg sm:text-center w-full sm:pl-10' htmlFor="volume">Volume</label>
      <input
       type="range"
       min="0"

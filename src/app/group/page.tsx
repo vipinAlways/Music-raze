@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import StartStream from "@/components/StartStream";
 import { findStream } from "./action";
 import { useGroup } from "@/components/GroupContextType ";
+import SongsQueue from "@/components/SongsQueue";
 
 function Page() {
   const { groupID } = useGroup();
@@ -32,12 +33,9 @@ function Page() {
     enabled: !!data?.members,
   });
 
-  const stream = useQuery({
-    queryKey: ["get-stream"],
-    queryFn: async () => findStream({ streamId: data?.streamId ?? "" }),
-  });
+ 
 
-  console.log(stream.data);
+
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data</div>;
 
@@ -76,43 +74,9 @@ function Page() {
       </div>
 
       {data?.streamId ? (
-        <div className="w-full flex items-center justify-between">
-          <div className="flex w-60 flex-col gap-1 h-fit p-1 border rounded-lg">
-            <div className="h-60 w-full bg-slate-200 rounded-lg flex flex-col items-center  relative">
-              <img
-                src={stream.data?.url[0].image}
-                alt=""
-                className="h-48 p-2 w-full object-cover"
-              />
-              <audio
-                src={stream.data?.url[0].url}
-                controls
-                className="p-2 w-full"
-              ></audio>
-            </div>
-            <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-2xl text-center py-1 rounded-lg">
-              {stream.data?.url[0].title}
-            </div>
-            <h1 className="text-slate-200 text-center">Current Song</h1>
-          </div>
-          <div className="w-[calc(80vw-15rem)] border-2 bg-gray-700 rounded-lg p-2 flex items-center gap-2">
-            {stream.data?.url?.map((song, index) => {
-              return song.url ? (
-                <div
-                  key={index} 
-                  className="flex w-60 flex-col gap-1 h-72 p-1 border rounded-lg"
-                >
-                  <div className="h-60 w-full bg-slate-200">
-                    <img src={song.image} alt={song.title} />
-                  </div>
-                  <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-2xl text-center py-1 rounded-lg whitespace-nowrap overflow-auto title ">
-                    <h1>{song.title}</h1>
-                  </div>
-                </div>
-              ) : null;
-            })}
-          </div>
-        </div>
+       <div>
+        <SongsQueue/>
+       </div>
       ) : (
         <div className="flex flex-col items-center min-h-32 justify-between mt-20">
           <h1 className="w-full text-center lg:text-3xl text-slate-200">

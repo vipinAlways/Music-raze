@@ -10,17 +10,17 @@ function page() {
 
   const session =useSession()
   return (
-    <div className="grid max-sm:flex max-sm:flex-col max-sm:items-center  grid-cols-2 w-full justify-between h-full pt-7">
-      <div className="lg:w-4/5 w-full ">
+    <div className="grid max-sm:flex max-sm:flex-col max-sm:items-center  grid-cols-2 w-full justify-between h-full pt-7 sm:pt-24">
+      <div className="lg:w-4/5 w-full h-full flex justify-center items-center">
         <Songs />
       </div>
 
-      <div className="text-slate-200 flex flex-col items-center justify-around">
+      <div className="text-slate-200 flex flex-col items-center justify-around h-full">
         <div>
-          <p className="text-center text-6xl font-serif w-full ">
+          <p className="text-center lg:text-6xl font-serif w-full sm:text-3xl">
             Welcome to Music Raze
           </p>
-          <p className="text-center w-4/5 mx-auto text-5xl font-serif">
+          <p className="text-center w-4/5 mx-auto text-5xl sm:text-2xl font-serif">
             where you can enjoy your favorite song hooks with the ones you love
           </p>
         </div>
