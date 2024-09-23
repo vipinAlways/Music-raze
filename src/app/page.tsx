@@ -10,8 +10,8 @@ function page() {
 
   const session =useSession()
   return (
-    <div className="grid max-sm:flex max-sm:flex-col max-sm:items-center  grid-cols-2 w-full justify-between h-full pt-7 sm:pt-24">
-      <div className="lg:w-4/5 w-full h-full flex justify-center items-center">
+    <div className="grid max-sm:flex max-sm:flex-col max-sm:items-center  grid-cols-2 w-full justify-between h-full  lg:pt-7 sm:pt-24">
+      <div className="lg:w-4/5 w-full h-full flex justify-start items-center">
         <Songs />
       </div>
 

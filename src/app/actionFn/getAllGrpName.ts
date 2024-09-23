@@ -109,7 +109,7 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
       throw new Error("Unable to find stream");
     }
 
-    if (image === '' && title === '' && link === '') {
+    if (!image || !title || !link) {
       throw new Error('not able to add this song')
     }
     const newUrl = await db.url.create({

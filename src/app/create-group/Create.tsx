@@ -49,8 +49,8 @@ function Create() {
   };
 
   return (
-    <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 h-[calc(100vh-10rem)] w-[60%] sm:w-4/5 flex  items-center justify-center mx-auto rounded-xl">
-      <Tabs defaultValue="Create Group" className="w-[50%] sm:w-3/5">
+    <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 h-[calc(100vh-10rem)] lg:w-[60%] sm:w-4/5 flex  items-center justify-center mx-auto rounded-xl">
+      <Tabs defaultValue="Create Group" className="lg:w-[60%] sm:w-3/5">
         <TabsList className="grid w-full grid-col-1">
           <TabsTrigger value="Create Group">Create Group</TabsTrigger>
         </TabsList>

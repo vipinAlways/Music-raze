@@ -4,7 +4,7 @@ import { MusicContext } from "./Context";
 import { cn } from "@/lib/utils";
 import VolumeRange from "./VolumeRange";
 import { Plus } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addUrl } from "@/app/actionFn/getAllGrpName";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,7 +20,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
-
+  const queryClient = useQueryClient()
   const {toast} =useToast()
 
   const musicContext = useContext(MusicContext);
@@ -116,13 +116,13 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
       })
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['get-stream'] })
       console.log("URL added successfully");
     },
   });
 
-  const handleUrl = () => {
-    
-    mutate({ image, title, link: songurl, groupId: currentgrpId.toString() });
+  const handleUrl = (songImage:string, songTitle: string, songPreview: string) => {
+    mutate({ image: songImage, title: songTitle, link: songPreview, groupId: currentgrpId.toString() })
   };
 
   return (
@@ -172,15 +172,14 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                   </p>
                   <div
                     className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
-                    onClick={() => {
-                      setImage(song.album.images[0]?.url);
-                      setTitle(song.name);
-                      setSongUrl(song.preview_url);
-                      handleUrl();
-                      setTimeout(() => {
-                        setSearchInput("");
-                      }, 100);
-                    }}
+                    
+                      // setImage(song.album.images[0]?.url);
+                      // setTitle(song.name);
+                      // setSongUrl(song.preview_url);
+                      onClick={() => {
+                      handleUrl(song.album.images[0]?.url, song.name, song.preview_url),
+                      setSearchInput("")
+                      }}
                   >
                     <Plus />
                   </div>
