@@ -27,6 +27,7 @@ model ActiveStreams {
   url         Url[]
   groupId     String          @unique
   group       Group           @relation(name: "ActiveStreamsToGroup", fields: [groupId], references: [id])
+   currentSongIndex Int          @default(0)  
 }
 
 model Url {

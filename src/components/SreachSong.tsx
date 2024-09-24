@@ -11,12 +11,9 @@ import { useToast } from "@/hooks/use-toast";
 function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [searchInput, setSearchInput] = useState<string>("");
   const [accessToken, setAccessToken] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
-  const [songurl, setSongUrl] = useState<string>("");
-  const [image, setImage] = useState<string>("");
   const [albums, setAlbums] = useState<any[]>([]);
   const [debounceSreachInput, setDebouncedSearchInput] = useState<string>("");
-  const [globalVolume, setGlobalVolume] = useState<number>(0.2);
+  const [globalVolume, setGlobalVolume] = useState<number>(1);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
@@ -26,13 +23,6 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const musicContext = useContext(MusicContext);
   const resultOffset = musicContext?.resultOffset;
 
-  const handlePlay = (audioElement: HTMLAudioElement) => {
-    if (currentAudio && currentAudio !== audioElement) {
-      currentAudio.pause();
-    }
-    audioElement.volume = globalVolume;
-    setCurrentAudio(audioElement);
-  };
 
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
@@ -141,7 +131,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
           className={cn(
             searchInput === "" && albums.length === 0
               ? "hidden"
-              : "w-full border-4 border-b-0 border-[#7C3AED] bg-[#7C3AED] bg-opacity-80 p-1 grid grid-cols-1 lg:grid-cols-3 gap-2 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md"
+              : "w-full border-4 border-b-0 border-[#7C3AED] bg-[#7C3AED] bg-opacity-80 p-1 grid grid-cols-1 lg:grid-cols-3 gap-2 items-stretch justify-center overflow-auto h-[70vh] dropdown rounded-md z-[9999]"
           )}
         >
           {albums.length > 0 ? (
@@ -172,11 +162,13 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                   </p>
                   <div
                     className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
-                    
-                      // setImage(song.album.images[0]?.url);
-                      // setTitle(song.name);
-                      // setSongUrl(song.preview_url);
                       onClick={() => {
+                        if (!song.album.images[0]?.url || !song.name || !song.preview_url) {
+                          toast({
+                            title:"Error",
+                            description:"can't able to add this song"
+                          })
+                        }
                       handleUrl(song.album.images[0]?.url, song.name, song.preview_url),
                       setSearchInput("")
                       }}
