@@ -120,7 +120,7 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
 
 
 export async function  dropUrl(urlId:string) {
-  await db.$connect()
+  await db.$connect();
 
   try {
     const url = await db.url.findUnique({
@@ -141,6 +141,8 @@ export async function  dropUrl(urlId:string) {
     })
   } catch (error) {
     throw new Error('while deleting steam')
+  }finally{
+    await db.$disconnect();
   }
 }
 
@@ -182,3 +184,5 @@ export async function findActiveStream(groupID: string ) {
     throw new Error("Could not find any stream for the given group");
   }
 }
+
+
