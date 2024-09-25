@@ -6,6 +6,7 @@ import { useGroup } from "./GroupContextType ";
 import { Minus } from "lucide-react";
 import ActiveSong from "./ActiveSong";
 import { dropUrl } from "@/app/actionFn/getAllGrpName";
+import { cn } from "@/lib/utils";
 
 interface Song {
   id: string;
@@ -77,34 +78,36 @@ function SongsQueue() {
   }
 
   return (
-    <div className="w-full flex items-center justify-between flex-1">
-      <div className="flex w-60 flex-col gap-1  p-1 border h-72 rounded-lg">
+    <div className="w-full flex items-start justify-between flex-1">
+      <div className="flex w-3/5 flex-col   p-1  h-96 rounded-lg">
         <ActiveSong />
       </div>
-      <div className="w-[calc(80vw-15rem)] border-2 bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex items-center gap-2 h-80 overflow-auto ">
-        {data.url.length >0 ? data.url.map((song: Song, index: number) =>(
-          <div
-          key={index}
-          className="flex  lg:min-w-60 lg:max-w-60 sm:w-40 flex-col gap-1 h-full p-1 border rounded-lg sm:justify-around  relative "
-        >
-          <div
-            className="absolute top-1.5 right-1 p-1 border bg-red-600 rounded-full z-50 hover:bg-red-900 "
-            onClick={() => handleDrop(song.id)}
+      <div className="w-[35%] border-2 bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex flex-col items-center gap-2 h-[60vh] overflow-auto songList" >
+        {data.url.length >0 ? data.url.map((song: Song, index: number) =>
+          index >=data.currentSongIndex ? (
+            <div
+            key={index}
+            className={cn("flex  lg:min-w-full lg:max-w-60 flex-col items-center h-52 p-1 border rounded-lg justify-around  relative",index === data.currentSongIndex ? 'opacity-75' :'opacity-100')}
           >
-            <Minus className="hover:scale-105"/>
+            <div
+              className={cn("absolute top-1.5 right-1 p-1 border bg-red-600 rounded-full z-50 hover:bg-red-900 ",index === data.currentSongIndex ? 'hidden' :null)}
+              onClick={() => handleDrop(song.id)}
+            >
+              <Minus className="hover:scale-105"/>
+            </div>
+            <div className="w-full">
+              <img
+                src={song.image}
+                alt={song.title}
+                className="rounded-tr-3xl object-contain lg:h-32 w-full "
+              />
+            </div>
+            <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-xl text-center py-1 rounded-lg whitespace-nowrap overflow-auto title ">
+              <h1>{song.title}</h1>
+            </div>
           </div>
-          <div className="lg:h-56 sm:h-40 w-full  ">
-            <img
-              src={song.image}
-              alt={song.title}
-              className="rounded-tr-3xl"
-            />
-          </div>
-          <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-2xl text-center py-1 rounded-lg whitespace-nowrap overflow-auto title ">
-            <h1>{song.title}</h1>
-          </div>
-        </div>
-        ) ) : null}
+          ) : null
+         ) : null}
       </div>
     </div>
   );

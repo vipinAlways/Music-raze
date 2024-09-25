@@ -107,6 +107,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['get-stream'] })
+      queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       console.log("URL added successfully");
     },
   });

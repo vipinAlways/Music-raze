@@ -152,9 +152,7 @@
 .title::-webkit-scrollbar{
   display: none;
 }
-.songqueue::-webkit-scrollbar{
-  display: none;
-}
+
 
 body {
   background: linear-gradient(40deg, #4b2ee0f7 5%, rgba(120,46,224,0.97) 21%, rgba(70,28,184,1) 35%, rgba(109,28,184,1) 58%);
@@ -162,3 +160,32 @@ body {
   /* background-repeat: no-repeat; */
 }
 
+/* Custom scrollbar for songList class */
+.songList::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.songList::-webkit-scrollbar-track {
+  background: rgba(124, 58, 237, 0.2); 
+  border-radius: 10px; 
+}
+
+.songList::-webkit-scrollbar-thumb {
+  background-color: rgba(66, 14, 154, 0.8);
+  border-radius: 10px; 
+  border: 2px solid rgba(124, 58, 237, 0.2);
+}
+
+.songList::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(45, 8, 110); 
+}
+
+
+.songList {
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(29, 4, 74, 0.8) rgba(124, 58, 237, 0.2);
+}
+.playing{
+  color: rgb(10, 3, 43);
+  color: linear-gradient(40deg, rgba(75,46,224,0.9697128851540616) 22%, rgba(120,46,224,0.9669117647058824) 28%, rgba(70,28,184,1) 46%, rgba(75,30,188,1) 53%, rgba(109,28,184,1) 75%);
+}

@@ -150,7 +150,7 @@ export async function updateActiveStream(groupID: string, currentSongIndex: numb
   return await db.activeStreams.update({
     where: { groupId: groupID },
     data: {
-      currentSongIndex,  // Now we update the index of the currently playing song
+      currentSongIndex,  
     },
   });
 }
