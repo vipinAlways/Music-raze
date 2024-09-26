@@ -184,5 +184,30 @@ export async function findActiveStream(groupID: string ) {
     throw new Error("Could not find any stream for the given group");
   }
 }
+export async function deleteStream(streamID: string ) {
+  await db.$connect()
+    try {
+    const group = await db.group.updateMany({
+      where:{
+        streamId:streamID
+      },
+      data:{
+        streamId:''
+      }
+    })
+
+    return await db.activeStreams.delete({
+      where: {
+        id: streamID,
+      },
+      
+    });
+
+    
+  } catch (error) {
+    console.log(error);
+    throw new Error("Could not find any stream for the given group");
+  }
+}
 
 

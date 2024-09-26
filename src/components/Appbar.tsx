@@ -95,34 +95,34 @@ function Appbar() {
       <div>
         <h1 className="text-lg lg:text-xl font-serif">Music Raze</h1>
       </div>
-      <div className="relative w-96 max-sm:hidden flex items-center gap-2">
+      <div className="relative min-w-96 max-sm:hidden flex items-center gap-2">
         <input
           type="text"
           id="search"
-          className="h-10 px-4 w-80 rounded-xl border border-gray-300 text-black focus:outline-none"
+          className="h-10 px-4 w-96 rounded-xl border border-gray-300 text-black focus:outline-none"
           value={inputValue}
           onChange={handleInputChange}
           onBlur={() => setTimeout(() => setShowOptions(false), 100)}
           onFocus={() => inputValue && setShowOptions(true)}
         />
         {showOptions && filteredOptions.length > 0 && (
-          <ul className="absolute z-10 w-full bg-[#7C3AED] border border-gray-300 rounded-xl mt-24 max-h-48 overflow-y-auto">
+          <ul className="absolute z-10 w-full bg-[#7C3AED] rounded-xl mt-24 max-h-48 overflow-y-auto">
             {filteredOptions.map((option) =>
               isLoading ? (
                 <div key={option.id}>
-                  <li className="px-4 py-2 hover:bg-[#563295] cursor-pointer"></li>
+                  <li className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"></li>
                 </div>
               ) : error && filteredOptions.length === 0 ? (
                 <div
                   key={option.id}
-                  className="px-4 py-2 hover:bg-[#563295] cursor-pointer"
+                  className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
                 >
                   Not able to Find that
                 </div>
               ) : (
                 <li
                   key={option.id}
-                  className="px-4 py-2 hover:bg-[#563295] cursor-pointer"
+                  className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
                   onClick={() => handleOptionClick(option)}
                 >
                   <h2>{option.groupName}</h2>

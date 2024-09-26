@@ -1,12 +1,14 @@
 import { createStream } from '@/app/actionFn/getAllGrpName'
 import { useToast } from '@/hooks/use-toast'
 import { useMutation } from '@tanstack/react-query'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 
 function StartStream({grpid}:{grpid:string}) {
     const {toast} = useToast()
-
+    const [countDown,setCountDown] =useState(0)
+    const [hidden,setHidden] =useState('hidden')
+    const [hidden2,setHidden2] =useState('')
     const {mutate} = useMutation({
         mutationKey:['createStream'],
         mutationFn:createStream,
@@ -24,7 +26,9 @@ function StartStream({grpid}:{grpid:string}) {
     })
 
     const handleSubmit = (e:React.FormEvent)=>{
-
+        setHidden('')
+        setHidden2('hidden')
+        setCountDown(0)
         e.preventDefault()
         mutate({groupId:grpid})
         setTimeout(() => {
@@ -32,10 +36,36 @@ function StartStream({grpid}:{grpid:string}) {
         }, 5000);
           
     }
+
+    useEffect(() => {
+      if (countDown < 5) {
+        const timer = setTimeout(() => {
+          setCountDown((prev) => prev + 1);
+        }, 1000);
+        
+      
+        return () => clearTimeout(timer);
+      }
+    }, [countDown]);
+    
   return (
-    <Button onClick={handleSubmit}>
+  <div className='relative w-full text-center'>
+     <h1 className={`w-full text-center lg:text-3xl text-slate-200 ${hidden2}`}>
+            Currently no stream
+          </h1>
+      <Button onClick={handleSubmit} className='mt-4' >
             Start Stream
           </Button>
+
+
+          <div className={`z-30 bg-[#5b1dc5] absolute top-0  left-1/2 -translate-x-1/2 rounded-full text-slate-200 ${hidden}`}>
+            <div className='h-72 rounded-full w-72  lg:text-7xl flex items-center justify-center'>
+                {
+                  countDown
+                }
+            </div>
+          </div>
+  </div>
   )
 }
 

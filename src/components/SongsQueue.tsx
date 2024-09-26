@@ -32,18 +32,16 @@ function SongsQueue() {
   };
 
   const dropSong = useMutation({
-    mutationKey:['drop-song'],
-    mutationFn:dropUrl,
-    onError:()=>{
-      console.log('nahi hua');
+    mutationKey: ["drop-song"],
+    mutationFn: dropUrl,
+    onError: () => {
+      console.log("nahi hua");
     },
-    onSuccess:()=>{
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
-    }
-  })
-
-
+    },
+  });
 
   useEffect(() => {
     const audioElement = audioRef.current;
@@ -64,17 +62,40 @@ function SongsQueue() {
     }
   }, [currentSongIndex]);
 
-  const handleDrop =(urlID:string)=>{
-      dropSong.mutate(urlID)
-      console.log(urlID);
-  }
+  const handleDrop = (urlID: string) => {
+    dropSong.mutate(urlID);
+    console.log(urlID);
+  };
 
   if (error) {
     return <div>Error loading stream</div>;
   }
 
   if (!data?.url || data.url.length === 0) {
-    return <div>No songs available</div>;
+    return (
+      <div className="w-full flex items-start justify-between  flex-1">
+        <div className="flex w-3/5 flex-col p-1 relative h-96 ">
+          <div className="h-full w-full">
+            <div className="relative">
+              <div className="h-48  w-full  flex flex-col justify-center lg:text-4xl  items-center relative z-20 ">
+                <h1 className="text-opacity-15 text-red-700">
+                  Please Select your first song
+                </h1>
+              </div>
+              <div className="absolute h-60 w-full top-0 bg-white bg">
+                hello
+              </div>
+              <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-2xl text-center py-1 rounded-lg"></div>
+
+              <div
+                className={cn("text-center w-full mt-3  lg:text-2xl relative")}
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div className="w-[35%]  bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex flex-col items-center gap-2 h-[60vh] overflow-auto songList lg:-mt-10"></div>
+      </div>
+    );
   }
 
   return (
@@ -82,32 +103,42 @@ function SongsQueue() {
       <div className="flex w-3/5 flex-col   p-1  h-96 rounded-lg">
         <ActiveSong />
       </div>
-      <div className="w-[35%] border-2 bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex flex-col items-center gap-2 h-[60vh] overflow-auto songList" >
-        {data.url.length >0 ? data.url.map((song: Song, index: number) =>
-          index >=data.currentSongIndex ? (
-            <div
-            key={index}
-            className={cn("flex  lg:min-w-full lg:max-w-60 flex-col items-center h-52 p-1 border rounded-lg justify-around  relative",index === data.currentSongIndex ? 'opacity-75' :'opacity-100')}
-          >
-            <div
-              className={cn("absolute top-1.5 right-1 p-1 border bg-red-600 rounded-full z-50 hover:bg-red-900 ",index === data.currentSongIndex ? 'hidden' :null)}
-              onClick={() => handleDrop(song.id)}
-            >
-              <Minus className="hover:scale-105"/>
-            </div>
-            <div className="w-full">
-              <img
-                src={song.image}
-                alt={song.title}
-                className="rounded-tr-3xl object-contain lg:h-32 w-full "
-              />
-            </div>
-            <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-xl text-center py-1 rounded-lg whitespace-nowrap overflow-auto title ">
-              <h1>{song.title}</h1>
-            </div>
-          </div>
-          ) : null
-         ) : null}
+      <div className="w-[35%]  bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex flex-col items-center gap-2 h-[60vh] overflow-auto songList lg:-mt-10">
+        {data.url.length > 0
+          ? data.url.map((song: Song, index: number) =>
+              index >= data.currentSongIndex ? (
+                <div
+                  key={index}
+                  className={cn(
+                    "flex  lg:min-w-full lg:max-w-60 flex-col items-center h-52 p-1 bg-[#38196e]  rounded-lg justify-around  relative",
+                    index === data.currentSongIndex
+                      ? "opacity-75"
+                      : "opacity-100"
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "absolute top-1.5 right-1 p-1 border bg-red-600 rounded-full z-50 hover:bg-red-900 ",
+                      index === data.currentSongIndex ? "hidden" : null
+                    )}
+                    onClick={() => handleDrop(song.id)}
+                  >
+                    <Minus className="hover:scale-105" />
+                  </div>
+                  <div className="w-full">
+                    <img
+                      src={song.image}
+                      alt={song.title}
+                      className="rounded-tr-3xl object-contain lg:h-32 w-full "
+                    />
+                  </div>
+                  <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-xl text-center py-1 rounded-lg whitespace-nowrap overflow-auto title ">
+                    <h1>{song.title}</h1>
+                  </div>
+                </div>
+              ) : null
+            )
+          : null}
       </div>
     </div>
   );

@@ -189,3 +189,25 @@ body {
   color: rgb(10, 3, 43);
   color: linear-gradient(40deg, rgba(75,46,224,0.9697128851540616) 22%, rgba(120,46,224,0.9669117647058824) 28%, rgba(70,28,184,1) 46%, rgba(75,30,188,1) 53%, rgba(109,28,184,1) 75%);
 }
+
+.bg{
+  filter: blur(12px);
+  animation: blur 6s ease-in-out 0.5s infinite;
+}
+@keyframes blur {
+  0%{
+    filter: blur(12px);
+  }
+  20%{
+    filter: blur(60px);
+  }
+  40%{
+    filter: blur(30px);
+  }
+  60%{
+    filter: blur(70px);
+  }
+  100%{
+    filter: blur(12px);
+  }
+}

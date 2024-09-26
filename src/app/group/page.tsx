@@ -33,9 +33,6 @@ function Page() {
     enabled: !!data?.members,
   });
 
- 
-
-
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data</div>;
 
@@ -46,7 +43,7 @@ function Page() {
       </Button>
       <SreachSong currentgrpId={groupID} />
       <div className="flex justify-between lg:pr-28">
-        <div className="h-full w-full flex flex-col items-start gap-7">
+        <div className="h-full w-full flex flex-col items-start gap-4">
           <h1 className="text-xl lg:text-3xl text-slate-200">
             || {data?.groupName} ||
           </h1>
@@ -74,14 +71,12 @@ function Page() {
       </div>
 
       {data?.streamId ? (
-       <div>
-        <SongsQueue/>
-       </div>
+        <div>
+          <SongsQueue />
+        </div>
       ) : (
         <div className="flex flex-col items-center min-h-32 justify-between mt-20">
-          <h1 className="w-full text-center lg:text-3xl text-slate-200">
-            Currently no stream
-          </h1>
+         
           <div className="w-full flex items-center justify-center lg:text-xl">
             <StartStream grpid={groupID} />
           </div>
