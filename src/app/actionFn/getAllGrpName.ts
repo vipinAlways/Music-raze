@@ -1,6 +1,8 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export async function getAllGrpNames() {
   return await db.group.findMany({});
@@ -208,6 +210,41 @@ export async function deleteStream(streamID: string ) {
     console.log(error);
     throw new Error("Could not find any stream for the given group");
   }
+}
+
+export async function  addFavorite({image_url, Audio_url, title_url }: { title_url: string; Audio_url: string; image_url: string; }) {
+
+  await db.$connect()
+  const session =await  getServerSession(authOptions)
+  try {
+    if (!session  || !session.user?.email) {
+      throw new Error('session is not register')
+    }
+    const user = await db.user.findFirst({
+      where:{
+        email:session?.user?.email
+      }
+    })
+
+    if (!user) {
+      throw new Error(
+        'no user find with this credentials'
+      )
+    }
+    return await db.favroutie.create({
+      data:{
+          userId:user?.id,
+          image_url,
+          Audio_url,
+          title_url
+      }
+    })
+  } catch (error) {
+    throw new Error(
+      'not able to add this in your favorite list'
+    )
+  }
+  
 }
 
 

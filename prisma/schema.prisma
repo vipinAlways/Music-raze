@@ -16,39 +16,41 @@ model User {
   streams  ActiveStreams[]
   group    Group[]
   upVotes  UrlUpVotes[]
+  favourite   Favroutie[]
 }
 
 model ActiveStreams {
-  id          String          @id @default(uuid())
-  type        StreamType
-  userId      String
-  user        User            @relation(fields: [userId], references: [id])
-  upVotes     UrlUpVotes[]    @relation("ActiveStreamsUpVotes")
-  url         Url[]
-  groupId     String          @unique
-  group       Group           @relation(name: "ActiveStreamsToGroup", fields: [groupId], references: [id])
-   currentSongIndex Int          @default(0)  
+  id               String       @id @default(uuid())
+  type             StreamType
+  userId           String
+  user             User         @relation(fields: [userId], references: [id])
+  upVotes          UrlUpVotes[] @relation("ActiveStreamsUpVotes")
+  url              Url[]
+  groupId          String       @unique
+  group            Group        @relation(name: "ActiveStreamsToGroup", fields: [groupId], references: [id])
+  currentSongIndex Int          @default(0)
 }
 
 model Url {
-  id             String          @id @default(uuid()) 
-  streamId       String
-  activeStream   ActiveStreams   @relation(fields: [streamId], references: [id], onDelete: Cascade)
-  url            String
-  image          String
-  title          String
-  upVotes        UrlUpVotes[]
+  id           String        @id @default(uuid())
+  streamId     String
+  activeStream ActiveStreams @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  url          String
+  image        String
+  title        String
+  upVotes      UrlUpVotes[]
 }
 
 model UrlUpVotes {
-  id             String          @id @default(uuid())
-  userId         String
-  urlId          String
-  streamId       String          
-  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  url            Url             @relation(fields: [urlId], references: [id], onDelete: Cascade)
-  activeStream   ActiveStreams   @relation(fields: [streamId], references: [id], onDelete: Cascade, name: "ActiveStreamsUpVotes")
-  @@unique([userId, urlId])    
+  id           String        @id @default(uuid())
+  userId       String
+  urlId        String
+  streamId     String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url          Url           @relation(fields: [urlId], references: [id], onDelete: Cascade)
+  activeStream ActiveStreams @relation(fields: [streamId], references: [id], onDelete: Cascade, name: "ActiveStreamsUpVotes")
+
+  @@unique([userId, urlId])
 }
 
 model Group {
@@ -65,8 +67,18 @@ model Group {
   ActiveStreams ActiveStreams[] @relation(name: "ActiveStreamsToGroup")
 }
 
+model Favroutie {
+  id        String @id @default(uuid())
+  Audio_url String
+  image_url String
+  title_url String
+  userId  String    
+  user    User       @relation(fields: [userId],references: [id],onDelete: Cascade)
+  
+}
+
 enum type {
-  invite 
+  invite
   anyone
 }
 

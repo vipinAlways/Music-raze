@@ -142,7 +142,7 @@ function Appbar() {
             Log out
           </Button>
         ) : (
-          <Button className="m-2 p-2 bg" onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
+          <Button className="m-2 p-2 " onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
             Sign In
           </Button>
         )}
