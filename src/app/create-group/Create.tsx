@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CreateGrp } from "./action";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -34,23 +34,40 @@ function Create() {
         variant: "destructive",
       }),
     onSuccess: () =>
+     {
       toast({
         title: "Group created",
         description: "Group created successfully",
       }),
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 150);
+     }
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+   
+    // e.preventDefault();
     mutation.mutate({ groupName, description });
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 150);
+    
   };
 
+  useEffect(() => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        handleSubmit()
+      }
+    };
+
+    window.document.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      window.document.removeEventListener("keydown", handleKeydown);
+    };
+  }, [groupName]);
   return (
     <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 h-[calc(100vh-10rem)] lg:w-[60%] sm:w-4/5 flex  items-center justify-center mx-auto rounded-xl">
-      <Tabs defaultValue="Create Group" className="lg:w-[60%] sm:w-3/5">
+      <Tabs defaultValue="Create Group" className="lg:w-[60%] sm:w-3/5 hello">
         <TabsList className="grid w-full grid-col-1">
           <TabsTrigger value="Create Group">Create Group</TabsTrigger>
         </TabsList>

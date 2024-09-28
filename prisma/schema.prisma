@@ -55,7 +55,7 @@ model UrlUpVotes {
 
 model Group {
   id            String          @id @default(uuid())
-  groupName     String
+  groupName     String          
   userId        String
   members       String[]
   streamId      String

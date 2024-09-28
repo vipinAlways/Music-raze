@@ -18,6 +18,9 @@ export async function CreateGrp({
     throw new Error("User not authenticated or missing email");
   }
 
+  if (!groupName) {
+    throw new Error ('please fill group name')
+  }
   
   const user = await db.user.findFirst({
     where: {

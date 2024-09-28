@@ -211,3 +211,6 @@ body {
     filter: blur(12px);
   }
 }
+.title::-webkit-scrollbar{
+  display: none;
+}
