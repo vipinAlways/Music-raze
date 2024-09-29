@@ -86,11 +86,11 @@ function Page() {
           </Button>
         </div>
 
-        <div className="h-[55vh] md:w-1/2 lg:w-[30%] bg-white bg-opacity-25 rounded-lg ">
+        <div className="min-h-[55vh] md:w-1/2 lg:w-[30%] bg-white bg-opacity-25 rounded-lg ">
           <h1 className="p-3 w-full text-center bg-white bg-opacity-30 text-purple-800 lg:text-2xl rounded-tr-lg rounded-tl-lg">
             Favorite Song
           </h1>
-          <div className="relative mt-1 h-full overflow-auto songlist flex flex-col items-center gap-2 ">
+          <div className="relative mt-1 h-[50vh] overflow-auto songlist flex flex-col items-center gap-2 title">
             {favortieSong?.data?.length > 0 ? (
               <>
                 {isPlaying ? (
@@ -107,7 +107,7 @@ function Page() {
                     key={index}
                     className={cn(
                       "flex lg:min-w-full lg:max-w-60 flex-col items-center h-40 p-1 bg-[#38196e] rounded-lg justify-around relative",
-                      currentSongIndex === index ? "opacity-50" : "opacity-100" // Change opacity based on current song
+                      currentSongIndex === index ? "opacity-50" : "opacity-100" 
                     )}
                   >
                     <div className="w-full">

@@ -21,7 +21,7 @@
       <html lang="en">
         <body className={`${inter.className} min-h-screen font-serif `}>
           <Provider>
-            <div className="px-10 ">
+            <div className="px-10 max-sm:px-5 ">
             <Appbar/>
               {children}</div>
               <Toaster/>

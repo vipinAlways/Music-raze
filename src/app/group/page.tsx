@@ -39,7 +39,7 @@ function Page() {
   return (
     <div className="flex flex-col gap-9 ">
       
-        <Link href="/dashboard" className="bg-[#7C3AED] w-44 text-center text-lg px-3 py-1.5 rounded-md text-slate-300">Back to Dashboard</Link>
+        <Link href="/dashboard" className="bg-[#7C3AED] lg:w-44 w-20 max-sm:mt-4 text-sm text-center px-0.5 lg:text-lg lg:px-3 py-1.5 rounded-md text-slate-300">Back to Dashboard</Link>
   
       <SreachSong currentgrpId={groupID} />
       <div className="flex flex-col justify-between lg:pr-28 mb-4">
@@ -54,7 +54,10 @@ function Page() {
         </div>
       </div>
 
-      {data?.streamId ? (
+     <div>
+      
+
+     {data?.streamId ? (
         <div>
           <SongsQueue />
         </div>
@@ -65,6 +68,7 @@ function Page() {
           </div>
         </div>
       )}
+     </div>
     </div>
   );
 }

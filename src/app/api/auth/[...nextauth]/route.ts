@@ -40,10 +40,11 @@ callbacks:{
       });
 
       console.log();
+      return true
     } catch (error) {
       console.log(error);
+      return false
     }
-      return true
   }
 }} 
 const handler = NextAuth(authOptions)

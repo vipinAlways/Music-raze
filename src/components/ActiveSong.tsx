@@ -5,6 +5,8 @@ import {
   addFavorite,
   deleteStream,
   findActiveStream,
+  getAdmin,
+  getUser,
   updateActiveStream,
 } from "@/app/actionFn/getAllGrpName";
 import { Button } from "./ui/button";
@@ -20,10 +22,27 @@ export default function ActiveSong() {
   const [countDown, setCountDown] = useState(0);
   const [hidden, setHidden] = useState("hidden");
   const [hidden2, setHidden2] = useState("");
-  const { data, error } = useQuery({
+  const [admin, setAdmin] = useState(false);
+  
+  const { data } = useQuery({
     queryKey: ["get-active-stream"],
     queryFn: async () => findActiveStream(groupID),
   });
+
+  const seeAdmin = useQuery({
+    queryKey:['see-admin',data?.id],
+    queryFn:async()=> getAdmin(),
+    enabled:!!data?.id
+  })
+  console.log(seeAdmin.data?.id);
+ 
+  useEffect(()=>{
+    if (seeAdmin.data?.id === data?.userId) {
+      setAdmin(true)
+    }else{
+      setAdmin(false)
+    }
+  },[seeAdmin])
 
   useEffect(() => {
     setTimeout(() => {
@@ -86,6 +105,9 @@ export default function ActiveSong() {
     setTimeout(() => {
       deleteS.mutate(data?.id ?? "");
     }, 5000);
+
+    queryClient.invalidateQueries({queryKey:['get-active-stream']})
+
   };
   useEffect(() => {
     if (countDown < 5) {
@@ -97,30 +119,38 @@ export default function ActiveSong() {
     }
   }, [countDown]);
 
-
   const favorite = useMutation({
-    mutationKey:['add-favorite'],
-    mutationFn:addFavorite,
-    onError:(error)=>{
+    mutationKey: ["add-favorite"],
+    mutationFn: addFavorite,
+    onError: (error) => {
       toast({
-        title:"Error",
-        description:'error while adding it to favorites',
-        variant:'destructive'
-      })
+        title: "Error",
+        description: "error while adding it to favorites",
+        variant: "destructive",
+      });
     },
-    onSuccess:()=>{
+    onSuccess: () => {
       toast({
-        title:"Greate",
-        description:'added it to favorites',
-       
-      })
-    }
-  })
+        title: "Greate",
+        description: "added it to favorites",
+      });
+    },
+  });
+
+  const addFavoriteSongs = (
+    songImage: string,
+    songTitle: string,
+    songPreview: string
+  ) => {
+    favorite.mutate({
+      image_url: songImage,
+      Audio_url: songPreview,
+      title_url: songTitle,
+    });
+  };
 
 
-  const addFavoriteSongs = (songImage:string, songTitle: string, songPreview: string)=>{
-    favorite.mutate({image_url:songImage,Audio_url:songPreview,title_url:songTitle})
-  }
+
   return (
     <div className="h-full w-full">
       {data?.url[currentSongIndex] ? (
@@ -147,8 +177,17 @@ export default function ActiveSong() {
             />
           </div>
 
-          <div className="absolute top-0 right-2 group z-30" onClick={()=>addFavoriteSongs(data.url[currentSongIndex].image,data.url[currentSongIndex].title,data.url[currentSongIndex].url)}>
-            <button className="text-red-700 text-3xl p-2 rounded-full px-4 bg-slate-300" >
+          <div
+            className="absolute top-0 right-2 group z-30"
+            onClick={() =>
+              addFavoriteSongs(
+                data.url[currentSongIndex].image,
+                data.url[currentSongIndex].title,
+                data.url[currentSongIndex].url
+              )
+            }
+          >
+            <button className="text-red-700 text-3xl p-2 rounded-full px-4 bg-slate-300">
               &#9829;
             </button>
             <h1 className="absolute -top-6 w-fit whitespace-nowrap -right-4 text-xs hidden group-hover:block group-hover:transition group-hover:ease-out group-hover:duration p-1 bg-red-400 rounded-lg text-slate-200">
@@ -165,10 +204,15 @@ export default function ActiveSong() {
               : " Stream Is Going TO be Ended"}
           </h1>
 
-          <div className={cn("text-center w-full mt-3  lg:text-2xl relative")}>
+          <div
+            className={cn(
+              "text-center w-full mt-3  lg:text-2xl relative",
+              admin ? "" : ""
+            )}
+          >
             <Button
               onClick={() => endStream()}
-              className={cn("bg-[#5b1dc5] lg:text-2xl p-2")}
+              className={cn("bg-[#5b1dc5] lg:text-2xl p-2",admin===true ? '': 'hidden')}
             >
               End Stream
             </Button>

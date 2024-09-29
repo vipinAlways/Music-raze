@@ -11,7 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useGroup } from "./GroupContextType ";
 
 function Appbar() {
-  const pathname =usePathname()
+  const pathname = usePathname();
   const session = useSession();
   const [inputValue, setInputValue] = useState<string>("");
   const [filteredOptions, setFilteredOptions] = useState<
@@ -31,7 +31,6 @@ function Appbar() {
         { id: "default1", groupName: "hello" },
         { id: "default2", groupName: "hello 2" },
       ];
-
 
   useEffect(() => {
     const savedInputValue = localStorage.getItem("inputValue");
@@ -90,62 +89,123 @@ function Appbar() {
     }
   };
 
-  return (
-    <div className="flex justify-between items-center h-20 text-white">
-      <div>
-        <h1 className="text-lg lg:text-xl font-serif">Music Raze</h1>
-      </div>
-      <div className="relative min-w-96 max-sm:hidden flex items-center gap-2">
-        <input
-          type="text"
-          id="search"
-          className="h-10 px-4 w-96 rounded-xl border border-gray-300 text-black focus:outline-none"
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={() => setTimeout(() => setShowOptions(false), 100)}
-          onFocus={() => inputValue && setShowOptions(true)}
-        />
-        {showOptions && filteredOptions.length > 0 && (
-          <ul className="absolute z-10 w-full bg-[#7C3AED] rounded-xl mt-24 max-h-48 overflow-y-auto">
-            {filteredOptions.map((option) =>
-              isLoading ? (
-                <div key={option.id}>
-                  <li className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"></li>
-                </div>
-              ) : error && filteredOptions.length === 0 ? (
-                <div
-                  key={option.id}
-                  className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
-                >
-                  Not able to Find that
-                </div>
-              ) : (
-                <li
-                  key={option.id}
-                  className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
-                  onClick={() => handleOptionClick(option)}
-                >
-                  <h2>{option.groupName}</h2>
-                </li>
-              )
-            )}
-          </ul>
-        )}
-        <Button onClick={onselect}>
-          <Link href="/group">Select</Link>
-        </Button>
-      </div>
+  const mobileClick = (option: { id: string; groupName: string }) => {
+    setInputValue(option.groupName);
+   
 
-      <div className="flex items-center gap-5">
-        {session.data?.user ? (
-          <Button className="m-2 p-2 font-medium" onClick={() => signOut({ callbackUrl: '/' })}>
-            Log out
-          </Button>
-        ) : (
-          <Button className="m-2 p-2 " onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
-            Sign In
-          </Button>
+    setGroupID(option.id);
+  };
+
+  return (
+    <div className="flex justify-between max-sm:flex-col items-center min-h-20 text-white">
+      <div className="flex justify-between items-center h-full w-full">
+        <div>
+          <Link href="/" className="text-lg lg:text-xl font-serif">
+            Music Raze
+          </Link>
+        </div>
+        <div className="relative min-w-96  max-sm:hidden flex items-center gap-2">
+          <input
+            type="text"
+            id="search"
+            className="h-10 px-4 w-96 rounded-xl border border-gray-300 text-black focus:outline-none"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={() => setTimeout(() => setShowOptions(false), 100)}
+            onFocus={() => inputValue && setShowOptions(true)}
+          />
+          {showOptions && filteredOptions.length > 0 && (
+            <ul className="absolute z-10 w-full bg-[#7C3AED] rounded-xl mt-24 max-h-48 overflow-y-auto">
+              {filteredOptions.map((option) =>
+                isLoading ? (
+                  <div key={option.id}>
+                    <li className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"></li>
+                  </div>
+                ) : error && filteredOptions.length === 0 ? (
+                  <div
+                    key={option.id}
+                    className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
+                  >
+                    Not able to Find that
+                  </div>
+                ) : (
+                  <li
+                    key={option.id}
+                    className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
+                    onClick={() => handleOptionClick(option)}
+                  >
+                    <h2>{option.groupName}</h2>
+                  </li>
+                )
+              )}
+            </ul>
+          )}
+          <div onClick={onselect}>
+            <Link
+              href="/group"
+              className="bg-[#7C3AED] p-3 rounded-md hover:bg-[hsl(262.1_83.3%_57.8%_/_0.9)] hover:transition hover:ease-out hover:duration-75"
+            >
+              Select
+            </Link>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-5">
+          {session.data?.user ? (
+            <Button
+              className="m-2 p-2 font-medium"
+              onClick={() => signOut({ callbackUrl: "/" })}
+            >
+              Log out
+            </Button>
+          ) : (
+            <Button
+              className="m-2 p-2 "
+              onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            >
+              Sign In
+            </Button>
+          )}
+        </div>
+      </div>
+      <div className="">
+      <div className="relative w-full sm:hidden flex items-center gap-2">
+    <input
+      type="text"
+      id="search"
+      className="h-10 px-4 w-[100%] rounded-xl border border-gray-300 text-black focus:outline-none"
+      value={inputValue}
+      onChange={handleInputChange}
+      onBlur={() => setTimeout(() => setShowOptions(false), 100)}
+      onFocus={() => inputValue && setShowOptions(true)}
+    />
+    {showOptions && filteredOptions.length > 0 && (
+      <ul className="absolute z-10 w-full bg-[#7C3AED] rounded-xl mt-24 max-h-48 overflow-y-auto">
+        {filteredOptions.map((option) =>
+          isLoading ? (
+            <div key={option.id}>
+              <li className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"></li>
+            </div>
+          ) : error ? (
+            <div
+              key={option.id}
+              className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
+            >
+              Not able to find that
+            </div>
+          ) : (
+            <li
+              key={option.id}
+              className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
+              onClick={() => mobileClick(option)}
+            >
+              <h2>{option.groupName}</h2>
+            </li>
+          )
         )}
+      </ul>
+    )}
+  </div>
       </div>
     </div>
   );

@@ -22,5 +22,5 @@ export default withAuth(
 
 // Specify the routes that require authentication
 export const config = {
-  matcher: ['/dashboard','/group'], // Match /dashboard and / routes
+  matcher: ['/dashboard'], // Match /dashboard and / routes
 }

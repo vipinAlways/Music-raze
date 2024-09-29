@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 
+
 export async function getAllGrpNames() {
   return await db.group.findMany({});
 }
@@ -248,3 +249,57 @@ export async function  addFavorite({image_url, Audio_url, title_url }: { title_u
 }
 
 
+export async function checkAdmin(groupID:string){
+  await db.$connect()
+  try {
+    const session = await getServerSession(authOptions)
+
+    if (!session || !session.user) {
+        throw new Error("can't find the user")
+
+    }
+
+    const user = await db.user.findUnique({
+      where:{
+        email:session.user.email!
+      }
+    })
+
+
+    const group = await db.group.findUnique({
+      where:{
+        id:groupID
+      }
+    })
+
+    if (group?.admin === user?.id) {
+      return {success:true}
+    }
+
+    else{ 
+      return {success:false}
+    }
+  } catch (error) {
+     throw new Error('admin is not there')
+  }
+}
+export async function getAdmin (){
+  await db.$connect()
+ 
+ try {
+  const session = await getServerSession()
+  if (!session || !session.user) {
+    throw new Error("can't find the user")
+
+}
+
+return await db.user.findUnique({
+  where:{
+    email:session.user.email!
+  }
+})
+
+ } catch (error) {
+  throw new Error('there is no admin')
+ }
+}
