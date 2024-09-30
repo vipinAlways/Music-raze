@@ -128,7 +128,7 @@ export default function ActiveSong() {
     onError: (error) => {
       toast({
         title: "Error",
-        description: "error while adding it to favorites",
+        description: error.message,
         variant: "destructive",
       });
     },
@@ -215,15 +215,15 @@ export default function ActiveSong() {
           >
             <Button
               onClick={() => endStream()}
-              className={cn("bg-[#5b1dc5] lg:text-2xl p-2",admin===true ? '': 'hidden')}
+              className={cn("bg-[#5b1dc5] lg:text-2xl p-2",admin===true ? '': 'hidden',hidden2)}
             >
               End Stream
             </Button>
 
             <div
-              className={`z-30 bg-[#5b1dc5] absolute -top-11  left-10 rounded-full text-slate-200 ${hidden} `}
+              className={`z-30 bg-[#5b1dc5] absolute -top-12 left-1/2 -translate-x-1/2 rounded-full text-slate-200 ${hidden}  `}
             >
-              <div className="h-28 rounded-full w-28  lg:text-4xl flex items-center justify-center">
+              <div className="h-28 rounded-full w-28  lg:text-4xl flex items-center justify-center top-12 ">
                 {countDown}
               </div>
             </div>

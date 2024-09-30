@@ -1,15 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 import { getFavoriteSongs } from "./action";
 import Error from "@/components/Error";
 import { cn } from "@/lib/utils";
-import { Pause, Play } from "lucide-react";
+import { Minus, Pause, Play } from "lucide-react";
 import Loader from "@/components/Loader";
+import { changeFavList } from "../actionFn/getAllGrpName";
 
 interface Song {
   image_url: string;
@@ -23,7 +24,7 @@ function Page() {
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
   const userName: string = session?.data?.user?.name ?? "user";
   const audioRefs = useRef<HTMLAudioElement[]>([]);
-
+  const queryClient  = useQueryClient()
   const playSong = (index: number) => {
     const currentAudio = audioRefs.current[index];
     if (currentAudio) {
@@ -62,8 +63,20 @@ function Page() {
     queryFn: async () => getFavoriteSongs(),
   });
 
+  const changeFav = useMutation({
+    mutationKey: ["change-fav-list"],
+    mutationFn: changeFavList,
+    onError: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['favorite-song']})
+    },
+  });
+  const handleFavList = (Audio_url: string) => {
+    changeFav.mutate(Audio_url);
+  };
+
   if (favortieSong.isLoading) {
-    return <Loader/>
+    return <Loader />;
   }
   if (favortieSong.error) {
     return <Error />;
@@ -73,6 +86,10 @@ function Page() {
     return <Error />;
   }
 
+
+  
+
+  console.log(favortieSong.data);
 
   return (
     <div className="mt-6 flex flex-col text-slate-300 w-full ">
@@ -132,6 +149,14 @@ function Page() {
                       currentSongIndex === index ? "opacity-50" : "opacity-100"
                     )}
                   >
+                    <div
+                      className={cn(
+                        "absolute top-1.5 right-1 p-1 border bg-red-600 rounded-full z-50 hover:bg-red-900 "
+                      )}
+                      onClick={() => handleFavList(song.Audio_url)}
+                    >
+                      <Minus className="hover:scale-105" />
+                    </div>
                     <div className="w-full">
                       <img
                         src={song.image_url}
@@ -187,7 +212,7 @@ function Page() {
                         className="rounded-tr-3xl object-cover lg:h-24  lg:w-full max-md:h-20 min-w-20"
                       />
                     </div>
-                   
+
                     <audio
                       //@ts-ignore
                       ref={(el) =>

@@ -5,6 +5,7 @@
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import { use } from "react";
 
 export async function findStream({ groupID }: { groupID: string }) {
   await db.$connect()
@@ -50,6 +51,72 @@ export async function checkMember() {
       }
     })
     return user
+  } catch (error) {
+      throw new Error('error while checking')
+  }
+}
+export async function updateMemberList(groupID:string) {
+  await db.$connect()
+  const session = await getServerSession(authOptions)
+  try {
+    if (!session?.user?.email ) {
+      throw new Error('login fiest')
+    }
+
+    const user = await db.user.findUnique({
+      where:{
+        email:session?.user?.email
+      }
+    })
+    if (!groupID) {
+      throw new Error('not able to find group')
+    }
+    const updateMember = await db.group.update({
+      where:{
+        id:groupID
+      },
+      data:{
+        members:{
+          push:user?.id
+        }
+      }
+    })
+  } catch (error) {
+      throw new Error('error while checking')
+  }
+}
+export async function updateMemberListDelete(groupID:string) {
+  await db.$connect()
+  const session = await getServerSession(authOptions)
+  try {
+    if (!session?.user?.email ) {
+      throw new Error('login fiest')
+    }
+
+    const user = await db.user.findUnique({
+      where:{
+        email:session?.user?.email
+      }
+    })
+
+    const group = await db.group.findUnique({
+      where: { id: groupID },
+      select: { members: true },
+    });
+    if (!groupID) {
+      throw new Error('not able to find group')
+    }
+    const updatedMembers = group?.members.filter((memberId: string) => memberId !== user?.id);
+    const updateMember = await db.group.update({
+      where:{
+        id:groupID
+      },
+      data:{
+        members:{
+          set:updatedMembers
+        }
+      }
+    })
   } catch (error) {
       throw new Error('error while checking')
   }

@@ -64,7 +64,8 @@ export async function  getFavoriteSongs() {
   return await db.favroutie.findMany({
     where:{
       userId:user.id
-    }
+    },
+ 
   })
   } catch (error) {
     throw new Error('can not find favorite song')

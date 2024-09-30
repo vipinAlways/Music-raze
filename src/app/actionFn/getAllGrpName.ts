@@ -28,8 +28,9 @@ export async function getUser(id: string) {
 }
 export async function getMembers(member: string[]) {
   if (member.length === 0) {
-    throw new Error("it do not have any member");
+    throw new Error("The member array does not contain any members.");
   }
+
   return await db.user.findMany({
     where: {
       id: {
@@ -38,6 +39,7 @@ export async function getMembers(member: string[]) {
     },
   });
 }
+
 
 export async function createStream({ groupId }: { groupId: string }) {
   try {
@@ -232,6 +234,16 @@ export async function  addFavorite({image_url, Audio_url, title_url }: { title_u
         'no user find with this credentials'
       )
     }
+
+    const checkFavList = await db.favroutie.findFirst({
+      where:{
+        Audio_url:Audio_url
+      }
+    })
+
+    if (checkFavList) {
+      throw new Error('All ready in fav list')
+    }
     return await db.favroutie.create({
       data:{
           userId:user?.id,
@@ -242,7 +254,7 @@ export async function  addFavorite({image_url, Audio_url, title_url }: { title_u
     })
   } catch (error) {
     throw new Error(
-      'not able to add this in your favorite list'
+      'Check your Fav List OR may be already in your fav list'
     )
   }
   
@@ -302,4 +314,19 @@ return await db.user.findUnique({
  } catch (error) {
   throw new Error('there is no admin')
  }
+}
+
+export async function changeFavList(Audio_url:string) {
+  await db.$connect()
+
+  try {
+    return db.favroutie.deleteMany({
+      where:{
+        Audio_url:Audio_url
+      }
+    })
+    
+  } catch (error) {
+    
+  }
 }
