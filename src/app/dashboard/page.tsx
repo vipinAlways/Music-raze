@@ -9,6 +9,7 @@ import { getFavoriteSongs } from "./action";
 import Error from "@/components/Error";
 import { cn } from "@/lib/utils";
 import { Pause, Play } from "lucide-react";
+import Loader from "@/components/Loader";
 
 interface Song {
   image_url: string;
@@ -61,6 +62,9 @@ function Page() {
     queryFn: async () => getFavoriteSongs(),
   });
 
+  if (favortieSong.isLoading) {
+    return <Loader/>
+  }
   if (favortieSong.error) {
     return <Error />;
   }
@@ -69,36 +73,54 @@ function Page() {
     return <Error />;
   }
 
+
   return (
-    <div className="mt-6 flex flex-col text-slate-300 ">
-      <div className="flex items-start lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 px-4 ">
-        <div className="leading-6 sm:w-96 sm:h-[60vh] flex flex-col items-start sm:pt-10 gap-10 lg:w-[60%]">
+    <div className="mt-6 flex flex-col text-slate-300 w-full ">
+      <div className="flex items-start lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-md:flex-col ">
+        <div className="leading-6 max-md:sm:w-full sm:h-[60vh] flex flex-col items-start max-md:items-center sm:pt-10 gap-10 lg:w-[60%]">
           <div className="text-3xl w-full">
-            <h1 className="w-full flex items-end gap-3 lg:text-7xl text-5xl mb-4">
+            <h1 className="w-full flex max-md:flex-col items-end gap-3 lg:text-7xl text-5xl mb-4 max-md:items-center">
               Hello <span className="text-2xl font-semibold ">@{userName}</span>
             </h1>
-            <p>Discover & Create groups where</p>
-            <p> you and your friends can have a great time together!</p>
+            <div className="lg:block hidden">
+              <p>Discover & Create groups where</p>
+              <p> you and your friends can have a great time together!</p>
+            </div>
+            <div className="lg:hidden block max-sm:text-sm w-full text-center">
+              <p>Discover & Create groups </p>
+              <p> where you and your friends </p>
+              <p>can have a great time together!</p>
+            </div>
           </div>
-
-          <Button className="p-3 h-fit text-2xl w-64 ml-3">
-            <Link href="/dashboard/user-group">YOUR GROUPS</Link>
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button className="lg:p-3 p-2 h-fit  max-md:text-lg lg:text-2xl lg:w-64 ">
+              <Link href="/dashboard/user-group">YOUR GROUPS</Link>
+            </Button>
+            <Button className="lg:p-3 p-2 h-fit lg:text-2xl max-md:text-lg lg:w-64">
+              <Link href="/create-group">Create GROUP</Link>
+            </Button>
+          </div>
         </div>
 
-        <div className="min-h-[55vh] md:w-1/2 lg:w-[30%] bg-white bg-opacity-25 rounded-lg ">
-          <h1 className="p-3 w-full text-center bg-white bg-opacity-30 text-purple-800 lg:text-2xl rounded-tr-lg rounded-tl-lg">
+        <div className="lg:h-[55vh] lg:w-[30%] bg-white bg-opacity-25 rounded-lg  items-center max-md:w-full max-md:mt-5 ">
+          <h1 className="p-3 w-full lg:text-center bg-white bg-opacity-30 text-purple-800 lg:text-2xl rounded-tr-lg rounded-tl-lg max-md:text-lg ">
             Favorite Song
           </h1>
-          <div className="relative mt-1 h-[50vh] overflow-auto songlist flex flex-col items-center gap-2 title">
+          <div className="max-md:hidden relative mt-1 h-[50vh] overflow-auto songlist flex flex-col items-center gap-2 title">
             {favortieSong?.data?.length > 0 ? (
               <>
                 {isPlaying ? (
-                  <Button onClick={pauseAllSongs} className="absolute top-0 left-0 z-50">
+                  <Button
+                    onClick={pauseAllSongs}
+                    className="absolute top-0 left-0 z-50"
+                  >
                     <Pause />
                   </Button>
                 ) : (
-                  <Button onClick={playAllSongs} className="absolute top-0 z-50 left-0">
+                  <Button
+                    onClick={playAllSongs}
+                    className="absolute top-0 z-50 left-0"
+                  >
                     <Play />
                   </Button>
                 )}
@@ -107,7 +129,7 @@ function Page() {
                     key={index}
                     className={cn(
                       "flex lg:min-w-full lg:max-w-60 flex-col items-center h-40 p-1 bg-[#38196e] rounded-lg justify-around relative",
-                      currentSongIndex === index ? "opacity-50" : "opacity-100" 
+                      currentSongIndex === index ? "opacity-50" : "opacity-100"
                     )}
                   >
                     <div className="w-full">
@@ -121,8 +143,56 @@ function Page() {
                       <h1>{song.title_url}</h1>
                     </div>
                     <audio
-                    //@ts-ignore
-                      ref={(el) => (audioRefs.current[index] = el as HTMLAudioElement)}
+                      //@ts-ignore
+                      ref={(el) =>
+                        (audioRefs.current[index] = el as HTMLAudioElement)
+                      }
+                      src={song.Audio_url}
+                    ></audio>
+                  </div>
+                ))}
+              </>
+            ) : null}
+          </div>
+          <div className="lg:hidden relative lg:h-[50vh] max-md:h-32 overflow-auto songlist flex lg:flex-col items-center gap-2 title">
+            {favortieSong?.data?.length > 0 ? (
+              <>
+                {isPlaying ? (
+                  <Button
+                    onClick={pauseAllSongs}
+                    className="sticky left-0 z-50"
+                  >
+                    <Pause />
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={playAllSongs}
+                    className="sticky top-0 z-50 left-0"
+                  >
+                    <Play />
+                  </Button>
+                )}
+                {favortieSong.data.map((song, index) => (
+                  <div
+                    key={index}
+                    className={cn(
+                      "flex lg:min-w-full lg:max-w-60 w-full flex-col items-center lg:h-40  max-md:h-28 px-1 bg-[#38196e] rounded-lg justify-around relative",
+                      currentSongIndex === index ? "opacity-50" : "opacity-100"
+                    )}
+                  >
+                    <div className="w-full">
+                      <img
+                        src={song.image_url}
+                        alt={song.title_url}
+                        className="rounded-tr-3xl object-cover lg:h-24  lg:w-full max-md:h-20 min-w-20"
+                      />
+                    </div>
+                   
+                    <audio
+                      //@ts-ignore
+                      ref={(el) =>
+                        (audioRefs.current[index] = el as HTMLAudioElement)
+                      }
                       src={song.Audio_url}
                     ></audio>
                   </div>

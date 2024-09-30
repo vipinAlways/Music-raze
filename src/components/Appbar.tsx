@@ -77,23 +77,8 @@ function Appbar() {
 
   const handleOptionClick = (option: { id: string; groupName: string }) => {
     setInputValue(option.groupName);
-    setShowOptions(false);
-  };
-
-  const onselect = () => {
-    const selectedGroup = options.find(
-      (option) => option.groupName === inputValue
-    );
-    if (selectedGroup) {
-      setGroupID(selectedGroup.id);
-    }
-  };
-
-  const mobileClick = (option: { id: string; groupName: string }) => {
-    setInputValue(option.groupName);
-   
-
     setGroupID(option.id);
+
   };
 
   return (
@@ -129,25 +114,21 @@ function Appbar() {
                     Not able to Find that
                   </div>
                 ) : (
-                  <li
+                  <Link
+                    href="/group"
                     key={option.id}
-                    className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
+                    className="text-start cursor-pointer flex-col items-center h-12 w-full "
                     onClick={() => handleOptionClick(option)}
                   >
-                    <h2>{option.groupName}</h2>
-                  </li>
+                    <h2 className="text-lg p-0 h-full py-3 px-3">
+                      {option.groupName}
+                    </h2>
+                  </Link>
                 )
               )}
             </ul>
           )}
-          <div onClick={onselect}>
-            <Link
-              href="/group"
-              className="bg-[#7C3AED] p-3 rounded-md hover:bg-[hsl(262.1_83.3%_57.8%_/_0.9)] hover:transition hover:ease-out hover:duration-75"
-            >
-              Select
-            </Link>
-          </div>
+         
         </div>
 
         <div className="flex items-center gap-5">
@@ -169,43 +150,46 @@ function Appbar() {
         </div>
       </div>
       <div className="">
-      <div className="relative w-full sm:hidden flex items-center gap-2">
-    <input
-      type="text"
-      id="search"
-      className="h-10 px-4 w-[100%] rounded-xl border border-gray-300 text-black focus:outline-none"
-      value={inputValue}
-      onChange={handleInputChange}
-      onBlur={() => setTimeout(() => setShowOptions(false), 100)}
-      onFocus={() => inputValue && setShowOptions(true)}
-    />
-    {showOptions && filteredOptions.length > 0 && (
-      <ul className="absolute z-10 w-full bg-[#7C3AED] rounded-xl mt-24 max-h-48 overflow-y-auto">
-        {filteredOptions.map((option) =>
-          isLoading ? (
-            <div key={option.id}>
-              <li className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"></li>
-            </div>
-          ) : error ? (
-            <div
-              key={option.id}
-              className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
-            >
-              Not able to find that
-            </div>
-          ) : (
-            <li
-              key={option.id}
-              className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
-              onClick={() => mobileClick(option)}
-            >
-              <h2>{option.groupName}</h2>
-            </li>
-          )
-        )}
-      </ul>
-    )}
-  </div>
+        <div className="relative w-full sm:hidden flex items-center gap-2">
+          <input
+            type="text"
+            id="search"
+            className="h-10 px-4 w-[100%] rounded-xl border sticky top-0  border-gray-300 text-black focus:outline-none"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={() => setTimeout(() => setShowOptions(false), 100)}
+            onFocus={() => inputValue && setShowOptions(true)}
+          />
+          {showOptions && filteredOptions.length > 0 && (
+            <ul className="absolute z-10 w-full bg-[#7C3AED] rounded-xl lg:mt-24 mt-28 max-h-48 overflow-y-auto ">
+              {filteredOptions.map((option) =>
+                isLoading ? (
+                  <div key={option.id}>
+                    <li className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"></li>
+                  </div>
+                ) : error ? (
+                  <div
+                    key={option.id}
+                    className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"
+                  >
+                    Not able to find that
+                  </div>
+                ) : (
+                  <Link
+                    href="/group"
+                    key={option.id}
+                    className="text-start cursor-pointer flex-col items-center h-12 w-full "
+                    onClick={() => handleOptionClick(option)}
+                  >
+                    <h2 className="text-lg p-0 h-full py-3 px-3">
+                      {option.groupName}
+                    </h2>
+                  </Link>
+                )
+              )}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );

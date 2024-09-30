@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { MusicContext } from "./Context";
 import { cn } from "@/lib/utils";
 import VolumeRange from "./VolumeRange";
@@ -116,9 +116,28 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     mutate({ image: songImage, title: songTitle, link: songPreview, groupId: currentgrpId.toString() })
   };
 
+  const inputRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+     
+        setSearchInput("");
+      }
+    };
+
+
+    document.addEventListener("mousedown", handleClickOutside);
+    
+ 
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
-    <div className="flex items-start justify-end">
-      <div className="w-2/5 mx-auto absolute top-2/5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50">
+    <div className="flex max-sm:flex-col-reverse relative items-start lg:justify-end justify-around  max-sm:h-36" ref={inputRef}>
+      <div className="w-2/5 max-sm:w-[85%] mx-auto absolute top-2/5 max-sm:top-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50">
         <input
           type="text"
           name="songName"

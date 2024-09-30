@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start:all": "pnpm dlx prisma migrate dev && pnpm dlx prisma generate && pnpm dlx prisma studio",
+    "start:all": "pnpm dlx prisma migrate dev && pnpm dlx prisma generate",
     "docker": "docker run -p 5432:5432 -e POSTGRES_PASSWORD=randompassword postgres",
     "dev": "next dev",
     "build": "next build",
@@ -14,7 +14,7 @@
     "@neondatabase/serverless": "^0.9.4",
     "@next-auth/prisma-adapter": "^1.0.7",
     "@prisma/adapter-neon": "^5.19.1",
-    "@prisma/client": "5.19.0",
+    "@prisma/client": "5.20.0",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
@@ -29,7 +29,6 @@
     "lucide-react": "^0.438.0",
     "next": "14.2.7",
     "next-auth": "^4.24.7",
-    "prisma": "^5.19.1",
     "react": "^18",
     "react-dom": "^18",
     "socket.io-client": "^4.8.0",
@@ -40,15 +39,17 @@
   },
   "devDependencies": {
     "@types/next-auth": "^3.15.0",
-    "@types/node": "^20",
+    "@types/node": "^20.16.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/ws": "^8.5.12",
     "eslint": "^8",
     "eslint-config-next": "14.2.7",
     "postcss": "^8",
+    "prisma": "^5.19.1",
     "spotify-web-api-node": "^5.0.2",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
   }
 }
