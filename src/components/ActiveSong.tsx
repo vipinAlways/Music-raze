@@ -27,8 +27,8 @@ export default function ActiveSong() {
   const { data } = useQuery({
     queryKey: ["get-active-stream"],
     queryFn: async () => findActiveStream(groupID),
-      refetchInterval: 1000, // Poll every second (1000 ms)
-      refetchIntervalInBackground: true, // Continue polling even when the tab is inactive
+      // refetchInterval: 1000, // Poll every second (1000 ms)
+      // refetchIntervalInBackground: true, // Continue polling even when the tab is inactive
     
   });
 

@@ -55,6 +55,9 @@ export async function checkMember() {
       throw new Error('error while checking')
   }
 }
+
+
+
 export async function updateMemberList(groupID:string) {
   await db.$connect()
   const session = await getServerSession(authOptions)
@@ -71,6 +74,23 @@ export async function updateMemberList(groupID:string) {
     if (!groupID) {
       throw new Error('not able to find group')
     }
+
+    const group = await db.group.findUnique({
+      where: { id: groupID },
+      select: { members: true },
+    });
+    if (!groupID) {
+      throw new Error('not able to find group')
+    }
+
+    const allREady = group?.members.includes(user?.id!)
+
+
+    if (allREady) {
+      throw new Error('hain tu')
+    }
+
+    
     const updateMember = await db.group.update({
       where:{
         id:groupID
