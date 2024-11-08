@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Minus, Pause, Play } from "lucide-react";
 import Loader from "@/components/Loader";
 import { changeFavList } from "../actionFn/getAllGrpName";
+import Image from "next/image";
 
 interface Song {
   image_url: string;
@@ -158,7 +159,7 @@ function Page() {
                       <Minus className="hover:scale-105" />
                     </div>
                     <div className="w-full">
-                      <img
+                      <Image
                         src={song.image_url}
                         alt={song.title_url}
                         className="rounded-tr-3xl object-contain lg:h-24 w-full"
@@ -206,7 +207,7 @@ function Page() {
                     )}
                   >
                     <div className="w-full">
-                      <img
+                      <Image
                         src={song.image_url}
                         alt={song.title_url}
                         className="rounded-tr-3xl object-cover lg:h-24  lg:w-full max-md:h-20 min-w-20"

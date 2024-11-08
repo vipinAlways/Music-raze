@@ -12,11 +12,11 @@ import SongsQueue from "@/components/SongsQueue";
 import { checkMember, updateMemberList, updateMemberListDelete } from "./action";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import io from 'socket.io-client';
+
 
 function Page() {
 
-  const socket = io('http://localhost:3000')
+  
   const { groupID } = useGroup();
   const [isMember, setIsMember] = useState(false);
   const queryClient = useQueryClient();
@@ -74,18 +74,7 @@ function Page() {
   }, [data,data?.members, user?.id,queryClient]);
 
 
-  useEffect(()=>{
-    socket.on('newactiveSong',()=>  queryClient.invalidateQueries({ queryKey: ["get-active-stream"] }))
-    socket.on('newSongAdded',()=>  queryClient.invalidateQueries({ queryKey: ["get-stream"] }))
-    socket.on('newGroupData',()=>  queryClient.invalidateQueries({ queryKey: ["group-data"] }))
-
-    return ()=>{
-      socket.off('newactiveSong')
-      socket.off('newSongAdded')
-      socket.off('newGroupData')
-    }
-    
-  },[queryClient])
+ 
 
 
   

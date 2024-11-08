@@ -7,6 +7,7 @@ import { Minus } from "lucide-react";
 import ActiveSong from "./ActiveSong";
 import { dropUrl, getAdmin } from "@/app/actionFn/getAllGrpName";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface Song {
   id: string;
@@ -28,11 +29,7 @@ function SongsQueue() {
     refetchInterval: 1000, 
       refetchIntervalInBackground: true, 
   });
-  const handleSongEnd = () => {
-    setCurrentSongIndex((prevIndex) => {
-      return prevIndex + 1 < data?.url.length! ? prevIndex + 1 : 0;
-    });
-  };
+  
 
 
   const seeAdmin = useQuery({
@@ -48,7 +45,7 @@ function SongsQueue() {
     }else{
       setAdmin(false)
     }
-  },[seeAdmin])
+  },[seeAdmin,data?.userId])
 
 
   const dropSong = useMutation({
@@ -64,6 +61,11 @@ function SongsQueue() {
   });
 
   useEffect(() => {
+    const handleSongEnd = () => {
+      setCurrentSongIndex((prevIndex) => {
+        return prevIndex + 1 < data?.url.length! ? prevIndex + 1 : 0;
+      });
+    };
     const audioElement = audioRef.current;
     if (audioElement) {
       audioElement.addEventListener("ended", handleSongEnd);
@@ -142,7 +144,7 @@ function SongsQueue() {
                     <Minus className="hover:scale-105" />
                   </div>
                   <div className="w-full">
-                    <img
+                    <Image
                       src={song.image}
                       alt={song.title}
                       className="rounded-tr-3xl object-cover lg:object-contain lg:h-32 w-full h-20  "

@@ -7,7 +7,7 @@ interface GroupContextType {
   setGroupID: (id: string) => void;
 }
 
-// Create the context with default values
+
 const GroupContext = createContext<GroupContextType | undefined>(undefined);
 
 export const useGroup = () => {
@@ -18,7 +18,7 @@ export const useGroup = () => {
   return context;
 };
 
-// Create a provider to wrap your app
+
 export const GroupProvider = ({ children }: { children: ReactNode }) => {
   const [groupID, setGroupID] = useState<string>("");
 

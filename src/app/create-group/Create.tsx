@@ -45,14 +45,12 @@ function Create() {
      }
   });
 
-  const handleSubmit = () => {
-   
-    // e.preventDefault();
-    mutation.mutate({ groupName, description });
-    
-  };
-
+ 
   useEffect(() => {
+    const handleSubmit = () => {
+      mutation.mutate({ groupName, description });
+    };
+  
     const handleKeydown = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
         handleSubmit()
@@ -64,7 +62,7 @@ function Create() {
     return () => {
       window.document.removeEventListener("keydown", handleKeydown);
     };
-  }, [groupName]);
+  }, [groupName,description,mutation]);
   return (
     <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 sm:h-[calc(100vh-10rem)] max-sm:h-[70vh]  lg:w-[60%] sm:w-4/5 max-sm:mt-5 flex  items-center justify-center mx-auto rounded-xl">
       
@@ -104,7 +102,7 @@ function Create() {
             </CardContent>
             <CardFooter>
               <Button
-                onClick={handleSubmit}
+                onClick={()=>  mutation.mutate({ groupName, description })}
                 disabled={mutation.isPending}
                 aria-busy={mutation.isPending}
                 className="bg-red-600 w-28"

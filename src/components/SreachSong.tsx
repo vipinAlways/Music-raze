@@ -7,6 +7,7 @@ import { Plus } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addUrl } from "@/app/actionFn/getAllGrpName";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -163,13 +164,13 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                 >
                   <div className="h-40 w-full">
                     {song.album.images[0]?.url ? (
-                      <img
+                      <Image
                         src={song.album.images[0].url}
                         alt="track img"
                         className="object-contain h-full w-full"
                       />
                     ) : (
-                      <img
+                      <Image
                         src=""
                         alt="no track"
                         className="object-contain h-full w-full"

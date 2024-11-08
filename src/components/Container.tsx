@@ -1,5 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 import React, { HTMLAttributes } from 'react';
 
 export interface PhoneProps extends HTMLAttributes<HTMLDivElement> {
@@ -18,7 +19,7 @@ function Container({ className, imgSrc, dark = false, ...props }: PhoneProps) {
       {...props}
     >
       <div className="">
-        <img
+        <Image
           src={imgSrc}
           className="h-full w-full object-contain rounded-l"
           alt="song img"

@@ -12,6 +12,7 @@ import {
 import { Button } from "./ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export default function ActiveSong() {
   const { toast } = useToast();
@@ -45,7 +46,7 @@ export default function ActiveSong() {
     }else{
       setAdmin(false)
     }
-  },[seeAdmin])
+  },[seeAdmin,data?.userId])
 
   useEffect(() => {
     setTimeout(() => {
@@ -63,16 +64,17 @@ export default function ActiveSong() {
     },
   });
 
-  const handleSongEnd = () => {
-    if (currentSongIndex < data?.url.length! - 1) {
-      const nextIndex = (currentSongIndex + 1) % data?.url.length!;
-      updateStreamMutation.mutate(nextIndex);
-    } else {
-      updateStreamMutation.mutate(data?.url.length! - 1);
-    }
-  };
+
 
   useEffect(() => {
+    const handleSongEnd = () => {
+      if (currentSongIndex < data?.url.length! - 1) {
+        const nextIndex = (currentSongIndex + 1) % data?.url.length!;
+        updateStreamMutation.mutate(nextIndex);
+      } else {
+        updateStreamMutation.mutate(data?.url.length! - 1);
+      }
+    };
     const audioElement = audioRef.current;
     if (audioElement) {
       audioElement.addEventListener("ended", handleSongEnd);
@@ -83,7 +85,7 @@ export default function ActiveSong() {
         audioElement.removeEventListener("ended", handleSongEnd);
       }
     };
-  }, [currentSongIndex, data?.url.length]);
+  }, [currentSongIndex, data?.url.length,updateStreamMutation]);
 
   const deleteS = useMutation({
     mutationKey: ["delete-stream"],
@@ -159,7 +161,7 @@ export default function ActiveSong() {
       {data?.url[currentSongIndex] ? (
         <div className="relative">
           <div className="h-full w-full rounded-lg flex flex-col items-center relative z-20 ">
-            <img
+            <Image
               src={data.url[currentSongIndex].image || ""}
               alt={data.url[currentSongIndex].title || ""}
               className="h-48 p-2 w-full object-contain"
@@ -173,7 +175,7 @@ export default function ActiveSong() {
             />
           </div>
           <div className="absolute h-60 w-full top-0 rounded-lg bg">
-            <img
+            <Image
               src={data.url[currentSongIndex].image || ""}
               alt={data.url[currentSongIndex].title || ""}
               className="object-cover -z-10 h-full w-full rounded-lg"

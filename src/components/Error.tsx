@@ -9,7 +9,7 @@ function Error() {
   
     <h1 className="text-9xl font-bold text-indigo-500">404</h1>
     <p className="text-2xl md:text-3xl font-light mb-4">Oops! It looks like Error.</p>
-    <p className="text-lg mb-8">The page you're looking for isn't available right now. Let's get back to the rhythm!</p>
+    <p className="text-lg mb-8">The page you&#39;re looking for isn&#39;t available right now. Let&#39;s get back to the rhythm!</p>
 
 
     <div className="mb-8">
