@@ -143,11 +143,12 @@ function SongsQueue() {
                   >
                     <Minus className="hover:scale-105" />
                   </div>
-                  <div className="w-full">
+                  <div className="w-full lg:h-32 h-20">
                     <Image
                       src={song.image}
                       alt={song.title}
-                      className="rounded-tr-3xl object-cover lg:object-contain lg:h-32 w-full h-20  "
+                      className="rounded-tr-3xl object-cover lg:object-contain   "
+                      fill
                     />
                   </div>
                   <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-auto title ">

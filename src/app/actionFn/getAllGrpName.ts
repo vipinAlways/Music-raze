@@ -1,8 +1,9 @@
 "use server";
 
+import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+
 
 
 export async function getAllGrpNames() {
@@ -262,7 +263,8 @@ export async function  addFavorite({image_url, Audio_url, title_url }: { title_u
 
 
 export async function checkAdmin(groupID:string){
-  await db.$connect()
+
+ 
   try {
     const session = await getServerSession(authOptions)
 

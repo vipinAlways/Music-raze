@@ -164,7 +164,9 @@ export default function ActiveSong() {
             <Image
               src={data.url[currentSongIndex].image || ""}
               alt={data.url[currentSongIndex].title || ""}
-              className="h-48 p-2 w-full object-contain"
+              className="p-2 w-full object-contain"
+              height={176}
+              width={176}
             />
             <audio
               ref={audioRef}
@@ -179,6 +181,8 @@ export default function ActiveSong() {
               src={data.url[currentSongIndex].image || ""}
               alt={data.url[currentSongIndex].title || ""}
               className="object-cover -z-10 h-full w-full rounded-lg"
+              height={176}
+              width={176}
             />
           </div>
 

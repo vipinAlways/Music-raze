@@ -163,6 +163,8 @@ function Page() {
                         src={song.image_url}
                         alt={song.title_url}
                         className="rounded-tr-3xl object-contain lg:h-24 w-full"
+                        height={176}
+                        width={176}
                       />
                     </div>
                     <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-auto">
@@ -206,11 +208,14 @@ function Page() {
                       currentSongIndex === index ? "opacity-50" : "opacity-100"
                     )}
                   >
-                    <div className="w-full">
+                    <div className="w-full lg:h-24  lg:w-full max-md:h-20 min-w-20">
                       <Image
                         src={song.image_url}
                         alt={song.title_url}
-                        className="rounded-tr-3xl object-cover lg:h-24  lg:w-full max-md:h-20 min-w-20"
+                        className="rounded-tr-3xl object-cover "
+                        // height={176}
+                        // width={176}
+                        fill
                       />
                     </div>
 

@@ -23,6 +23,8 @@ function Container({ className, imgSrc, dark = false, ...props }: PhoneProps) {
           src={imgSrc}
           className="h-full w-full object-contain rounded-l"
           alt="song img"
+         fill
+
         />
       </div>
     </div>

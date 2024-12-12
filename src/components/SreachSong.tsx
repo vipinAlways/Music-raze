@@ -167,13 +167,15 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                       <Image
                         src={song.album.images[0].url}
                         alt="track img"
-                        className="object-contain h-full w-full"
+                        className="object-contain"
+                        fill
                       />
                     ) : (
                       <Image
                         src=""
                         alt="no track"
-                        className="object-contain h-full w-full"
+                        className="object-contain"
+                        fill
                       />
                     )}
                   </div>
