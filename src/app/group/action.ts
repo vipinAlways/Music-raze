@@ -4,7 +4,7 @@
 
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/lib/auth"
 import { use } from "react";
 
 export async function findStream({ groupID }: { groupID: string }) {

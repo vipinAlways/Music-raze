@@ -1,23 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    async headers() {
-      return [
-        {
-          source: "/api/socket",
-          headers: [
-            {
-              key: "Connection",
-              value: "Upgrade"
-            },
-            {
-              key: "Upgrade",
-              value: "websocket"
-            }
-          ]
-        }
-      ];
-    }
-  };
-  
-  export default nextConfig;
-  
+  images: {
+    domains: ["i.scdn.co"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "",
+      },
+    ],
+  },
+};
+
+export default nextConfig;

@@ -37,7 +37,7 @@ function SongsQueue() {
     queryFn:async()=> getAdmin(),
     enabled:!!data?.id
   })
-  console.log(seeAdmin.data?.id);
+ 
  
   useEffect(()=>{
     if (seeAdmin.data?.id === data?.userId) {

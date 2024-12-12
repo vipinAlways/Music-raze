@@ -95,6 +95,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     };
     getTrack();
   }, [debounceSreachInput, accessToken, resultOffset]);
+  console.log(albums,"ye hain ");
 
   const { mutate } = useMutation({
     mutationKey: ["add-url"],

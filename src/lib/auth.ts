@@ -14,14 +14,15 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
+        
       try {
-        // Ensure user email exists
+     
         if (!user?.email) {
           console.log('No email found for the user.');
-          return false; // Prevent sign-in
+          return false; 
         }
 
-        // Check if user already exists in the database
+       
         const existingUser = await db.user.findFirst({
           where: {
             email: user.email,
@@ -33,12 +34,12 @@ export const authOptions: NextAuthOptions = {
           return true;
         }
 
-        // Create a new user in the database
+       
         await db.user.create({
           data: {
             email: user.email,
             provider: "Google",
-            userName: user.name ?? '', // Use empty string if name is undefined
+            userName: user.name ?? '', 
           },
         });
 

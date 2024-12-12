@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 function StartStream({ grpid }: { grpid: string }) {
+  
   const { toast } = useToast();
   const [countDown, setCountDown] = useState(0);
   const queryClient = useQueryClient();
@@ -52,7 +53,7 @@ function StartStream({ grpid }: { grpid: string }) {
 
   const group = useQuery({
     queryKey: ["check-admin", grpid],
-    queryFn: async () => checkAdmin(grpid),
+    queryFn: async () =>await checkAdmin(grpid),
     enabled: !!grpid,
     staleTime: 0,
   });

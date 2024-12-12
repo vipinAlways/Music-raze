@@ -1,8 +1,9 @@
 "use server";
 
-import { authOptions } from "@/lib/auth";
+
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth"
 
 
 
@@ -263,8 +264,7 @@ export async function  addFavorite({image_url, Audio_url, title_url }: { title_u
 
 
 export async function checkAdmin(groupID:string){
-
- 
+  await groupID
   try {
     const session = await getServerSession(authOptions)
 
@@ -301,7 +301,7 @@ export async function getAdmin (){
   await db.$connect()
  
  try {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
   if (!session || !session.user) {
     throw new Error("can't find the user")
 

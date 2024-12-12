@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { getServerSession, User } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/lib/auth"
 
 export async function CreateGrp({
   groupName,
