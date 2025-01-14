@@ -18,12 +18,11 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
-  const queryClient = useQueryClient()
-  const {toast} =useToast()
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const musicContext = useContext(MusicContext);
   const resultOffset = musicContext?.resultOffset;
-
 
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
@@ -95,50 +94,61 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     };
     getTrack();
   }, [debounceSreachInput, accessToken, resultOffset]);
-  console.log(albums,"ye hain ");
 
+  console.log(albums, "ye hian");
   const { mutate } = useMutation({
     mutationKey: ["add-url"],
     mutationFn: addUrl,
     onError: (error) => {
       toast({
-        title:"Error",
-        description:error.message ?? 'error while adding',
-        variant:'destructive'
-      })
+        title: "Error",
+        description: error.message ?? "error while adding",
+        variant: "destructive",
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-stream'] })
+      queryClient.invalidateQueries({ queryKey: ["get-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       console.log("URL added successfully");
     },
   });
 
-  const handleUrl = (songImage:string, songTitle: string, songPreview: string) => {
-    mutate({ image: songImage, title: songTitle, link: songPreview, groupId: currentgrpId.toString() })
+  const handleUrl = (
+    songImage: string,
+    songTitle: string,
+    songPreview: string
+  ) => {
+    mutate({
+      image: songImage,
+      title: songTitle,
+      link: songPreview,
+      groupId: currentgrpId.toString(),
+    });
   };
 
   const inputRef = useRef<HTMLDivElement>(null);
 
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
-     
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
         setSearchInput("");
       }
     };
 
-
     document.addEventListener("mousedown", handleClickOutside);
-    
- 
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   return (
-    <div className="flex max-sm:flex-col-reverse relative items-start lg:justify-end justify-around  max-sm:h-36" ref={inputRef}>
+    <div
+      className="flex max-sm:flex-col-reverse relative items-start lg:justify-end justify-around  max-sm:h-36"
+      ref={inputRef}
+    >
       <div className="w-2/5 max-sm:w-[85%] mx-auto absolute top-2/5 max-sm:top-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50">
         <input
           type="text"
@@ -163,13 +173,14 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                   key={index}
                   className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg relative"
                 >
-                  <div className="h-40 w-full">
+                  <div className="h-40 w-full ">
                     {song.album.images[0]?.url ? (
                       <Image
                         src={song.album.images[0].url}
                         alt="track img"
-                        className="object-contain"
-                        fill
+                        className="object-contain rounded-xl"
+                        height={176}
+                        width={300}
                       />
                     ) : (
                       <Image
@@ -186,16 +197,24 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                   </p>
                   <div
                     className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
-                      onClick={() => {
-                        if (!song.album.images[0]?.url || !song.name || !song.preview_url) {
-                          toast({
-                            title:"Error",
-                            description:"can't able to add this song"
-                          })
-                        }
-                      handleUrl(song.album.images[0]?.url, song.name, song.preview_url),
-                      setSearchInput("")
-                      }}
+                    onClick={() => {
+                      if (
+                        !song.album.images[0]?.url ||
+                        !song.name ||
+                        !song.preview_url
+                      ) {
+                        toast({
+                          title: "Error",
+                          description: "can't able to add this song",
+                        });
+                      }
+                      handleUrl(
+                        song.album.images[0]?.url,
+                        song.name,
+                        song.preview_url
+                      ),
+                        setSearchInput("");
+                    }}
                   >
                     <Plus />
                   </div>

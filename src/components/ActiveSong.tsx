@@ -38,7 +38,7 @@ export default function ActiveSong() {
     queryFn:async()=> getAdmin(),
     enabled:!!data?.id
   })
-  console.log(seeAdmin.data?.id);
+
  
   useEffect(()=>{
     if (seeAdmin.data?.id === data?.userId) {
@@ -161,13 +161,15 @@ export default function ActiveSong() {
       {data?.url[currentSongIndex] ? (
         <div className="relative">
           <div className="h-full w-full rounded-lg flex flex-col items-center relative z-20 ">
-            <Image
+           <div className="h-40 w-44">
+           <Image
               src={data.url[currentSongIndex].image || ""}
               alt={data.url[currentSongIndex].title || ""}
               className="p-2 w-full object-contain"
               height={176}
               width={176}
             />
+           </div>
             <audio
               ref={audioRef}
               src={data.url[currentSongIndex].url}
