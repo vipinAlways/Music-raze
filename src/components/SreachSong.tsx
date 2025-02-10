@@ -37,6 +37,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
       window.document.removeEventListener("keydown", handleKeydown);
     };
   }, [searchInput]);
+  console.log(accessToken,"accessToken");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -80,7 +81,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     const getTrack = async () => {
       if (debounceSreachInput && accessToken) {
         const response = await fetch(
-          `https://api.spotify.com/v1/search?q=${debounceSreachInput}&type=track&offset=${resultOffset}&limit=12`,
+          `https://api.spotify.com/v1/search?q=${debounceSreachInput}&type=episode&offset=${resultOffset}&limit=12`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -89,13 +90,13 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
         );
 
         const tracks = await response.json();
-        setAlbums(tracks.tracks?.items || []);
+        setAlbums(tracks.episodes?.items|| []);
       }
     };
     getTrack();
   }, [debounceSreachInput, accessToken, resultOffset]);
 
-  console.log(albums, "ye hian");
+  
   const { mutate } = useMutation({
     mutationKey: ["add-url"],
     mutationFn: addUrl,
@@ -109,7 +110,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
-      console.log("URL added successfully");
+     
     },
   });
 
@@ -144,6 +145,16 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  /*
+  {
+    "access_token": "BQD7Hq61mW0ST3Cum_NEcHyxDlrV-K70qbnlLM4i0VQ9pwsoBVGP77_Myg2EvPc2lR6uRwY0yRFShnEpFuu8tJRgeed5IkPoiAVTJhEvU5ehZeDxLTyJiMPE2VQX1dKUV8gEHBg5XuM",
+    "token_type": "Bearer",
+    "expires_in": 3600
+}
+  */
+
+  console.log(albums, "ye hain ablum");
   return (
     <div
       className="flex max-sm:flex-col-reverse relative items-start lg:justify-end justify-around  max-sm:h-36"
@@ -168,15 +179,15 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
         >
           {albums.length > 0 ? (
             albums.map((song, index) =>
-              song.preview_url ? (
+              song.audio_preview_url ? (
                 <div
                   key={index}
                   className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg relative"
                 >
                   <div className="h-40 w-full ">
-                    {song.album.images[0]?.url ? (
+                    {song.images[0]?.url ? (
                       <Image
-                        src={song.album.images[0].url}
+                        src={song.images[0].url}
                         alt="track img"
                         className="object-contain rounded-xl"
                         height={176}
@@ -193,13 +204,13 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                   </div>
                   <p className="text-sm text-center whitespace-nowrap overflow-auto w-full songName">
                     {song.name} by{" "}
-                    {song.artists.map((artist: any) => artist.name).join(", ")}
+                   
                   </p>
                   <div
                     className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
                     onClick={() => {
                       if (
-                        !song.album.images[0]?.url ||
+                        !song.images[0]?.url ||
                         !song.name ||
                         !song.preview_url
                       ) {
@@ -209,9 +220,9 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                         });
                       }
                       handleUrl(
-                        song.album.images[0]?.url,
+                        song.images[0]?.url,
                         song.name,
-                        song.preview_url
+                        song.audio_preview_url
                       ),
                         setSearchInput("");
                     }}

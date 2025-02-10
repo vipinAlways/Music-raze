@@ -11,16 +11,16 @@ function Provider({children}:{children:React.ReactNode}) {
 
   return (
     <QueryClientProvider client={queryClient}>
+    <SessionProvider>
       <ContextProvider>
 
-    <SessionProvider>
       <GroupProvider>
 
         {children}
       </GroupProvider>
-    </SessionProvider>
       </ContextProvider>
     <ReactQueryDevtools />
+    </SessionProvider>
     </QueryClientProvider>
   )
 }
