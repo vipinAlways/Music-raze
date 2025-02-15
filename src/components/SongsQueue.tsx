@@ -119,7 +119,7 @@ function SongsQueue() {
   return (
     <div className="w-full flex items-start justify-between flex-1 max-sm:flex-col max-sm:mb-10" >
       <div className="flex lg:w-3/5 flex-col w-full  p-1  h-96 rounded-lg">
-        <ActiveSong />
+        <ActiveSong isAdmin={admin} />
       </div>
       <div className="lg:w-[35%] w-full max-sm:h-40  bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex lg:flex-col items-center gap-2 lg:h-[60vh] overflow-auto songList lg:-mt-10">
         {data.url.length > 0

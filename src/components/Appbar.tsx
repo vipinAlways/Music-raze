@@ -82,14 +82,14 @@ function Appbar() {
   };
 
   return (
-    <div className="flex justify-between max-sm:flex-col items-center min-h-20 text-white">
+    <div className="flex justify-between max-md:flex-col items-center min-h-20 text-white">
       <div className="flex justify-between items-center h-full w-full">
         <div>
           <Link href="/" className="text-lg lg:text-xl font-serif">
             Music Raze
           </Link>
         </div>
-        <div className="relative min-w-96  max-sm:hidden flex items-center gap-2">
+        <div className="relative min-w-96  max-md:hidden flex items-center gap-2">
           <input
             type="text"
             id="search"
@@ -150,7 +150,7 @@ function Appbar() {
         </div>
       </div>
       <div className="">
-        <div className="relative w-full sm:hidden flex items-center gap-2">
+        <div className="relative w-full md:hidden flex items-center gap-2">
           <input
             type="text"
             id="search"

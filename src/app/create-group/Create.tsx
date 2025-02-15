@@ -64,7 +64,7 @@ function Create() {
     };
   }, [groupName,description,mutation]);
   return (
-    <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 sm:h-[calc(100vh-10rem)] max-sm:h-[70vh]  lg:w-[60%] sm:w-4/5 max-sm:mt-5 flex  items-center justify-center mx-auto rounded-xl">
+    <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 sm:h-[calc(100vh-10rem)] max-md:h-[70vh]  lg:w-[60%] sm:w-4/5 max-md:mt-5 flex  items-center justify-center mx-auto rounded-xl">
       
       <Tabs defaultValue="Create Group" className="lg:w-[60%] sm:w-3/5 hello">
         <TabsList className="grid w-full grid-col-1">

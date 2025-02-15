@@ -90,7 +90,7 @@ function Page() {
 
   
 
-  console.log(favortieSong.data);
+
 
   return (
     <div className="mt-6 flex flex-col text-slate-300 w-full ">
@@ -104,7 +104,7 @@ function Page() {
               <p>Discover & Create groups where</p>
               <p> you and your friends can have a great time together!</p>
             </div>
-            <div className="lg:hidden block max-sm:text-sm w-full text-center">
+            <div className="lg:hidden block max-md:text-sm w-full text-center">
               <p>Discover & Create groups </p>
               <p> where you and your friends </p>
               <p>can have a great time together!</p>

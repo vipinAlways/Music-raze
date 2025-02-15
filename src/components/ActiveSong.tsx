@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-export default function ActiveSong() {
+export default function ActiveSong({ isAdmin }: { isAdmin: boolean }) {
   const { toast } = useToast();
   const { groupID } = useGroup();
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -24,29 +24,27 @@ export default function ActiveSong() {
   const [hidden, setHidden] = useState("hidden");
   const [hidden2, setHidden2] = useState("");
   const [admin, setAdmin] = useState(false);
-  
+
   const { data } = useQuery({
     queryKey: ["get-active-stream"],
     queryFn: async () => findActiveStream(groupID),
-      // refetchInterval: 1000, // Poll every second (1000 ms)
-      // refetchIntervalInBackground: true, // Continue polling even when the tab is inactive
-    
+    refetchInterval: 1000,
+    refetchIntervalInBackground: true,
   });
 
   const seeAdmin = useQuery({
-    queryKey:['see-admin',data?.id],
-    queryFn:async()=> getAdmin(),
-    enabled:!!data?.id
-  })
+    queryKey: ["see-admin", data?.id],
+    queryFn: async () => getAdmin(),
+    enabled: !!data?.id,
+  });
 
- 
-  useEffect(()=>{
+  useEffect(() => {
     if (seeAdmin.data?.id === data?.userId) {
-      setAdmin(true)
-    }else{
-      setAdmin(false)
+      setAdmin(true);
+    } else {
+      setAdmin(false);
     }
-  },[seeAdmin,data?.userId])
+  }, [seeAdmin, data?.userId]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -63,8 +61,6 @@ export default function ActiveSong() {
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
     },
   });
-
-
 
   useEffect(() => {
     const handleSongEnd = () => {
@@ -85,7 +81,7 @@ export default function ActiveSong() {
         audioElement.removeEventListener("ended", handleSongEnd);
       }
     };
-  }, [currentSongIndex, data?.url.length,updateStreamMutation]);
+  }, [currentSongIndex, data?.url.length, updateStreamMutation]);
 
   const deleteS = useMutation({
     mutationKey: ["delete-stream"],
@@ -111,8 +107,7 @@ export default function ActiveSong() {
       deleteS.mutate(data?.id ?? "");
     }, 5000);
 
-    queryClient.invalidateQueries({queryKey:['get-active-stream']})
-
+    queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
   };
   useEffect(() => {
     if (countDown < 5) {
@@ -154,27 +149,26 @@ export default function ActiveSong() {
     });
   };
 
-
-
   return (
     <div className="h-full w-full">
       {data?.url[currentSongIndex] ? (
         <div className="relative">
           <div className="h-full w-full rounded-lg flex flex-col items-center relative z-20 ">
-           <div className="h-40 w-44">
-           <Image
-              src={data.url[currentSongIndex].image || ""}
-              alt={data.url[currentSongIndex].title || ""}
-              className="p-2 w-full object-contain"
-              height={176}
-              width={176}
-            />
-           </div>
+            <div className="relative w-44 h-44 sm:w-52 sm:h-52 md:w-56 md:h-56 lg:w-64 lg:h-64">
+              <Image
+                src={data.url[currentSongIndex].image || ""}
+                alt={data.url[currentSongIndex].title || ""}
+                className="object-cover lg:object-contain"
+                fill
+                sizes="(max-width: 640px) 176px, (max-width: 1024px) 256px, 176px"
+              />
+            </div>
+
             <audio
               ref={audioRef}
               src={data.url[currentSongIndex].url}
               controls={true}
-              className="p-2 w-full"
+              className={cn("p-2 w-full", !isAdmin && "hidden")}
               autoPlay={true}
             />
           </div>
@@ -182,9 +176,9 @@ export default function ActiveSong() {
             <Image
               src={data.url[currentSongIndex].image || ""}
               alt={data.url[currentSongIndex].title || ""}
-              className="object-cover -z-10 h-full w-full rounded-lg"
+              className="object-cover -z-10 h-full w-full rounded-md"
               height={176}
-              width={176}
+              width={160}
             />
           </div>
 
@@ -223,7 +217,11 @@ export default function ActiveSong() {
           >
             <Button
               onClick={() => endStream()}
-              className={cn("bg-[#5b1dc5] lg:text-2xl p-2",admin===true ? '': 'hidden',hidden2)}
+              className={cn(
+                "bg-[#5b1dc5] lg:text-2xl p-2",
+                admin === true ? "" : "hidden",
+                hidden2
+              )}
             >
               End Stream
             </Button>
