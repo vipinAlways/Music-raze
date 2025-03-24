@@ -26,8 +26,8 @@ function SongsQueue() {
   const { data, error } = useQuery({
     queryKey: ["get-stream"],
     queryFn: async () => findStream({ groupID: groupID }),
-    refetchInterval: 1000, 
-      refetchIntervalInBackground: true, 
+    // refetchInterval: 1000, 
+    //   refetchIntervalInBackground: true, 
   });
   
 

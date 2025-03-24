@@ -1,7 +1,6 @@
-// GroupContext.tsx
+
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-// Define the context type
 interface GroupContextType {
   groupID: string;
   setGroupID: (id: string) => void;

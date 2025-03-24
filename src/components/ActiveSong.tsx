@@ -28,8 +28,8 @@ export default function ActiveSong({ isAdmin }: { isAdmin: boolean }) {
   const { data } = useQuery({
     queryKey: ["get-active-stream"],
     queryFn: async () => findActiveStream(groupID),
-    refetchInterval: 1000,
-    refetchIntervalInBackground: true,
+    // refetchInterval: 1000,
+    // refetchIntervalInBackground: true,
   });
 
   const seeAdmin = useQuery({

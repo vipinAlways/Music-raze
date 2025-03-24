@@ -15,8 +15,6 @@ import { Button } from "@/components/ui/button";
 
 
 function Page() {
-
-  
   const { groupID } = useGroup();
   const [isMember, setIsMember] = useState(false);
   const [count, setCount] = useState();
@@ -73,12 +71,6 @@ function Page() {
       }
     }
   }, [data,data?.members, user?.id,queryClient]);
-
-
- 
-
-
-  
 
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data</div>;

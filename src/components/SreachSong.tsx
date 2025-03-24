@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext, useRef, useMemo } from "react";
 import { MusicContext } from "./Context";
 import { cn } from "@/lib/utils";
 import VolumeRange from "./VolumeRange";
@@ -37,7 +37,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
       window.document.removeEventListener("keydown", handleKeydown);
     };
   }, [searchInput]);
-  console.log(accessToken,"accessToken");
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -90,13 +90,12 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
         );
 
         const tracks = await response.json();
-        setAlbums(tracks.episodes?.items|| []);
+        setAlbums(tracks.episodes?.items || []);
       }
     };
     getTrack();
   }, [debounceSreachInput, accessToken, resultOffset]);
 
-  
   const { mutate } = useMutation({
     mutationKey: ["add-url"],
     mutationFn: addUrl,
@@ -110,7 +109,6 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
-     
     },
   });
 
@@ -146,15 +144,8 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     };
   }, []);
 
-  /*
-  {
-    "access_token": "BQD7Hq61mW0ST3Cum_NEcHyxDlrV-K70qbnlLM4i0VQ9pwsoBVGP77_Myg2EvPc2lR6uRwY0yRFShnEpFuu8tJRgeed5IkPoiAVTJhEvU5ehZeDxLTyJiMPE2VQX1dKUV8gEHBg5XuM",
-    "token_type": "Bearer",
-    "expires_in": 3600
-}
-  */
+  const filteredAlbums = useMemo(() => albums.filter((song) => song.audio_preview_url), [albums]);
 
-  console.log(albums, "ye hain ablum");
   return (
     <div
       className="flex max-md:flex-col-reverse relative items-start lg:justify-end justify-around  max-md:h-36"
@@ -178,59 +169,59 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
           )}
         >
           {albums.length > 0 ? (
-            albums.map((song, index) =>
-              song.audio_preview_url ? (
-                <div
-                  key={index}
-                  className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg relative"
-                >
-                  <div className="h-40 w-full ">
-                    {song.images[0]?.url ? (
-                      <Image
-                        src={song.images[0].url}
-                        alt="track img"
-                        className="object-contain rounded-xl"
-                        height={176}
-                        width={300}
-                      />
-                    ) : (
-                      <Image
-                        src=""
-                        alt="no track"
-                        className="object-contain"
-                        fill
-                      />
-                    )}
-                  </div>
-                  <p className="text-sm text-center whitespace-nowrap overflow-auto w-full songName">
-                    {song.name} by{" "}
-                   
-                  </p>
+            albums.map(
+              (song, index) =>
+                filteredAlbums && (
                   <div
-                    className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
-                    onClick={() => {
-                      if (
-                        !song.images[0]?.url ||
-                        !song.name ||
-                        !song.preview_url
-                      ) {
-                        toast({
-                          title: "Error",
-                          description: "can't able to add this song",
-                        });
-                      }
-                      handleUrl(
-                        song.images[0]?.url,
-                        song.name,
-                        song.audio_preview_url
-                      ),
-                        setSearchInput("");
-                    }}
+                    key={index}
+                    className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg relative"
                   >
-                    <Plus />
+                    <div className="h-40 w-full ">
+                      {song.images[0]?.url ? (
+                        <Image
+                          src={song.images[0].url}
+                          alt="track img"
+                          className="object-contain rounded-xl"
+                          height={176}
+                          width={300}
+                        />
+                      ) : (
+                        <Image
+                          src=""
+                          alt="no track"
+                          className="object-contain"
+                          fill
+                        />
+                      )}
+                    </div>
+                    <p className="text-sm text-center whitespace-nowrap overflow-auto w-full songName">
+                      {song.name} by{" "}
+                    </p>
+                    <div
+                      className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
+                      onClick={() => {
+                        if (
+                          !song.images[0]?.url ||
+                          !song.name ||
+                          !song.preview_url
+                        ) {
+                          toast({
+                            title: "Error",
+                            description: "can't able to add this song",
+                          });
+                        }
+                        handleUrl(
+                          song.images[0]?.url,
+                          song.name,
+                          song.audio_preview_url
+                        ),
+                          setSearchInput("");
+                      }}
+                    >
+                      <Plus />
+                    </div>
                   </div>
-                </div>
-              ) : null
+                )
             )
           ) : (
             <div
