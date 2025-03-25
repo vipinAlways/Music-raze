@@ -264,7 +264,9 @@ export async function  addFavorite({image_url, Audio_url, title_url }: { title_u
 
 
 export async function checkAdmin(groupID:string){
-  await groupID
+   if (!groupID) {
+    throw new Error('group id Server Issue')  
+   }
   try {
     const session = await getServerSession(authOptions)
 
