@@ -4,6 +4,7 @@
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth"
+import { pusherServer } from "@/lib/pusher";
 
 
 
@@ -154,14 +155,16 @@ export async function  dropUrl(urlId:string) {
 }
 
 export async function updateActiveStream(groupID: string, currentSongIndex: number) {
-  return await db.activeStreams.update({
+  const activeSong=  await db.activeStreams.update({
     where: { groupId: groupID },
     data: {
       currentSongIndex,  
     },
   });
-}
+  await pusherServer.trigger('active-song', 'new-activeSong', activeSong);
 
+  return activeSong
+}
 
 export async function findActiveStream(groupID: string ) {
   await db.$connect()

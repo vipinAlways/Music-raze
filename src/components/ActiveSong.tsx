@@ -13,6 +13,7 @@ import { Button } from "./ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { pusherClient } from "@/lib/pusher";
 
 export default function ActiveSong({ isAdmin }: { isAdmin: boolean }) {
   const { toast } = useToast();
@@ -61,6 +62,20 @@ export default function ActiveSong({ isAdmin }: { isAdmin: boolean }) {
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
     },
   });
+  useEffect(() => {
+    const channel = pusherClient.subscribe("active-song");
+
+    channel.bind("new-activeSong", (updated: any) => {
+      if (updated.groupId === groupID) {
+        queryClient.setQueryData(["get-active-stream", groupID], updated);
+      }
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("active-song");
+    };
+  }, [groupID, queryClient]);
 
   useEffect(() => {
     const handleSongEnd = () => {
@@ -149,8 +164,12 @@ export default function ActiveSong({ isAdmin }: { isAdmin: boolean }) {
     });
   };
 
+  
+ 
   return (
     <div className="h-full w-full">
+
+      <h1>{data?.currentSongIndex}</h1>
       {data?.url[currentSongIndex] ? (
         <div className="relative">
           <div className="h-full w-full rounded-lg flex flex-col items-center relative z-20 ">
@@ -167,8 +186,8 @@ export default function ActiveSong({ isAdmin }: { isAdmin: boolean }) {
             <audio
               ref={audioRef}
               src={data.url[currentSongIndex].url}
-              controls={true}
-              className={cn("p-2 w-full", !isAdmin && "hidden")}
+             controls
+              className={cn("p-2 w-full")}
               autoPlay={true}
             />
           </div>
