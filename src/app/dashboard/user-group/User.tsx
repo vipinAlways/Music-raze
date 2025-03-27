@@ -28,8 +28,8 @@ function User() {
         <div className="flex flex-col items-center gap-3">
           <div className="w-full flex justify-center items-center"></div>
           <ul className="w-full">
-            {data.length > 0 ? (
-              data.map((group) => (
+            {data.createdOne.length > 0 ? (
+              data.createdOne.map((group) => (
                 <li
                   key={group.id}
                   className="bg-white p-4 rounded-lg shadow-md flex flex-col gap-2"

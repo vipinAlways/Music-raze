@@ -3,9 +3,8 @@ import User from './User'
 
 const page = () => {
   return (
-    <>
       <User/>
-    </>
+    
   )
 }
 

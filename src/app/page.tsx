@@ -25,14 +25,16 @@ import Image from "next/image";
             where you can enjoy your favorite song hooks with the ones you love
           </p>
         </div>
-        <div className="flex items-center justify-center gap-4 w-full">
+        <div className="flex items-center justify-center gap-4 w-full relative">
+          <div className="relative w-60 h-52">
           <Image
             src="/testimonials/7.gif"
             alt="Enjoy Life GIF"
             className="object-contain"
-            height={176}
-            width={176}
+            fill
+            priority
           />
+          </div>
           <Button
             onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
             className={cn("p-2 py-3 text-xl", session ? "hidden" : null)}

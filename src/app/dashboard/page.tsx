@@ -5,13 +5,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
-import { getFavoriteSongs } from "./action";
+import { GetCreatedGrp, getFavoriteSongs } from "./action";
 import Error from "@/components/Error";
 import { cn } from "@/lib/utils";
 import { Minus, Pause, Play } from "lucide-react";
 import Loader from "@/components/Loader";
 import { changeFavList } from "../actionFn/getAllGrpName";
 import Image from "next/image";
+import { useGroup } from "@/components/GroupContextType ";
 
 interface Song {
   image_url: string;
@@ -21,11 +22,17 @@ interface Song {
 
 function Page() {
   const session = useSession();
+  const { groupID, setGroupID } = useGroup();
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
   const userName: string = session?.data?.user?.name ?? "user";
   const audioRefs = useRef<HTMLAudioElement[]>([]);
-  const queryClient  = useQueryClient()
+  const queryClient = useQueryClient();
+
+    const { data, isPending, isError } = useQuery({
+      queryKey: ["get-user-created-grp"],
+      queryFn: async () => GetCreatedGrp(),
+    });
   const playSong = (index: number) => {
     const currentAudio = audioRefs.current[index];
     if (currentAudio) {
@@ -69,7 +76,7 @@ function Page() {
     mutationFn: changeFavList,
     onError: () => {},
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:['favorite-song']})
+      queryClient.invalidateQueries({ queryKey: ["favorite-song"] });
     },
   });
   const handleFavList = (Audio_url: string) => {
@@ -86,11 +93,6 @@ function Page() {
   if (!favortieSong.data) {
     return <Error />;
   }
-
-
-  
-
-
 
   return (
     <div className="mt-6 flex flex-col text-slate-300 w-full ">
@@ -208,24 +210,20 @@ function Page() {
                       currentSongIndex === index ? "opacity-50" : "opacity-100"
                     )}
                   >
-                    <div className="w-full lg:h-24  lg:w-full max-md:h-20 min-w-20">
+                    <div className="w-full lg:h-24 relative  lg:w-full max-md:h-20 min-w-20">
                       <Image
                         src={song.image_url}
                         alt={song.title_url}
                         className="rounded-tr-3xl object-cover "
-                        // height={176}
-                        // width={176}
                         fill
                       />
                     </div>
-
                     <audio
-                      //@ts-ignore
-                      ref={(el) =>
-                        (audioRefs.current[index] = el as HTMLAudioElement)
-                      }
+                      ref={(el: HTMLAudioElement | null) => {
+                        if (el) audioRefs.current[index] = el;
+                      }}
                       src={song.Audio_url}
-                    ></audio>
+                    />
                   </div>
                 ))}
               </>
@@ -235,7 +233,19 @@ function Page() {
       </div>
       <div className="flex flex-col items-start pl-12">
         <h1 className="lg:text-4xl text-3xl ">Enrolled Groups</h1>
-        <div className="w-full "></div>
+        <div className="w-full ">
+            {
+              data?.addedOne && (
+                data?.addedOne.map((group)=>(
+                  <div>
+                    <h1>{group.groupName}</h1>
+                    <p>{group.description}</p>  
+                  </div>
+                ))
+              )
+            }
+
+        </div>
       </div>
     </div>
   );

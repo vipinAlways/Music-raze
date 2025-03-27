@@ -25,12 +25,22 @@ export async function GetCreatedGrp() {
   }
 
   try {
-    return await db.group.findMany({
+    const createdOne = await db.group.findMany({
       where: {
         admin: user.id,
       }
+
       
     });
+    const addedOne = await db.group.findMany({
+      where:{
+        members:{
+          hasSome:[user.id]
+        }
+      }
+    })
+
+    return {addedOne,createdOne};
   } catch (error) {
     console.log(error);
     throw new Error("syntax error");
