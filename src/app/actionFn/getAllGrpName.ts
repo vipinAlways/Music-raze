@@ -117,6 +117,7 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
         url: link,
       },
     });
+    await pusherServer.trigger('add-song', 'new-song-add', newUrl);
 
     return newUrl;
   } catch (error) {
@@ -155,15 +156,24 @@ export async function  dropUrl(urlId:string) {
 }
 
 export async function updateActiveStream(groupID: string, currentSongIndex: number) {
-  const activeSong=  await db.activeStreams.update({
-    where: { groupId: groupID },
-    data: {
-      currentSongIndex,  
-    },
-  });
-  await pusherServer.trigger('active-song', 'new-activeSong', activeSong);
-
-  return activeSong
+ try {
+   const activeSong = await db.activeStreams.update({
+     where: { groupId: groupID },
+     data: { currentSongIndex },
+     // create: {
+     //   groupId: groupID,
+     //   currentSongIndex,
+     //   type: "Spotify", 
+     //   userId: "", 
+     // },
+   });
+   
+   await pusherServer.trigger('active-song', 'new-activeSong', activeSong);
+ 
+   return activeSong
+ } catch (error) {
+  console.log(error);
+ }
 }
 
 export async function findActiveStream(groupID: string ) {

@@ -8,6 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addUrl } from "@/app/actionFn/getAllGrpName";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
+import { pusherClient } from "@/lib/pusher";
+import { useGroup } from "./GroupContextType ";
 
 function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -19,6 +21,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     null
   );
   const queryClient = useQueryClient();
+  const {groupID} = useGroup();
   const { toast } = useToast();
 
   const musicContext = useContext(MusicContext);
@@ -111,6 +114,20 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
     },
   });
+   useEffect(() => {
+      const channel = pusherClient.subscribe("add-song");
+  
+      channel.bind("new-song-add", (updated: any) => {
+        if (updated.groupId === groupID) {
+          queryClient.setQueryData(["get-stream", groupID], updated);
+        }
+      });
+  
+      return () => {
+        channel.unbind_all();
+        pusherClient.unsubscribe("active-song");
+      };
+    }, [groupID, queryClient]);
 
   const handleUrl = (
     songImage: string,

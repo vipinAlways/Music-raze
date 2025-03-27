@@ -188,7 +188,7 @@ export default function ActiveSong({ isAdmin }: { isAdmin: boolean }) {
               src={data.url[currentSongIndex].url}
              controls
               className={cn("p-2 w-full")}
-              autoPlay={true}
+              autoPlay
             />
           </div>
           <div className="absolute h-60 w-full top-0 rounded-lg bg">
