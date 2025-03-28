@@ -24,7 +24,7 @@ function SongsQueue() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queryClient = useQueryClient();
   const { data, error } = useQuery({
-    queryKey: ["get-stream"],
+    queryKey: ["get-stream",groupID],
     queryFn: async () => findStream({ groupID: groupID }),
     // refetchInterval: 1000, 
     //   refetchIntervalInBackground: true, 
@@ -55,8 +55,8 @@ function SongsQueue() {
       console.log("nahi hua");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
+      queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
     },
   });
 

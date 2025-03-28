@@ -103,6 +103,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     mutationKey: ["add-url"],
     mutationFn: addUrl,
     onError: (error) => {
+      console.log(error,"ye hian ");
       toast({
         title: "Error",
         description: error.message ?? "error while adding",
@@ -119,13 +120,14 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   
       channel.bind("new-song-add", (updated: any) => {
         if (updated.groupId === groupID) {
-          queryClient.setQueryData(["get-stream", groupID], updated);
-        }
+          console.log("Received update from Pusher:", updated);
+          queryClient.setQueryData(["get-stream"], updated);
+        }else (console.log("chal na"))
       });
   
       return () => {
         channel.unbind_all();
-        pusherClient.unsubscribe("active-song");
+        pusherClient.unsubscribe("add-song");
       };
     }, [groupID, queryClient]);
 
@@ -217,16 +219,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                     <div
                       className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
                       onClick={() => {
-                        if (
-                          !song.images[0]?.url ||
-                          !song.name ||
-                          !song.preview_url
-                        ) {
-                          toast({
-                            title: "Error",
-                            description: "can't able to add this song",
-                          });
-                        }
+                       
                         handleUrl(
                           song.images[0]?.url,
                           song.name,
