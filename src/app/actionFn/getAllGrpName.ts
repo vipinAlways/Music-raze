@@ -118,9 +118,10 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
     });
     await pusherServer.trigger("add-song", "new-song-add", {
       ...newUrl,
-      groupId: groupId, // Add this explicitly
+      groupId: groupId, 
     });
-
+    
+    console.log("new song added")
     return newUrl;
   } catch (error) {
     console.error("Error adding URL:", error);
