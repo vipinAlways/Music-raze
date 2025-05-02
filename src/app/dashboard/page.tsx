@@ -12,7 +12,7 @@ import { Minus, Pause, Play } from "lucide-react";
 import Loader from "@/components/Loader";
 import { changeFavList } from "../actionFn/getAllGrpName";
 import Image from "next/image";
-import { useGroup } from "@/components/GroupContextType ";
+
 
 interface Song {
   image_url: string;
@@ -22,7 +22,7 @@ interface Song {
 
 function Page() {
   const session = useSession();
-  const { groupID, setGroupID } = useGroup();
+  
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
   const userName: string = session?.data?.user?.name ?? "user";
@@ -96,11 +96,11 @@ function Page() {
 
   return (
     <div className="mt-6 flex flex-col text-slate-300 w-full ">
-      <div className="flex items-start lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-md:flex-col ">
+      <div className="flex items-start max-lg:items-center lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-md:flex-col ">
         <div className="leading-6 max-md:sm:w-full sm:h-[60vh] flex flex-col items-start max-md:items-center sm:pt-10 gap-10 lg:w-[60%]">
-          <div className="text-3xl w-full">
-            <h1 className="w-full flex max-md:flex-col items-end gap-3 lg:text-7xl text-5xl mb-4 max-md:items-center">
-              Hello <span className="text-2xl font-semibold ">@{userName}</span>
+          <div className="text-3xl w-full ">
+            <h1 className="w-full flex max-md:flex-col items-end gap-3 lg:text-7xl text-6xl mb-4 max-md:items-center">
+            Welcome <span className="text-3xl font-semibold ">@{userName}</span>
             </h1>
             <div className="lg:block hidden">
               <p>Discover & Create groups where</p>
@@ -112,7 +112,7 @@ function Page() {
               <p>can have a great time together!</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center gap-3">
             <Button className="lg:p-3 p-2 h-fit  max-md:text-lg lg:text-2xl lg:w-64 ">
               <Link href="/dashboard/user-group">YOUR GROUPS</Link>
             </Button>

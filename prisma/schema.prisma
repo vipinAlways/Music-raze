@@ -9,14 +9,14 @@ datasource db {
 }
 
 model User {
-  id       String          @id @default(uuid())
-  userName String
-  email    String          @unique
-  provider Provider
-  streams  ActiveStreams[]
-  group    Group[]
-  upVotes  UrlUpVotes[]
-  favourite   Favroutie[]
+  id        String          @id @default(uuid())
+  userName  String
+  email     String          @unique
+  provider  Provider
+  streams   ActiveStreams[]
+  group     Group[]
+  upVotes   UrlUpVotes[]
+  favourite Favroutie[]
 }
 
 model ActiveStreams {
@@ -54,12 +54,14 @@ model UrlUpVotes {
 }
 
 model Group {
-  id            String          @id @default(uuid())
-  groupName     String          
-  userId        String
-  members       String[]
-  streamId      String
-  type          type
+  id        String   @id @default(uuid())
+  groupName String
+  userId    String
+  members   String[]
+  streamId  String
+  type      type
+  avatar    String   @default("default-avatar.png")
+
   description   String
   user          User            @relation(fields: [userId], references: [id])
   admin         String
@@ -72,9 +74,8 @@ model Favroutie {
   Audio_url String
   image_url String
   title_url String
-  userId  String    
-  user    User       @relation(fields: [userId],references: [id],onDelete: Cascade)
-  
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum type {

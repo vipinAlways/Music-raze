@@ -9,7 +9,7 @@ import { addUrl } from "@/app/actionFn/getAllGrpName";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { pusherClient } from "@/lib/pusher";
-import { useGroup } from "./GroupContextType ";
+
 
 function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -21,7 +21,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     null
   );
   const queryClient = useQueryClient();
-  const {groupID} = useGroup();
+  
   const { toast } = useToast();
 
   const musicContext = useContext(MusicContext);
@@ -119,7 +119,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
       const channel = pusherClient.subscribe("add-song");
   
       channel.bind("new-song-add", (updated: any) => {
-        if (updated.groupId === groupID) {
+        if (updated.groupId === currentgrpId) {
           console.log("Received update from Pusher:", updated);
           queryClient.setQueryData(["get-stream"], updated);
         }else (console.log("chal na"))
@@ -129,7 +129,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
         channel.unbind_all();
         pusherClient.unsubscribe("add-song");
       };
-    }, [groupID, queryClient]);
+    }, [currentgrpId, queryClient]);
 
   const handleUrl = (
     songImage: string,

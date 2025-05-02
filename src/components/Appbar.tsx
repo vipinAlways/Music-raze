@@ -8,7 +8,7 @@ import { getAllGrpNames } from "@/app/actionFn/getAllGrpName";
 import Link from "next/link";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useGroup } from "./GroupContextType ";
+
 
 function Appbar() {
   const pathname = usePathname();
@@ -18,7 +18,7 @@ function Appbar() {
     { id: string; groupName: string }[]
   >([]);
   const [showOptions, setShowOptions] = useState<boolean>(false);
-  const { groupID, setGroupID } = useGroup();
+  
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["getgrp-name"],
@@ -34,31 +34,15 @@ function Appbar() {
 
   useEffect(() => {
     const savedInputValue = localStorage.getItem("inputValue");
-    const savedGroupID = localStorage.getItem("groupID");
+    // const savedGroupID = localStorage.getItem("groupID");
 
     if (savedInputValue) {
       setInputValue(savedInputValue);
     }
 
-    if (savedGroupID) {
-      setGroupID(savedGroupID);
-    }
 
-    if (pathname !== "/group") {
-      setInputValue("");
-      setGroupID("");
-    }
-  }, [setGroupID, pathname]);
+  }, [ pathname]);
 
-  useEffect(() => {
-    localStorage.setItem("inputValue", inputValue);
-  }, [inputValue]);
-
-  useEffect(() => {
-    if (groupID) {
-      localStorage.setItem("groupID", groupID);
-    }
-  }, [groupID]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -77,7 +61,7 @@ function Appbar() {
 
   const handleOptionClick = (option: { id: string; groupName: string }) => {
     setInputValue(option.groupName);
-    setGroupID(option.id);
+    // setGroupID(option.id);
 
   };
 

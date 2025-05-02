@@ -11,7 +11,7 @@ import Image from "next/image";
   const session = useSession()
 
   return (
-    <div className="grid max-md:flex max-md:flex-col-reverse max-md:items-center  grid-cols-2 w-full justify-between h-full  lg:pt-7 sm:pt-24">
+    <div className="grid max-md:flex max-lg:flex-col-reverse max-md:items-center grid-cols-2 w-full justify-between h-full  lg:pt-7  max-lg:pt-12  max-lg:gap-4">
       <div className="lg:w-4/5 w-full h-full max-md:h-[100%] rounded-md flex justify-start items-center ">
         <Songs/>
       </div>

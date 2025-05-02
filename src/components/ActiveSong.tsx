@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { useGroup } from "./GroupContextType ";
+
 import {
   addFavorite,
   deleteStream,
@@ -15,9 +15,9 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { pusherClient } from "@/lib/pusher";
 
-export default function ActiveSong({ isAdmin }: { isAdmin: boolean }) {
+export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,groupID: string }) {
   const { toast } = useToast();
-  const { groupID } = useGroup();
+  
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queryClient = useQueryClient();
   const [currentSongIndex, setCurrentSongIndex] = useState(0);

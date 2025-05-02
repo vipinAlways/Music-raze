@@ -1,21 +1,25 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getGroup } from "../actionFn/getAllGrpName";
+import { getGroup } from "../../actionFn/getAllGrpName";
 import SreachSong from "@/components/SreachSong";
 import Loader from "@/components/Loader";
 import Link from "next/link";
 import StartStream from "@/components/StartStream";
-import { useGroup } from "@/components/GroupContextType ";
+
 import SongsQueue from "@/components/SongsQueue";
 import { checkMember, updateMemberList, updateMemberListDelete } from "./action";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+interface PageProps {
+  params: {
+    groupID: string;
+  };
+}
 
-
-function Page() {
-  const { groupID } = useGroup();
+function Page({ params }: PageProps) {
+  const { groupID } = params;
   const [isMember, setIsMember] = useState(false);
   const [count, setCount] = useState();
   const queryClient = useQueryClient();
@@ -110,7 +114,7 @@ function Page() {
       <div className={cn(isMember === true ? "" : "hidden")}>
         {(data?.streamId && isMember) ? (
           <div>
-            <SongsQueue />
+            <SongsQueue groupID={groupID}/>
           </div>
         ) : (
           <div className="flex flex-col items-center min-h-32 justify-between mt-20">
@@ -134,6 +138,8 @@ function Page() {
 
         <p>{count}</p>
       </div>
+
+
     </div>
   );
 }

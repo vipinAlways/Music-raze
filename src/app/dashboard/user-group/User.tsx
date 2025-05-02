@@ -7,10 +7,10 @@ import Error from "@/components/Error";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useGroup } from "@/components/GroupContextType ";
+
 
 function User() {
-  const { groupID, setGroupID } = useGroup();
+  
   const { data, isPending, isError } = useQuery({
     queryKey: ["get-user-created-grp"],
     queryFn: async () => GetCreatedGrp(),
@@ -46,9 +46,9 @@ function User() {
                     {group.description || "No description available"}
                   </p>
 
-                  <Button onClick={() => setGroupID(group.id)}>
+                  <Button>
                     <Link
-                      href="/group"
+                      href={`/group/${group.id}`}
                       className="p-2 rounded-md text-center font-bold w-full"
                     >
                       View Group
