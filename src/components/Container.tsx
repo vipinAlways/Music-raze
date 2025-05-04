@@ -13,7 +13,7 @@ function Container({ className, imgSrc, dark = false, ...props }: PhoneProps) {
   return (
     <div
       className={cn(
-        'relative pointer-events-none z-50 overflow-hidden lg:h-40 h-20 w-full flex items-center justify-center rounded-md',  
+        'relative pointer-events-none z-50 overflow-hidden lg:h-40 h-20 w-full flex items-center justify-center ',  
         className
       )}
       {...props}
@@ -21,7 +21,7 @@ function Container({ className, imgSrc, dark = false, ...props }: PhoneProps) {
     
         <Image
           src={imgSrc}
-          className="h-full w-full object-contain rounded-md"
+          className="h-full w-full object-contain rounded-lg"
           alt="song img"
          fill
 

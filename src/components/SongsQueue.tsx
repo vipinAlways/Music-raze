@@ -26,8 +26,6 @@ function SongsQueue({groupID}:{groupID:string}) {
   const { data, error } = useQuery({
     queryKey: ["get-stream",groupID],
     queryFn: async () => findStream({ groupID: groupID }),
-    // refetchInterval: 1000, 
-    //   refetchIntervalInBackground: true, 
   });
   
 
@@ -128,7 +126,7 @@ function SongsQueue({groupID}:{groupID:string}) {
                 <div
                   key={index}
                   className={cn(
-                    "flex  lg:min-w-full lg:max-w-60 flex-col items-center lg:h-52 p-1 h-36 w-36 bg-[#38196e]  rounded-lg justify-around  relative",
+                    "flex  lg:min-w-full lg:max-w-60 flex-col items-center lg:h-60 p-1 h-36 w-36 bg-[#38196e]  rounded-lg justify-around  relative",
                     index === data.currentSongIndex
                       ? "opacity-75"
                       : "opacity-100"
@@ -143,17 +141,16 @@ function SongsQueue({groupID}:{groupID:string}) {
                   >
                     <Minus className="hover:scale-105" />
                   </div>
-                  <div className="lg:h-32  w-60" >
+                  <div className="lg:h-40  h-20 w-full relative" >
                     <Image
                       src={song.image}
                       alt={song.title}
-                      className="object-cover lg:object-contain   "
-                      height={176}
-                      width={176}
+                      className="object-contain object-center "
+                      fill
                     />
                   </div>
-                  <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-auto title ">
-                    <h1>{song.title}</h1>
+                  <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-x-auto overflow-y-hidden ">
+                    <h1 className="title">{song.title}</h1>
                   </div>
                 </div>
               ) : null

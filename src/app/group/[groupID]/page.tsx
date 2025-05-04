@@ -21,7 +21,7 @@ interface PageProps {
 function Page({ params }: PageProps) {
   const { groupID } = params;
   const [isMember, setIsMember] = useState(false);
-  const [count, setCount] = useState();
+
   const queryClient = useQueryClient();
 
   const { data, isError, isLoading } = useQuery({
@@ -136,7 +136,7 @@ function Page({ params }: PageProps) {
           +
         </Button>
 
-        <p>{count}</p>
+     
       </div>
 
 

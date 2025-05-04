@@ -29,9 +29,7 @@ export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,group
   const { data } = useQuery({
     queryKey: ["get-active-stream"],
     queryFn: async () => findActiveStream(groupID),
-    // refetchInterval: 1000,
-    // refetchIntervalInBackground: true,
-  });
+    });
 
   const seeAdmin = useQuery({
     queryKey: ["see-admin", data?.id],
@@ -168,8 +166,6 @@ export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,group
  
   return (
     <div className="h-full w-full">
-
-      <h1>{data?.currentSongIndex}</h1>
       {data?.url[currentSongIndex] ? (
         <div className="relative">
           <div className="h-full w-full rounded-lg flex flex-col items-center relative z-20 ">
@@ -192,13 +188,14 @@ export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,group
             />
           </div>
           <div className="absolute h-60 w-full top-0 rounded-lg bg">
-            <Image
+           <div className="relative h-full w-full">
+           <Image
               src={data.url[currentSongIndex].image || ""}
               alt={data.url[currentSongIndex].title || ""}
               className="object-cover -z-10 h-full w-full rounded-md"
-              height={176}
-              width={160}
+              fill
             />
+           </div>
           </div>
 
           <div

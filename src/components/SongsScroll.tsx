@@ -118,7 +118,7 @@ function ReviewGrid() {
   return (
     <div
       ref={containerRef}
-      className="relative  grid  lg:max-h-[77vh]  max-md:h-[50vh] rounded-md items-start gap-8 overflow-hidden grid-cols-3"
+      className="grid  lg:max-h-[77vh]  max-md:h-[50vh] rounded-md items-start gap-8 overflow-hidden grid-cols-3"
     >
       {isInView ? (
         <>
@@ -128,7 +128,7 @@ function ReviewGrid() {
               cn({
                 "md:hidden": reviewIndex >= column1.length + column3[0].length,
                 "lg:hidden": reviewIndex >= column1.length,
-              })
+              },)
             }
             msPerPixel={10}
           />
@@ -143,7 +143,7 @@ function ReviewGrid() {
           <SongsColumn songs={column3.flat()} className="" msPerPixel={10} />
         </>
       ) : null}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-slate-500 rounded-lg" />
+      <div className="pointer-events-none absolute inset-x-0 -top-2 h-32 bg-gradient-to-b from-slate-500 rounded-lg" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-500 rounded-lg" />
     </div>
   );

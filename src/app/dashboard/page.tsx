@@ -98,7 +98,7 @@ function Page() {
     <div className="mt-6 flex flex-col text-slate-300 w-full ">
       <div className="flex items-start max-lg:items-center lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-md:flex-col ">
         <div className="leading-6 max-md:sm:w-full sm:h-[60vh] flex flex-col items-start max-md:items-center sm:pt-10 gap-10 lg:w-[60%]">
-          <div className="text-3xl w-full ">
+          <div className="text-3xl w-full space-y-2 ">
             <h1 className="w-full flex max-md:flex-col items-end gap-3 lg:text-7xl text-6xl mb-4 max-md:items-center">
             Welcome <span className="text-3xl font-semibold ">@{userName}</span>
             </h1>
@@ -122,8 +122,8 @@ function Page() {
           </div>
         </div>
 
-        <div className="lg:h-[55vh] lg:w-[30%] bg-white bg-opacity-25 rounded-lg  items-center max-md:w-full max-md:mt-5 ">
-          <h1 className="p-3 w-full lg:text-center bg-white bg-opacity-30 text-purple-800 lg:text-2xl rounded-tr-lg rounded-tl-lg max-md:text-lg ">
+        <div className="lg:h-[55vh] lg:w-[30%] bg-white bg-opacity-15 rounded-lg  items-center max-md:w-full max-md:mt-5 ">
+          <h1 className="p-3 w-full lg:text-center bg-white bg-opacity-60 text-purple-900 lg:text-2xl rounded-tr-lg rounded-tl-lg max-md:text-lg ">
             Favorite Song
           </h1>
           <div className="max-md:hidden relative mt-1 h-[50vh] overflow-auto songlist flex flex-col items-center gap-2 title">
@@ -173,10 +173,10 @@ function Page() {
                       <h1>{song.title_url}</h1>
                     </div>
                     <audio
-                      //@ts-ignore
-                      ref={(el) =>
-                        (audioRefs.current[index] = el as HTMLAudioElement)
-                      }
+                      
+                      ref={(el) => {
+                        audioRefs.current[index] = el as HTMLAudioElement;
+                      }}
                       src={song.Audio_url}
                     ></audio>
                   </div>
