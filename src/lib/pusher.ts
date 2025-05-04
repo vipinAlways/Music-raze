@@ -6,7 +6,7 @@ import PusherClient from 'pusher-js'
 if (!process.env.NEXT_PUBLIC_PUSHER_APP_KEY ) {
   console.log(process.env.PUSHER_APP_ID, process.env.NEXT_PUBLIC_PUSHER_APP_KEY, process.env.PUSHER_APP_SECRET)   ;
   
-  throw new Error('Pusher environment variables are missing.')
+  throw new Error('Pusher environment variables are missing.') 
 }
 export const pusherServer = new PusherServer({
   appId: process.env.PUSHER_APP_ID !,
