@@ -42,7 +42,7 @@ export async function getMembers(member: string[]) {
 
 export async function createStream({ groupId }: { groupId: string }) {
   try {
-    // Find the group by ID
+   
     const group = await db.group.findUnique({
       where: {
         id: groupId,
@@ -116,10 +116,7 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
         activeStream: true,
       },
     });
-    await pusherServer.trigger("add-song", "new-song-add", {
-      ...newUrl,
-      groupId: groupId, 
-    });
+   
     
     console.log("new song added")
     return newUrl;
