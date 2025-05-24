@@ -42,7 +42,6 @@ export async function getMembers(member: string[]) {
 
 export async function createStream({ groupId }: { groupId: string }) {
   try {
-   
     const group = await db.group.findUnique({
       where: {
         id: groupId,
@@ -65,6 +64,7 @@ export async function createStream({ groupId }: { groupId: string }) {
       where: { id: groupId },
       data: { streamId: createdStream.id },
     });
+    pusherServer.trigger("active-song", "new-activeSong", createdStream);
 
     return createdStream;
   } catch (error) {
@@ -116,12 +116,9 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
         activeStream: true,
       },
     });
-   
-    
-    console.log("new song added")
+
     return newUrl;
   } catch (error) {
-    console.error("Error adding URL:", error);
     throw error;
   }
 }
