@@ -68,8 +68,8 @@ export async function createStream({ groupId }: { groupId: string }) {
 
     return createdStream;
   } catch (error) {
-    console.error("Error creating stream:", error);
-    throw error;
+    
+    throw  new Error(`${error}`)
   }
 }
 
