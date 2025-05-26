@@ -157,12 +157,6 @@ export async function updateActiveStream(
     const activeSong = await db.activeStreams.update({
       where: { groupId: groupID },
       data: { currentSongIndex },
-      // create: {
-      //   groupId: groupID,
-      //   currentSongIndex,
-      //   type: "Spotify",
-      //   userId: "",
-      // },
     });
 
     await pusherServer.trigger("active-song", "new-activeSong", activeSong);
@@ -329,5 +323,7 @@ export async function changeFavList(Audio_url: string) {
         Audio_url: Audio_url,
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    throw new Error("Error while deleting from fav list");
+  }
 }

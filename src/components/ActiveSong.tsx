@@ -15,9 +15,15 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { pusherClient } from "@/lib/pusher";
 
-export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,groupID: string }) {
+export default function ActiveSong({
+  isAdmin,
+  groupID,
+}: {
+  isAdmin: boolean;
+  groupID: string;
+}) {
   const { toast } = useToast();
-  
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queryClient = useQueryClient();
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -29,7 +35,7 @@ export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,group
   const { data } = useQuery({
     queryKey: ["get-active-stream"],
     queryFn: async () => findActiveStream(groupID),
-    });
+  });
 
   const seeAdmin = useQuery({
     queryKey: ["see-admin", data?.id],
@@ -58,6 +64,7 @@ export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,group
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
+      pusherClient.trigger("active-song", "new-activeSong", {})
     },
   });
   useEffect(() => {
@@ -162,8 +169,6 @@ export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,group
     });
   };
 
-  
- 
   return (
     <div className="h-full w-full">
       {data?.url[currentSongIndex] ? (
@@ -182,20 +187,20 @@ export default function ActiveSong({ isAdmin,groupID }: { isAdmin: boolean,group
             <audio
               ref={audioRef}
               src={data.url[currentSongIndex].url}
-             controls
+              controls
               className={cn("p-2 w-full")}
               autoPlay
             />
           </div>
           <div className="absolute h-60 w-full top-0 rounded-lg bg">
-           <div className="relative h-full w-full">
-           <Image
-              src={data.url[currentSongIndex].image || ""}
-              alt={data.url[currentSongIndex].title || ""}
-              className="object-cover -z-10 h-full w-full rounded-md"
-              fill
-            />
-           </div>
+            <div className="relative h-full w-full">
+              <Image
+                src={data.url[currentSongIndex].image || ""}
+                alt={data.url[currentSongIndex].title || ""}
+                className="object-cover -z-10 h-full w-full rounded-md"
+                fill
+              />
+            </div>
           </div>
 
           <div
