@@ -64,7 +64,7 @@ export default function ActiveSong({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
-      pusherClient.trigger("active-song", "new-activeSong", {})
+      pusherClient.subscribe("active-song")
     },
   });
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function ActiveSong({
 
     channel.bind("new-activeSong", (updated: any) => {
       if (updated.groupId === groupID) {
-        queryClient.setQueryData(["get-active-stream", groupID], updated);
+        queryClient.setQueryData(["get-active-stream", groupID, ], updated);
       }
     });
 

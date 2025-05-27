@@ -13,7 +13,6 @@ import Loader from "@/components/Loader";
 import { changeFavList } from "../actionFn/getAllGrpName";
 import Image from "next/image";
 
-
 interface Song {
   image_url: string;
   title_url: string;
@@ -22,17 +21,17 @@ interface Song {
 
 function Page() {
   const session = useSession();
-  
+
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
   const userName: string = session?.data?.user?.name ?? "user";
   const audioRefs = useRef<HTMLAudioElement[]>([]);
   const queryClient = useQueryClient();
 
-    const { data, isPending, isError } = useQuery({
-      queryKey: ["get-user-created-grp"],
-      queryFn: async () => GetCreatedGrp(),
-    });
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["get-user-created-grp"],
+    queryFn: async () => GetCreatedGrp(),
+  });
   const playSong = (index: number) => {
     const currentAudio = audioRefs.current[index];
     if (currentAudio) {
@@ -86,21 +85,18 @@ function Page() {
   if (favortieSong.isLoading) {
     return <Loader />;
   }
-  if (favortieSong.error) {
-    return <Error />;
-  }
-
-  if (!favortieSong.data) {
+  if (favortieSong.error || !favortieSong.data) {
     return <Error />;
   }
 
   return (
     <div className="mt-6 flex flex-col text-slate-300 w-full ">
-      <div className="flex items-start max-lg:items-center lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-md:flex-col ">
+      <div className="flex items-start max-lg:items-center lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-lg:flex-col ">
         <div className="leading-6 max-md:sm:w-full sm:h-[60vh] flex flex-col items-start max-md:items-center sm:pt-10 gap-10 lg:w-[60%]">
           <div className="text-3xl w-full space-y-2 ">
             <h1 className="w-full flex max-md:flex-col items-end gap-3 lg:text-7xl text-6xl mb-4 max-md:items-center">
-            Welcome <span className="text-3xl font-semibold ">@{userName}</span>
+              Welcome{" "}
+              <span className="text-3xl font-semibold ">@{userName}</span>
             </h1>
             <div className="lg:block hidden">
               <p>Discover & Create groups where</p>
@@ -126,7 +122,7 @@ function Page() {
           <h1 className="p-3 w-full lg:text-center bg-white bg-opacity-60 text-purple-900 lg:text-2xl rounded-tr-lg rounded-tl-lg max-md:text-lg ">
             Favorite Song
           </h1>
-          <div className="max-md:hidden relative mt-1 h-[50vh] overflow-auto songlist flex flex-col items-center gap-2 title">
+          <div className="max-lg:hidden relative mt-1 h-[50vh] overflow-auto songlist flex flex-col items-center gap-2 title">
             {favortieSong?.data?.length > 0 ? (
               <>
                 {isPlaying ? (
@@ -169,11 +165,10 @@ function Page() {
                         width={176}
                       />
                     </div>
-                    <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-auto">
+                    <div className="bg-[#7C3AED] title h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-x-auto overflow-y-hidden">
                       <h1>{song.title_url}</h1>
                     </div>
                     <audio
-                      
                       ref={(el) => {
                         audioRefs.current[index] = el as HTMLAudioElement;
                       }}
@@ -184,7 +179,7 @@ function Page() {
               </>
             ) : null}
           </div>
-          <div className="lg:hidden relative lg:h-[50vh] max-md:h-32 overflow-auto songlist flex lg:flex-col items-center gap-2 title">
+          <div className="max-lg:flex  relative lg:h-[50vh] max-md:h-32 overflow-auto songlist lg:hidden lg:flex-col items-center gap-2 title">
             {favortieSong?.data?.length > 0 ? (
               <>
                 {isPlaying ? (
@@ -206,11 +201,11 @@ function Page() {
                   <div
                     key={index}
                     className={cn(
-                      "flex lg:min-w-full lg:max-w-60 w-full flex-col items-center lg:h-40  max-md:h-28 px-1 bg-[#38196e] rounded-lg justify-around relative",
+                      "flex lg:min-w-full lg:max-w-60 w-full flex-col items-center lg:h-40  max-lg:h-28 px-1 bg-[#38196e] rounded-lg justify-around relative",
                       currentSongIndex === index ? "opacity-50" : "opacity-100"
                     )}
                   >
-                    <div className="w-full lg:h-24 relative  lg:w-full max-md:h-20 min-w-20">
+                    <div className="h-24 relative w-full  min-w-20">
                       <Image
                         src={song.image_url}
                         alt={song.title_url}
@@ -234,17 +229,13 @@ function Page() {
       <div className="flex flex-col items-start pl-12">
         <h1 className="lg:text-4xl text-3xl ">Enrolled Groups</h1>
         <div className="w-full ">
-            {
-              data?.addedOne && (
-                data?.addedOne.map((group)=>(
-                  <div>
-                    <h1>{group.groupName}</h1>
-                    <p>{group.description}</p>  
-                  </div>
-                ))
-              )
-            }
-
+          {data?.addedOne &&
+            data?.addedOne.map((group) => (
+              <div>
+                <h1>{group.groupName}</h1>
+                <p>{group.description}</p>
+              </div>
+            ))}
         </div>
       </div>
     </div>
