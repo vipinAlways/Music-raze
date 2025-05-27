@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["i.scdn.co"],
+    domains: [
+      "i.scdn.co",
+      "cdn0.iconfinder.com",
+      "cdn1.iconfinder.com",
+      "cdn2.iconfinder.com",
+      "cdn3.iconfinder.com",
+      "cdn4.iconfinder.com",
+      "cdn5.iconfinder.com",
+    ],
     remotePatterns: [
       {
         protocol: "https",
@@ -11,4 +19,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default nextConfig;

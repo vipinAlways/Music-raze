@@ -7,9 +7,11 @@ import { authOptions } from "@/lib/auth"
 export async function CreateGrp({
   groupName,
   description,
+  avatar
 }: {
   groupName: string;
   description: string;
+  avatar:string
 }) {
   const session = await getServerSession(authOptions);
   const client: User = session?.user as User;
@@ -50,6 +52,7 @@ export async function CreateGrp({
         groupName: groupName,
         members: [],
         admin: user.id,
+        avatar:avatar,
         streamId: "",
       },
     });

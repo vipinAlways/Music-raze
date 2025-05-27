@@ -7,6 +7,7 @@ import Error from "@/components/Error";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 
 function User() {
@@ -35,9 +36,12 @@ function User() {
                   className="bg-white p-4 rounded-lg shadow-md flex flex-col gap-2"
                 >
                   <div className="flex justify-between items-center">
-                    <h3 className="text-xl font-medium text-blue-600">
+                   <div className="flex items-center gap-2">
+                    <Image src={group.avatar} alt={group.groupName} height={20} width={30} className="rounded-full "/>
+                     <h3 className="text-xl font-medium text-blue-600">
                       {group.groupName}
                     </h3>
+                   </div>
                     <span className="text-sm text-gray-500">
                       Members: {group.members.length}
                     </span>

@@ -9,9 +9,14 @@ import Link from "next/link";
 import StartStream from "@/components/StartStream";
 
 import SongsQueue from "@/components/SongsQueue";
-import { checkMember, updateMemberList, updateMemberListDelete } from "./action";
+import {
+  checkMember,
+  updateMemberList,
+  updateMemberListDelete,
+} from "./action";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 interface PageProps {
   params: {
     groupID: string;
@@ -28,7 +33,6 @@ function Page({ params }: PageProps) {
     queryKey: ["group-data", groupID],
     queryFn: () => getGroup(groupID),
     enabled: !!groupID,
-    
   });
 
   const { data: user } = useQuery({
@@ -37,44 +41,43 @@ function Page({ params }: PageProps) {
   });
 
   const memberList = useMutation({
-    mutationKey:['update-member-list'],
-    mutationFn:updateMemberList,
-    onError:()=>{},
-    onSuccess:()=>{
-      queryClient.invalidateQueries({queryKey:['group-data']})
-    }
-  })
+    mutationKey: ["update-member-list"],
+    mutationFn: updateMemberList,
+    onError: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["group-data"] });
+    },
+  });
   const memberListDelte = useMutation({
-    mutationKey:['update-member-list'],
-    mutationFn:updateMemberListDelete,
-    onError:()=>{},
-    onSuccess:()=>{
-      queryClient.invalidateQueries({queryKey:['group-data']})
+    mutationKey: ["update-member-list"],
+    mutationFn: updateMemberListDelete,
+    onError: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["group-data"] });
       setTimeout(() => {
-        window.location.reload()
+        window.location.reload();
       }, 1000);
-    }
-  })
+    },
+  });
 
-  const upMemList = ()=>{
-    memberList.mutate(groupID)
-  }
-  const upMemListdel = ()=>{
-    alert('DO you Really want us to leave')
-    memberListDelte.mutate(groupID)
-  }
-
+  const upMemList = () => {
+    memberList.mutate(groupID);
+  };
+  const upMemListdel = () => {
+    alert("DO you Really want us to leave");
+    memberListDelte.mutate(groupID);
+  };
 
   useEffect(() => {
     if (data?.members && user?.id) {
       const check = data.members.some((result) => result === user.id);
       const malik = data.admin === user.id;
-      
+
       if (check || malik) {
         setIsMember(true);
       }
     }
-  }, [data,data?.members, user?.id,queryClient]);
+  }, [data, data?.members, user?.id, queryClient]);
 
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data</div>;
@@ -94,9 +97,16 @@ function Page({ params }: PageProps) {
 
       <div className="flex flex-col justify-between lg:pr-28 mb-4">
         <div className="h-full w-full flex flex-col items-start gap-4">
-          <h1 className="text-3xl lg:text-4xl text-purple-300 ">
-            {data?.groupName}
-          </h1>
+          <div className="flex items-center gap-4">
+            {data && (
+              <>
+                <Image src={data?.avatar} alt={data?.groupName} height={40} width={100} className="rounded-full"/>
+                <h1 className="text-3xl lg:text-4xl text-purple-300 ">
+                  {data?.groupName}
+                </h1>
+              </>
+            )}
+          </div>
 
           <div className="text-center">
             <h1>Members: {data?.members.length}</h1>
@@ -104,17 +114,20 @@ function Page({ params }: PageProps) {
         </div>
       </div>
 
-
-      <div className={cn(!isMember  ?  "w-full flex items-center  justify-center" :"hidden")}>
-          <Button onClick={()=> upMemList()} className="text-3xl">
-              Join Us
-          </Button>
+      <div
+        className={cn(
+          !isMember ? "w-full flex items-center  justify-center" : "hidden"
+        )}
+      >
+        <Button onClick={() => upMemList()} className="text-3xl">
+          Join Us
+        </Button>
       </div>
 
       <div className={cn(isMember === true ? "" : "hidden")}>
-        {(data?.streamId && isMember) ? (
+        {data?.streamId && isMember ? (
           <div>
-            <SongsQueue groupID={groupID}/>
+            <SongsQueue groupID={groupID} />
           </div>
         ) : (
           <div className="flex flex-col items-center min-h-32 justify-between mt-20">
@@ -123,23 +136,16 @@ function Page({ params }: PageProps) {
             </div>
           </div>
         )}
-        <div className={cn((!isMember  || (data?.admin === user?.id))?  "hidden" :"")}>
-          <Button onClick={()=> upMemListdel()}>
-              leave
-          </Button>
+        <div
+          className={cn(!isMember || data?.admin === user?.id ? "hidden" : "")}
+        >
+          <Button onClick={() => upMemListdel()}>leave</Button>
+        </div>
       </div>
-      </div>
-
 
       <div>
-        <Button>
-          +
-        </Button>
-
-     
+        <Button>+</Button>
       </div>
-
-
     </div>
   );
 }

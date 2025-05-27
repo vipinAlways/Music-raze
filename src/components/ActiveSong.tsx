@@ -15,13 +15,14 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { pusherClient } from "@/lib/pusher";
 
+export interface ActiveSongProps {
+  isAdmin: boolean;
+  groupID: string;
+}
 export default function ActiveSong({
   isAdmin,
   groupID,
-}: {
-  isAdmin: boolean;
-  groupID: string;
-}) {
+}: ActiveSongProps) {
   const { toast } = useToast();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -70,8 +71,9 @@ export default function ActiveSong({
   useEffect(() => {
     const channel = pusherClient.subscribe("active-song");
 
-    channel.bind("new-activeSong", (updated: any) => {
-      if (updated.groupId === groupID) {
+    channel.bind("new-activeSong", (updated: ActiveSongProps) => {
+      if (updated.groupID === groupID) {
+          console.log("Updated active song:", updated);
         queryClient.setQueryData(["get-active-stream", groupID, ], updated);
       }
     });
