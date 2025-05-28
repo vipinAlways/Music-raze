@@ -8,6 +8,7 @@ import ActiveSong from "./ActiveSong";
 import { dropUrl, getAdmin } from "@/app/actionFn/getAllGrpName";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { pusherClient } from "@/lib/pusher";
 
 interface Song {
   id: string;
@@ -24,7 +25,7 @@ function SongsQueue({groupID}:{groupID:string}) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queryClient = useQueryClient();
   const { data, error } = useQuery({
-    queryKey: ["get-stream",groupID],
+    queryKey: ["get-songs",groupID],
     queryFn: async () => findStream({ groupID: groupID }),
   });
   
@@ -44,6 +45,30 @@ function SongsQueue({groupID}:{groupID:string}) {
       setAdmin(false)
     }
   },[seeAdmin,data?.userId])
+
+
+  useEffect(() => {
+  const channel = pusherClient.subscribe("add-song");
+
+  const handleNewSong = (updated: any) => {
+    console.log(updated,"hain kya ye");
+    if (updated) {
+      console.log("Pusher update received in SongsQueue:", updated);
+      queryClient.invalidateQueries({ queryKey: ["get-songs", groupID] });
+    } else {
+      console.log("Pusher ignored: groupID doesn't match");
+      console.log(updated,"nahi hain kya ");
+    }
+  };
+
+  channel.bind("new-song-add", handleNewSong);
+
+  return () => {
+    channel.unbind("new-song-add", handleNewSong);
+    pusherClient.unsubscribe("add-song");
+  };
+}, [groupID, queryClient]);
+
 
 
   const dropSong = useMutation({

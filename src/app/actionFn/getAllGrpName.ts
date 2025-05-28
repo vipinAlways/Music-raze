@@ -115,6 +115,7 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
         activeStream: true,
       },
     });
+     await pusherServer.trigger("add-song", "new-song-add", newUrl);
 
     return newUrl;
   } catch (error) {

@@ -10,7 +10,6 @@ import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { pusherClient } from "@/lib/pusher";
 
-
 function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [searchInput, setSearchInput] = useState<string>("");
   const [accessToken, setAccessToken] = useState<string>("");
@@ -21,7 +20,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     null
   );
   const queryClient = useQueryClient();
-  
+
   const { toast } = useToast();
 
   const musicContext = useContext(MusicContext);
@@ -40,7 +39,6 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
       window.document.removeEventListener("keydown", handleKeydown);
     };
   }, [searchInput]);
-  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -103,7 +101,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     mutationKey: ["add-url"],
     mutationFn: addUrl,
     onError: (error) => {
-      console.log(error,"ye hian ");
+      console.log(error, "ye hian ");
       toast({
         title: "Error",
         description: error.message ?? "error while adding",
@@ -111,25 +109,23 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-stream"] });
+      queryClient.invalidateQueries({ queryKey: ["get-songs"] });
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
     },
   });
-   useEffect(() => {
-      const channel = pusherClient.subscribe("add-song");
-  
-      channel.bind("new-song-add", (updated: any) => {
-        if (updated.groupId === currentgrpId) {
-          console.log("Received update from Pusher:", updated);
-          queryClient.setQueryData(["get-stream"], updated);
-        }else (console.log("chal na"))
-      });
-  
-      return () => {
-        channel.unbind_all();
-        pusherClient.unsubscribe("add-song");
-      };
-    }, [currentgrpId, queryClient]);
+  useEffect(() => {
+    const channel = pusherClient.subscribe("add-song");
+
+    channel.bind("new-song-add", (updated: any) => {
+      console.log("Received update from Pusher:", updated);
+     queryClient.invalidateQueries({ queryKey: ["get-songs"] });
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("add-song");
+    };
+  }, [currentgrpId, queryClient]);
 
   const handleUrl = (
     songImage: string,
@@ -163,7 +159,10 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     };
   }, []);
 
-  const filteredAlbums = useMemo(() => albums.filter((song) => song.audio_preview_url), [albums]);
+  const filteredAlbums = useMemo(
+    () => albums.filter((song) => song.audio_preview_url),
+    [albums]
+  );
 
   return (
     <div
@@ -219,7 +218,6 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                     <div
                       className="text-center flex flex-col justify-center bg-zinc-600 text-white items-center absolute top-2 right-[1%] -translate-x-[10%] border rounded-full h-8 w-8"
                       onClick={() => {
-                       
                         handleUrl(
                           song.images[0]?.url,
                           song.name,

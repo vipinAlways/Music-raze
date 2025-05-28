@@ -25,6 +25,7 @@ interface PageProps {
 
 function Page({ params }: PageProps) {
   const { groupID } = params;
+  console.log("groupID", groupID);
   const [isMember, setIsMember] = useState(false);
 
   const queryClient = useQueryClient();
