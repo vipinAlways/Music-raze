@@ -99,7 +99,7 @@ function Appbar() {
                   </div>
                 ) : (
                   <Link
-                    href="/group"
+                    href={`/group/${option.id}`}
                     key={option.id}
                     className="text-start cursor-pointer flex-col items-center h-12 w-full "
                     onClick={() => handleOptionClick(option)}

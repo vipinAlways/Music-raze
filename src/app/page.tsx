@@ -33,6 +33,7 @@ import Image from "next/image";
             className="object-contain"
             fill
             priority
+            unoptimized
           />
           </div>
           <Button

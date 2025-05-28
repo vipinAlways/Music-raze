@@ -4,9 +4,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { pusherClient } from "@/lib/pusher";
+import { ActiveSongProps } from "./ActiveSong";
 
 function StartStream({ grpid }: { grpid: string }) {
-  
   const { toast } = useToast();
   const [countDown, setCountDown] = useState(0);
   const queryClient = useQueryClient();
@@ -29,6 +30,22 @@ function StartStream({ grpid }: { grpid: string }) {
         description: "Stream started successfully",
       }),
   });
+
+  useEffect(() => {
+    const channel = pusherClient.subscribe("active-stream");
+
+    channel.bind("new-stream", (updated: ActiveSongProps) => {
+      if (updated.groupID === grpid) {
+        console.log("Updated active song:", updated);
+        queryClient.setQueryData(["get-active-stream", grpid], updated);
+      }
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("active-stream");
+    };
+  }, [grpid, queryClient]);
 
   const handleSubmit = (e: React.FormEvent) => {
     setHidden("");
@@ -53,7 +70,7 @@ function StartStream({ grpid }: { grpid: string }) {
 
   const group = useQuery({
     queryKey: ["check-admin", grpid],
-    queryFn: async () =>await checkAdmin(grpid),
+    queryFn: async () => await checkAdmin(grpid),
     enabled: !!grpid,
     staleTime: 0,
   });

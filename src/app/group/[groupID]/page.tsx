@@ -126,7 +126,7 @@ function Page({ params }: PageProps) {
 
       <div className={cn(isMember === true ? "" : "hidden")}>
         {data?.streamId && isMember ? (
-          <div>
+          <div> 
             <SongsQueue groupID={groupID} />
           </div>
         ) : (

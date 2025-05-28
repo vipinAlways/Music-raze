@@ -64,12 +64,11 @@ export async function createStream({ groupId }: { groupId: string }) {
       where: { id: groupId },
       data: { streamId: createdStream.id },
     });
-    pusherServer.trigger("active-song", "new-activeSong", createdStream);
+    pusherServer.trigger("active-stream", "new-stream", createdStream);
 
     return createdStream;
   } catch (error) {
-    
-    throw  new Error(`${error}`)
+    throw new Error(`${error}`);
   }
 }
 
