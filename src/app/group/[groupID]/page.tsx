@@ -17,6 +17,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { pusherClient } from "@/lib/pusher";
+import { ActiveSongProps } from "@/components/ActiveSong";
 interface PageProps {
   params: {
     groupID: string;
@@ -80,6 +82,22 @@ function Page({ params }: PageProps) {
     }
   }, [data, data?.members, user?.id, queryClient]);
 
+  useEffect(() => {
+    const channel = pusherClient.subscribe("active-stream");
+
+    channel.bind("new-stream", (updated: ActiveSongProps) => {
+      if (updated) {
+        console.log("Updated active song:", updated);
+        queryClient.invalidateQueries({queryKey:["get-active-stream", groupID]});
+      }
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("active-stream");
+    };
+  }, [groupID, queryClient]);
+
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data</div>;
 
@@ -101,7 +119,13 @@ function Page({ params }: PageProps) {
           <div className="flex items-center gap-4">
             {data && (
               <>
-                <Image src={data?.avatar} alt={data?.groupName} height={40} width={100} className="rounded-full"/>
+                <Image
+                  src={data?.avatar}
+                  alt={data?.groupName}
+                  height={40}
+                  width={100}
+                  className="rounded-full"
+                />
                 <h1 className="text-3xl lg:text-4xl text-purple-300 ">
                   {data?.groupName}
                 </h1>
@@ -127,7 +151,7 @@ function Page({ params }: PageProps) {
 
       <div className={cn(isMember === true ? "" : "hidden")}>
         {data?.streamId && isMember ? (
-          <div> 
+          <div>
             <SongsQueue groupID={groupID} />
           </div>
         ) : (

@@ -35,9 +35,9 @@ function StartStream({ grpid }: { grpid: string }) {
     const channel = pusherClient.subscribe("active-stream");
 
     channel.bind("new-stream", (updated: ActiveSongProps) => {
-      if (updated.groupID === grpid) {
+      if (updated) {
         console.log("Updated active song:", updated);
-        queryClient.setQueryData(["get-active-stream", grpid], updated);
+        queryClient.invalidateQueries({queryKey:["get-active-stream", grpid]} );
       }
     });
 
@@ -54,7 +54,7 @@ function StartStream({ grpid }: { grpid: string }) {
     e.preventDefault();
     mutate({ groupId: grpid });
     setTimeout(() => {
-      window.location.reload();
+      queryClient.invalidateQueries({queryKey:["get-active-stream", grpid]} );
     }, 5000);
   };
 

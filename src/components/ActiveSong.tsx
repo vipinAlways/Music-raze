@@ -68,22 +68,7 @@ export default function ActiveSong({
       pusherClient.subscribe("active-song")
     },
   });
-  useEffect(() => {
-    const channel = pusherClient.subscribe("active-song");
-
-    channel.bind("new-activeSong", (updated: ActiveSongProps) => {
-      if (updated.groupID === groupID) {
-          console.log("Updated active song:", updated);
-        queryClient.setQueryData(["get-active-stream", groupID, ], updated);
-      }
-    });
-
-    return () => {
-      channel.unbind_all();
-      pusherClient.unsubscribe("active-song");
-    };
-  }, [groupID, queryClient]);
-
+ 
   useEffect(() => {
     const handleSongEnd = () => {
       if (currentSongIndex < data?.url.length! - 1) {
@@ -131,6 +116,23 @@ export default function ActiveSong({
 
     queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
   };
+
+   useEffect(() => {
+    const channel = pusherClient.subscribe("active-song");
+
+    channel.bind("new-activeSong", (updated: ActiveSongProps) => {
+      if (updated) {
+          console.log("Updated active song:", updated);
+        queryClient.invalidateQueries({queryKey:["get-active-stream", groupID, ]});
+      }
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("active-song");
+    };
+  }, [groupID, queryClient]);
+
   useEffect(() => {
     if (countDown < 5) {
       const timer = setTimeout(() => {
@@ -171,10 +173,60 @@ export default function ActiveSong({
     });
   };
 
+   if (!data?.url || data.url.length === 0) {
+    return (
+      <div className="w-full flex items-start justify-between flex-1 max-sm:flex-col ">
+        <div className="flex lg:w-3/5 flex-col w-full  p-1  h-96 rounded-lg ">
+          <div className="h-full w-full">
+            <div className="relative flex flex-col items-center gap-10">
+              <div className="h-48  w-full  flex flex-col justify-center lg:text-4xl  items-center relative z-20 ">
+                <h1 className="text-opacity-15 text-red-700">
+                  Please Select your first song
+                </h1>
+              </div>
+              <div className="absolute h-60 w-full top-0 bg-white bg">
+              
+              </div>
+              <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-2xl text-center py-1 rounded-lg"></div>
+            </div>
+          </div>
+            <div
+            className={cn(
+              "text-center w-full mt-3  lg:text-2xl relative",
+              admin ? "" : ""
+            )}
+          >
+            <Button
+              onClick={() => endStream()}
+              className={cn(
+                "bg-[#5b1dc5] lg:text-2xl p-2",
+                admin === true ? "" : "hidden",
+                hidden2
+              )}
+            >
+              End Stream
+            </Button>
+
+            <div
+              className={`z-30 bg-[#5b1dc5] absolute -top-12 left-1/2 -translate-x-1/2 rounded-full text-slate-200 ${hidden}  `}
+            >
+              <div className="h-28 rounded-full w-28  lg:text-4xl flex items-center justify-center top-12 ">
+                {countDown}
+              </div>
+            </div>
+          </div>
+        </div>
+         
+        
+        <div className="lg:w-[35%] w-full max-sm:h-40  bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex lg:flex-col items-center gap-2 lg:h-[60vh] overflow-auto songList lg:-mt-10"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full w-full">
       {data?.url[currentSongIndex] ? (
-        <div className="relative">
+        <div className="relative flex flex-col items-center gap-10">
           <div className="h-full w-full rounded-lg flex flex-col items-center relative z-20 ">
             <div className="relative w-44 h-44 sm:w-52 sm:h-52 md:w-56 md:h-56 lg:w-64 lg:h-64">
               <Image

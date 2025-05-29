@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
 
 import { Minus } from "lucide-react";
-import ActiveSong from "./ActiveSong";
+import ActiveSong, { ActiveSongProps } from "./ActiveSong";
 import { dropUrl, getAdmin } from "@/app/actionFn/getAllGrpName";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -69,6 +69,22 @@ function SongsQueue({groupID}:{groupID:string}) {
   };
 }, [groupID, queryClient]);
 
+   useEffect(() => {
+    const channel = pusherClient.subscribe("active-song");
+
+    channel.bind("new-activeSong", (updated: ActiveSongProps) => {
+      if (updated) {
+          console.log("Updated active song:", updated);
+        queryClient.invalidateQueries({queryKey:["get-active-stream", groupID, ]});
+      }
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("active-song");
+    };
+  }, [groupID, queryClient]);
+
 
 
   const dropSong = useMutation({
@@ -116,72 +132,49 @@ function SongsQueue({groupID}:{groupID:string}) {
     return <div>Error loading stream</div>;
   }
 
-  if (!data?.url || data.url.length === 0) {
-    return (
-      <div className="w-full flex items-start justify-between flex-1 max-sm:flex-col ">
-        <div className="flex lg:w-3/5 flex-col w-full  p-1  h-96 rounded-lg ">
-          <div className="h-full w-full">
-            <div className="relative">
-              <div className="h-48  w-full  flex flex-col justify-center lg:text-4xl  items-center relative z-20 ">
-                <h1 className="text-opacity-15 text-red-700">
-                  Please Select your first song
-                </h1>
-              </div>
-              <div className="absolute h-60 w-full top-0 bg-white bg">
-                hello
-              </div>
-              <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-2xl text-center py-1 rounded-lg"></div>
-            </div>
-          </div>
-        </div>
-        <div className="lg:w-[35%] w-full max-sm:h-40  bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex lg:flex-col items-center gap-2 lg:h-[60vh] overflow-auto songList lg:-mt-10"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full flex items-start justify-between flex-1 max-sm:flex-col max-sm:mb-10" >
-      <div className="flex lg:w-3/5 flex-col w-full  p-1  h-96 rounded-lg">
+      <div className="flex lg:w-full flex-col w-full  p-1  h-96 rounded-lg">
         <ActiveSong groupID={groupID} isAdmin={admin} />
       </div>
-      <div className="lg:w-[35%] w-full max-sm:h-40  bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex lg:flex-col items-center gap-2 lg:h-[60vh] overflow-auto songList lg:-mt-10">
-        {data.url.length > 0
-          ? data.url.map((song: Song, index: number) =>
-              index >= data.currentSongIndex ? (
-                <div
-                  key={index}
-                  className={cn(
-                    "flex  lg:min-w-full lg:max-w-60 flex-col items-center lg:h-60 p-1 h-36 w-36 bg-[#38196e]  rounded-lg justify-around  relative",
-                    index === data.currentSongIndex
-                      ? "opacity-75"
-                      : "opacity-100"
-                  )}
-                >
-                  <div
-                    className={cn(
-                      "absolute top-1.5 right-1 p-1 border bg-red-600 rounded-full z-50 hover:bg-red-900 ",
-                      index === data.currentSongIndex ? "hidden" : null,admin === true ?null:'hidden'
-                    )}
-                    onClick={() => handleDrop(song.id)}
-                  >
-                    <Minus className="hover:scale-105" />
-                  </div>
-                  <div className="lg:h-40  h-20 w-full relative" >
-                    <Image
-                      src={song.image}
-                      alt={song.title}
-                      className="object-contain object-center "
-                      fill
-                    />
-                  </div>
-                  <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-x-auto overflow-y-hidden ">
-                    <h1 className="title">{song.title}</h1>
-                  </div>
-                </div>
-              ) : null
-            )
-          : null}
-      </div>
+      {data && data.url.length > 0 ? (
+  <div className="lg:w-[35%] w-full max-sm:h-40 bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex lg:flex-col items-center gap-2 lg:h-[60vh] overflow-auto songList lg:-mt-10">
+    {data.url.map((song: Song, index: number) =>
+      index >= data.currentSongIndex ? (
+        <div
+          key={index}
+          className={cn(
+            "flex lg:min-w-full lg:max-w-60 flex-col items-center lg:h-60 p-1 h-36 w-36 bg-[#38196e] rounded-lg justify-around relative",
+            index === data.currentSongIndex ? "opacity-75" : "opacity-100"
+          )}
+        >
+          <div
+            className={cn(
+              "absolute top-1.5 right-1 p-1 border bg-red-600 rounded-full z-50 hover:bg-red-900",
+              index === data.currentSongIndex ? "hidden" : "",
+              admin === true ? "" : "hidden"
+            )}
+            onClick={() => handleDrop(song.id)}
+          >
+            <Minus className="hover:scale-105" />
+          </div>
+          <div className="lg:h-40 h-20 w-full relative">
+            <Image
+              src={song.image}
+              alt={song.title}
+              className="object-contain object-center"
+              fill
+            />
+          </div>
+          <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-x-auto overflow-y-hidden">
+            <h1 className="title">{song.title}</h1>
+          </div>
+        </div>
+      ) : null
+    )}
+  </div>
+) : null}
+
     </div>
   );
 }
