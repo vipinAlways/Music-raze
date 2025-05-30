@@ -88,7 +88,10 @@ function Page({ params }: PageProps) {
     channel.bind("new-stream", (updated: ActiveSongProps) => {
       if (updated) {
         console.log("Updated active song:", updated);
-        queryClient.invalidateQueries({queryKey:["get-active-stream", groupID]});
+        queryClient.invalidateQueries({
+          queryKey: ["get-active-stream", groupID],
+        });
+        queryClient.invalidateQueries({ queryKey: ["group-data", groupID] });
       }
     });
 

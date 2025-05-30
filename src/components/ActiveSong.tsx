@@ -19,10 +19,7 @@ export interface ActiveSongProps {
   isAdmin: boolean;
   groupID: string;
 }
-export default function ActiveSong({
-  isAdmin,
-  groupID,
-}: ActiveSongProps) {
+export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
   const { toast } = useToast();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -65,10 +62,10 @@ export default function ActiveSong({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
-      pusherClient.subscribe("active-song")
+      pusherClient.subscribe("active-song");
     },
   });
- 
+
   useEffect(() => {
     const handleSongEnd = () => {
       if (currentSongIndex < data?.url.length! - 1) {
@@ -103,6 +100,7 @@ export default function ActiveSong({
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
       queryClient.invalidateQueries({ queryKey: ["group-data"] });
+      pusherClient.unsubscribe("active-song");
     },
   });
 
@@ -113,17 +111,34 @@ export default function ActiveSong({
     setTimeout(() => {
       deleteS.mutate(data?.id ?? "");
     }, 5000);
-
-    queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
   };
 
-   useEffect(() => {
+  useEffect(() => {
+    const channel = pusherClient.subscribe("end-stream");
+    channel.bind("new-end-stream", (updated: ActiveSongProps) => {
+      if (updated) {
+        console.log(updated);
+        queryClient.invalidateQueries({
+          queryKey: ["get-active-stream", groupID],
+        });
+      }
+    });
+
+    queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("end-stream");
+    };
+  }, [queryClient]);
+  useEffect(() => {
     const channel = pusherClient.subscribe("active-song");
 
     channel.bind("new-activeSong", (updated: ActiveSongProps) => {
       if (updated) {
-          console.log("Updated active song:", updated);
-        queryClient.invalidateQueries({queryKey:["get-active-stream", groupID, ]});
+        console.log("Updated active song:", updated);
+        queryClient.invalidateQueries({
+          queryKey: ["get-active-stream", groupID],
+        });
       }
     });
 
@@ -173,7 +188,7 @@ export default function ActiveSong({
     });
   };
 
-   if (!data?.url || data.url.length === 0) {
+  if (!data?.url || data.url.length === 0) {
     return (
       <div className="w-full flex items-start justify-between flex-1 max-sm:flex-col ">
         <div className="flex lg:w-3/5 flex-col w-full  p-1  h-96 rounded-lg ">
@@ -184,13 +199,11 @@ export default function ActiveSong({
                   Please Select your first song
                 </h1>
               </div>
-              <div className="absolute h-60 w-full top-0 bg-white bg">
-              
-              </div>
+              <div className="absolute h-60 w-full top-0 bg-white bg"></div>
               <div className="bg-[#7C3AED] h-10 text-slate-300 w-full text-2xl text-center py-1 rounded-lg"></div>
             </div>
           </div>
-            <div
+          <div
             className={cn(
               "text-center w-full mt-3  lg:text-2xl relative",
               admin ? "" : ""
@@ -216,8 +229,7 @@ export default function ActiveSong({
             </div>
           </div>
         </div>
-         
-        
+
         <div className="lg:w-[35%] w-full max-sm:h-40  bg-[#7C3AED] bg-opacity-20 rounded-lg p-2 lg:p-1 flex lg:flex-col items-center gap-2 lg:h-[60vh] overflow-auto songList lg:-mt-10"></div>
       </div>
     );

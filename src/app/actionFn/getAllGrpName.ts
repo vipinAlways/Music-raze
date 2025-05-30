@@ -188,6 +188,8 @@ export async function findActiveStream(groupID: string) {
         url: true,
       },
     });
+
+    
   } catch (error) {
     console.log(error);
     throw new Error("Could not find any stream for the given group");
@@ -205,11 +207,16 @@ export async function deleteStream(streamID: string) {
       },
     });
 
-    return await db.activeStreams.delete({
+    const dropSong= await db.activeStreams.delete({
       where: {
         id: streamID,
       },
     });
+
+
+     await pusherServer.trigger("ebd-strean", "new-endStream", dropSong);
+
+     return dropSong
   } catch (error) {
     console.log(error);
     throw new Error("Could not find any stream for the given group");

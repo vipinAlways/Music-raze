@@ -9,7 +9,6 @@ import { ActiveSongProps } from "./ActiveSong";
 
 function StartStream({ grpid }: { grpid: string }) {
   const { toast } = useToast();
-  const [countDown, setCountDown] = useState(0);
   const queryClient = useQueryClient();
   const [hidden, setHidden] = useState("hidden");
   const [admin, setAdmin] = useState(false);
@@ -31,42 +30,34 @@ function StartStream({ grpid }: { grpid: string }) {
       }),
   });
 
-  useEffect(() => {
-    const channel = pusherClient.subscribe("active-stream");
+  const handleSubmit = (e: React.FormEvent) => {
+    setHidden("");
+    setHidden2("hidden");
+    e.preventDefault();
+    mutate({ groupId: grpid });
+    setTimeout(() => {
+      queryClient.invalidateQueries({ queryKey: ["get-active-stream", grpid] });
+      queryClient.invalidateQueries({ queryKey: ["group-data", grpid] });
+    }, 5000);
+  };
 
-    channel.bind("new-stream", (updated: ActiveSongProps) => {
+  useEffect(() => {
+    const channel = pusherClient.subscribe("active-song");
+
+    channel.bind("new-activeSong", (updated: ActiveSongProps) => {
       if (updated) {
-        console.log("Updated active song:", updated);
-        queryClient.invalidateQueries({queryKey:["get-active-stream", grpid]} );
+        console.log(updated);
+        queryClient.invalidateQueries({
+          queryKey: ["get-active-stream", grpid],
+        });
       }
     });
 
     return () => {
       channel.unbind_all();
-      pusherClient.unsubscribe("active-stream");
+      pusherClient.unsubscribe("active-song");
     };
   }, [grpid, queryClient]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    setHidden("");
-    setHidden2("hidden");
-    setCountDown(0);
-    e.preventDefault();
-    mutate({ groupId: grpid });
-    setTimeout(() => {
-      queryClient.invalidateQueries({queryKey:["get-active-stream", grpid]} );
-    }, 5000);
-  };
-
-  useEffect(() => {
-    if (countDown < 5) {
-      const timer = setTimeout(() => {
-        setCountDown((prev) => prev + 1);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [countDown]);
 
   const group = useQuery({
     queryKey: ["check-admin", grpid],
@@ -100,14 +91,6 @@ function StartStream({ grpid }: { grpid: string }) {
       >
         Start Stream
       </Button>
-
-      <div
-        className={`z-30 bg-[#5b1dc5] absolute top-0 left-1/2 -translate-x-1/2 rounded-full text-slate-200 ${hidden}`}
-      >
-        <div className="h-72 rounded-full w-72 lg:text-7xl flex items-center justify-center">
-          {countDown}
-        </div>
-      </div>
     </div>
   );
 }

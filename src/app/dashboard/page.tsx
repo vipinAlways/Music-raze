@@ -92,7 +92,7 @@ function Page() {
   return (
     <div className="mt-6 flex flex-col text-slate-300 w-full ">
       <div className="flex items-start max-lg:items-center lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-lg:flex-col ">
-        <div className="leading-6 max-md:sm:w-full sm:h-[60vh] flex flex-col items-start max-md:items-center sm:pt-10 gap-10 lg:w-[60%]">
+        <div className="leading-6 max-md:sm:w-full sm:h-[60vh] flex flex-col items-start max-lg:items-center sm:pt-10 gap-10 lg:w-[60%]">
           <div className="text-3xl w-full space-y-2 ">
             <h1 className="w-full flex max-md:flex-col items-end gap-3 lg:text-7xl text-6xl mb-4 max-md:items-center">
               Welcome{" "}

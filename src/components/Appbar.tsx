@@ -17,7 +17,7 @@ function Appbar() {
   const [filteredOptions, setFilteredOptions] = useState<
     { id: string; groupName: string }[]
   >([]);
-  const [showOptions, setShowOptions] = useState<boolean>(false);
+  const [showOptions, setShowOptions] = useState<boolean>(true);
   
 
   const { data, error, isLoading } = useQuery({
@@ -76,7 +76,7 @@ function Appbar() {
         <div className="relative min-w-96  max-md:hidden flex items-center gap-2">
           <input
             type="text"
-            id="search"
+           
             className="h-10 px-4 w-96 rounded-xl border border-gray-300 text-black focus:outline-none"
             value={inputValue}
             onChange={handleInputChange}
@@ -97,7 +97,7 @@ function Appbar() {
                   >
                     Not able to Find that
                   </div>
-                ) : (
+                ) : option.id && (
                   <Link
                     href={`/group/${option.id}`}
                     key={option.id}
@@ -160,7 +160,7 @@ function Appbar() {
                   </div>
                 ) : (
                   <Link
-                    href="/group"
+                    href={`/group/${option.id}`}
                     key={option.id}
                     className="text-start cursor-pointer flex-col items-center h-12 w-full "
                     onClick={() => handleOptionClick(option)}

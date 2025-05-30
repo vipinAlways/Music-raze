@@ -51,7 +51,7 @@ function SongsQueue({groupID}:{groupID:string}) {
   const channel = pusherClient.subscribe("add-song");
 
   const handleNewSong = (updated: any) => {
-    console.log(updated,"hain kya ye");
+    
     if (updated) {
       console.log("Pusher update received in SongsQueue:", updated);
       queryClient.invalidateQueries({ queryKey: ["get-songs", groupID] });
@@ -74,7 +74,7 @@ function SongsQueue({groupID}:{groupID:string}) {
 
     channel.bind("new-activeSong", (updated: ActiveSongProps) => {
       if (updated) {
-          console.log("Updated active song:", updated);
+       
         queryClient.invalidateQueries({queryKey:["get-active-stream", groupID, ]});
       }
     });
