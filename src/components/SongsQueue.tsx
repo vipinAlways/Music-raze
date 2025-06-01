@@ -135,7 +135,21 @@ function SongsQueue({ groupID }: { groupID: string }) {
       channel.unbind_all();
       pusherClient.unsubscribe("end-stream");
     };
-  }, [queryClient]);
+  }, [queryClient,handleDrop,groupID]);
+  useEffect(() => {
+    const channel = pusherClient.subscribe("drop-song");
+
+    channel.bind("new-song-remove", (updated: any) => {
+      if (updated) {
+        queryClient.invalidateQueries({ queryKey: ["get-songs"] });
+      }
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("drop-song");
+    };
+  }, [groupID, queryClient]);
 
   if (error) {
     return <div>Error loading stream</div>;

@@ -147,7 +147,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
       pusherClient.unsubscribe("active-song");
     };
   }, [groupID, queryClient]);
-
+  
 
   useEffect(() => {
     if (countDown < 5) {

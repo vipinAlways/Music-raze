@@ -117,8 +117,10 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     const channel = pusherClient.subscribe("add-song");
 
     channel.bind("new-song-add", (updated: any) => {
-      console.log("Received update from Pusher:", updated);
-     queryClient.invalidateQueries({ queryKey: ["get-songs"] });
+ 
+     if(updated){
+      queryClient.invalidateQueries({ queryKey: ["get-songs"] });
+     }
     });
 
     return () => {
