@@ -115,7 +115,7 @@ export async function addUrl({ image, title, groupId, link }: urlTypes) {
         activeStream: true,
       },
     });
-     await pusherServer.trigger("add-song", "new-song-add", newUrl);
+    await pusherServer.trigger("add-song", "new-song-add", newUrl);
 
     return newUrl;
   } catch (error) {
@@ -188,8 +188,6 @@ export async function findActiveStream(groupID: string) {
         url: true,
       },
     });
-
-    
   } catch (error) {
     console.log(error);
     throw new Error("Could not find any stream for the given group");
@@ -198,7 +196,15 @@ export async function findActiveStream(groupID: string) {
 export async function deleteStream(streamID: string) {
   await db.$connect();
   try {
-    const group = await db.group.updateMany({
+    const existingStream = await db.activeStreams.findUnique({
+      where: { id: streamID },
+    });
+
+    if (!existingStream) {
+      throw new Error("Stream not found");
+    }
+
+    await db.group.updateMany({
       where: {
         streamId: streamID,
       },
@@ -207,16 +213,14 @@ export async function deleteStream(streamID: string) {
       },
     });
 
-    const dropSong= await db.activeStreams.delete({
+    const dropSong = await db.activeStreams.delete({
       where: {
         id: streamID,
       },
     });
+    await pusherServer.trigger("end-stream", "new-endStream", dropSong);
 
-
-     await pusherServer.trigger("ebd-strean", "new-endStream", dropSong);
-
-     return dropSong
+    return dropSong;
   } catch (error) {
     console.log(error);
     throw new Error("Could not find any stream for the given group");

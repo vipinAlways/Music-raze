@@ -100,7 +100,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
       queryClient.invalidateQueries({ queryKey: ["get-stream"] });
       queryClient.invalidateQueries({ queryKey: ["group-data"] });
-      pusherClient.unsubscribe("active-song");
+      pusherClient.unsubscribe("end-stream");
     },
   });
 
@@ -115,27 +115,27 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
 
   useEffect(() => {
     const channel = pusherClient.subscribe("end-stream");
-    channel.bind("new-end-stream", (updated: ActiveSongProps) => {
+    channel.bind("new-endStream", (updated: ActiveSongProps) => {
       if (updated) {
-        console.log(updated);
-        queryClient.invalidateQueries({
-          queryKey: ["get-active-stream", groupID],
+        console.log(updated, "stream ended");
+         queryClient.invalidateQueries({
+          queryKey: ["group-data", groupID],
         });
       }
     });
 
-    queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
     return () => {
       channel.unbind_all();
       pusherClient.unsubscribe("end-stream");
     };
   }, [queryClient]);
+  
   useEffect(() => {
     const channel = pusherClient.subscribe("active-song");
 
     channel.bind("new-activeSong", (updated: ActiveSongProps) => {
       if (updated) {
-        console.log("Updated active song:", updated);
+        console.log("Updated active stream:", updated);
         queryClient.invalidateQueries({
           queryKey: ["get-active-stream", groupID],
         });
@@ -192,7 +192,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
     return (
       <div className="w-full flex items-start justify-between flex-1 max-sm:flex-col ">
         <div className="flex lg:w-3/5 flex-col w-full  p-1  h-96 rounded-lg ">
-          <div className="h-full w-full">
+          <div className=" w-full">
             <div className="relative flex flex-col items-center gap-10">
               <div className="h-48  w-full  flex flex-col justify-center lg:text-4xl  items-center relative z-20 ">
                 <h1 className="text-opacity-15 text-red-700">
@@ -236,9 +236,9 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
   }
 
   return (
-    <div className="h-full w-full">
+    <div className="w-full h-fit">
       {data?.url[currentSongIndex] ? (
-        <div className="relative flex flex-col items-center gap-10">
+        <div className="relative flex flex-col items-center gap-10 h-fit">
           <div className="h-full w-full rounded-lg flex flex-col items-center relative z-20 ">
             <div className="relative w-44 h-44 sm:w-52 sm:h-52 md:w-56 md:h-56 lg:w-64 lg:h-64">
               <Image
@@ -298,7 +298,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
 
           <div
             className={cn(
-              "text-center w-full mt-3  lg:text-2xl relative",
+              "text-center w-full  lg:text-2xl relative",
               admin ? "" : ""
             )}
           >

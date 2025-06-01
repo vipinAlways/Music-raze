@@ -87,7 +87,6 @@ function Page({ params }: PageProps) {
 
     channel.bind("new-stream", (updated: ActiveSongProps) => {
       if (updated) {
-        console.log("Updated active song:", updated);
         queryClient.invalidateQueries({
           queryKey: ["get-active-stream", groupID],
         });
@@ -100,6 +99,23 @@ function Page({ params }: PageProps) {
       pusherClient.unsubscribe("active-stream");
     };
   }, [groupID, queryClient]);
+
+  useEffect(() => {
+    const channel = pusherClient.subscribe("end-stream");
+    channel.bind("new-endStream", (updated: ActiveSongProps) => {
+      if (updated) {
+        console.log(updated, "stream ended");
+        queryClient.invalidateQueries({
+          queryKey: ["group-data", groupID],
+        });
+      }
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe("end-stream");
+    };
+  }, [queryClient]);
 
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data</div>;

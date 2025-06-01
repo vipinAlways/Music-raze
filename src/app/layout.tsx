@@ -19,9 +19,9 @@
   }>) {
     return (
       <html lang="en">
-        <body className={`${inter.className} min-h-screen font-serif `}>
+        <body className={`${inter.className} font-serif `}>
           <Provider>
-            <div className="px-10 max-md:px-5 ">
+            <div className="px-10 max-md:px-5 min-h-screen ">
             <Appbar/>
               {children}</div>
               <Toaster/>
