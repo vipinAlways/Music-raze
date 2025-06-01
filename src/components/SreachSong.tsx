@@ -168,10 +168,10 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
 
   return (
     <div
-      className="flex max-md:flex-col-reverse relative items-start lg:justify-end justify-around  max-md:h-36"
+      className="flex max-lg:flex-col-reverse relative items-start lg:justify-end justify-around  max-lg:h-36 gap-3"
       ref={inputRef}
     >
-      <div className="w-2/5 max-md:w-[85%] mx-auto absolute top-2/5 max-md:top-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50">
+      <div className="w-2/5 max-lg:w-[85%] mx-auto absolute top-2/5 max-md:top-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50">
         <input
           type="text"
           name="songName"
