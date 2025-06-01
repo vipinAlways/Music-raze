@@ -160,7 +160,7 @@ export async function updateActiveStream(
     });
 
     await pusherServer.trigger("active-song", "new-activeSong", activeSong);
-    console.log("Active song updated:");
+
     return activeSong;
   } catch (error) {
     console.log(error);

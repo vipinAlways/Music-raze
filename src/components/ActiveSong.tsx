@@ -137,7 +137,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
       if (updated) {
         console.log("Updated active stream:", updated);
         queryClient.invalidateQueries({
-          queryKey: ["get-active-stream", groupID],
+         queryKey: ["group-data", groupID],
         });
       }
     });
@@ -147,6 +147,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
       pusherClient.unsubscribe("active-song");
     };
   }, [groupID, queryClient]);
+
 
   useEffect(() => {
     if (countDown < 5) {
