@@ -1,39 +1,91 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎵 Music Raze
 
-## Getting Started
+**Music Raze** is a modern, full-stack music streaming web application built with Next.js, Tailwind CSS, Prisma, and the Spotify Web API. It offers a sleek and responsive interface for users to explore and enjoy their favorite tracks.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Features
+
+- 🎧 **Spotify Integration**: Seamless connection with the Spotify API to fetch and play music.
+- 🖥️ **Responsive Design**: Optimized for desktops, tablets, and mobile devices.
+- 🌐 **Next.js Framework**: Utilizes the latest features of Next.js for server-side rendering and routing.
+- 🎨 **Tailwind CSS**: Rapid UI development with utility-first CSS.
+- 🗄️ **Prisma ORM**: Efficient and type-safe database interactions.
+- 🔐 **Authentication**: Secure user authentication and session management.
+
+---
+
+## 🛠️ Technologies Used
+
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Prisma](https://www.prisma.io/)
+- [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [pnpm](https://pnpm.io/)
+
+---
+
+## 📦 Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/vipinAlways/Music-raze.git
+   cd Music-raze
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   pnpm install
+   ```
+
+3. **Set up environment variables**:
+
+   Create a `.env` file in the root directory and add your Spotify API credentials:
+
+   ```env
+   SPOTIFY_CLIENT_ID=your_spotify_client_id
+   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+   ```
+
+4. **Run the development server**:
+
+   ```bash
+   pnpm dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+---
+
+## 📁 Project Structure
+
+```
+Music-raze/
+├── prisma/             # Prisma schema and migrations
+├── public/             # Static assets
+├── src/                # Source code
+│   ├── app/            # Next.js app directory
+│   ├── components/     # Reusable UI components
+│   ├── lib/            # Utility functions and libraries
+│   └── styles/         # Global styles
+├── .eslintrc.json      # ESLint configuration
+├── next.config.mjs     # Next.js configuration
+├── package.json        # Project metadata and scripts
+├── tailwind.config.ts  # Tailwind CSS configuration
+└── tsconfig.json       # TypeScript configuration
 ```
 
-and this 
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📄 License
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project is licensed under the [MIT License](LICENSE).
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+---
 
-## Learn More
+## 🙋‍♂️ Author
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-   
+Developed by [Vipin Tiwari](https://github.com/vipinAlways), a passionate frontend developer from India on a journey to become a full-stack developer.
