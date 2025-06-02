@@ -115,7 +115,7 @@ function Page({ params }: PageProps) {
       channel.unbind_all();
       pusherClient.unsubscribe("end-stream");
     };
-  }, [queryClient]);
+  }, [queryClient,groupID]);
 
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data</div>;

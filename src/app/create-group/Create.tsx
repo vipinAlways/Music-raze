@@ -62,7 +62,7 @@ function Create() {
     return () => {
       window.document.removeEventListener("keydown", handleKeydown);
     };
-  }, [groupName, description, mutation]);
+  }, [avatar,groupName, description, mutation]);
 
     const fetchIcons = async (name: string) => {
     const res = await fetch(`/api/get-icons?name=${name}`);

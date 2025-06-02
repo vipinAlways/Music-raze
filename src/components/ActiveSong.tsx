@@ -128,7 +128,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
       channel.unbind_all();
       pusherClient.unsubscribe("end-stream");
     };
-  }, [queryClient]);
+  }, [queryClient,groupID]);
   
   useEffect(() => {
     const channel = pusherClient.subscribe("active-song");

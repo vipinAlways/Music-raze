@@ -1,7 +1,7 @@
 "use client";
 import { findStream } from "@/app/group/[groupID]/action";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { Minus } from "lucide-react";
 import ActiveSong, { ActiveSongProps } from "./ActiveSong";
@@ -116,10 +116,10 @@ function SongsQueue({ groupID }: { groupID: string }) {
     }
   }, [currentSongIndex]);
 
-  const handleDrop = (urlID: string) => {
+  const handleDrop = useCallback((urlID: string) => {
     dropSong.mutate(urlID);
     console.log(urlID);
-  };
+  },[dropSong])
 
   useEffect(() => {
     const channel = pusherClient.subscribe("end-stream");

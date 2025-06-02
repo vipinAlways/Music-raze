@@ -7,7 +7,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 
- function page() {
+ function Page() {
   const session = useSession()
 
   return (
@@ -51,4 +51,4 @@ import Image from "next/image";
   );
 }
 
-export default page;
+export default Page;

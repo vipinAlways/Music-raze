@@ -8,10 +8,11 @@ import React, { useRef, useState } from "react";
 import { GetCreatedGrp, getFavoriteSongs } from "./action";
 import Error from "@/components/Error";
 import { cn } from "@/lib/utils";
-import { Minus, Pause, Play } from "lucide-react";
+import {Minus, Pause, Play } from "lucide-react";
 import Loader from "@/components/Loader";
 import { changeFavList } from "../actionFn/getAllGrpName";
 import Image from "next/image";
+import { Group } from "@prisma/client";
 
 interface Song {
   image_url: string;
@@ -28,7 +29,7 @@ function Page() {
   const audioRefs = useRef<HTMLAudioElement[]>([]);
   const queryClient = useQueryClient();
 
-  const { data, isPending, isError } = useQuery({
+  const {data} = useQuery({
     queryKey: ["get-user-created-grp"],
     queryFn: async () => GetCreatedGrp(),
   });
@@ -90,8 +91,8 @@ function Page() {
   }
 
   return (
-    <div className="mt-6 flex flex-col text-slate-300 w-full ">
-      <div className="flex items-start max-lg:items-center lg:justify-evenly sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-lg:flex-col ">
+    <div className="my-6 flex flex-col text-slate-300 w-full px-6  ">
+      <div className="flex items-start max-lg:items-center  sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-lg:flex-col ">
         <div className="leading-6 max-md:sm:w-full sm:h-[60vh] flex flex-col items-start max-lg:items-center sm:pt-10 gap-10 lg:w-[60%]">
           <div className="text-3xl w-full space-y-2 ">
             <h1 className="w-full flex max-md:flex-col items-end gap-3 lg:text-7xl text-6xl mb-4 max-md:items-center">
@@ -177,7 +178,18 @@ function Page() {
                   </div>
                 ))}
               </>
-            ) : null}
+            ) : (
+              <div className="w-96 h-fit flex items-center justify-center ">
+                <Image
+                  src={"/noSong.gif"}
+                  alt="no song"
+                  height={20}
+                  width={160}
+                  className="object-contain"
+                  loading="lazy"
+                />
+              </div>
+            )}
           </div>
           <div className="max-lg:flex  relative lg:h-[50vh] max-md:h-32 overflow-auto songlist lg:hidden lg:flex-col items-center gap-2 title">
             {favortieSong?.data?.length > 0 ? (
@@ -222,19 +234,46 @@ function Page() {
                   </div>
                 ))}
               </>
-            ) : null}
+            ) : (
+              <div className="w-full h-fit flex items-center justify-center ">
+                <Image
+                  src={"/noSong.gif"}
+                  alt="no song"
+                  height={20}
+                  width={125}
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-start pl-12">
+      <div className="flex flex-col items-start gap-4">
         <h1 className="lg:text-4xl text-3xl ">Enrolled Groups</h1>
-        <div className="w-full ">
+        <div className="w-full flex-nowrap flex overflow-y-hidden overflow-auto  ">
           {data?.addedOne &&
-            data?.addedOne.map((group) => (
-              <div>
-                <h1>{group.groupName}</h1>
+            data?.addedOne.map((group: Group) => (
+              <Link
+                href={`/group/${group.id}`}
+                key={group.id}
+                className="h-40 bg-[#7947d5cc] w-60 text-white rounded-lg  p-4 flex-col text-lg title hover:scale-[1.01] transition-all duration-150 ease-out"
+              >
+                <div className="flex items-center ">
+                  <Image
+                    src={group?.avatar}
+                    alt={group?.groupName}
+                    height={10}
+                    width={30}
+                    className="rounded-full"
+                  />
+                  <h1 className="text-3xl lg:text-4xl text-purple-300 ">
+                    {group?.groupName}
+                  </h1>
+                </div>
                 <p>{group.description}</p>
-              </div>
+                <span>Members : {group.members.length}</span>
+              </Link>
             ))}
         </div>
       </div>

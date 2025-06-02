@@ -250,7 +250,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
         setCurrentAudio={setCurrentAudio}
         setGlobalVolume={setGlobalVolume}
         currentAudio={currentAudio}
-        globalVolume={globalVolume}
+        globalVolume={globalVolume}  
       />
     </div>
   );
