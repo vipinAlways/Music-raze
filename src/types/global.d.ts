@@ -1,5 +1,5 @@
 // global.d.ts
 interface Window {
-    Spotify: any;
+    Spotify: string;
   }
   
