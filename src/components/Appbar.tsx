@@ -8,6 +8,7 @@ import { getAllGrpNames } from "@/app/actionFn/getAllGrpName";
 import Link from "next/link";
 
 import { usePathname, useRouter } from "next/navigation";
+import { Group } from "@/app/dashboard/page";
 
 
 function Appbar() {
@@ -26,7 +27,7 @@ function Appbar() {
   });
 
   const options = data
-    ? data.map((group: any) => ({ id: group.id, groupName: group.groupName }))
+    ? data.map((group: Group) => ({ id: group.id, groupName: group.groupName }))
     : [
         { id: "default1", groupName: "hello" },
         { id: "default2", groupName: "hello 2" },

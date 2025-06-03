@@ -8,6 +8,7 @@ import Error from "@/components/Error";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import { Group } from "../page";
 
 
 function User() {
@@ -30,7 +31,7 @@ function User() {
           <div className="w-full flex justify-center items-center"></div>
           <ul className="w-full">
             {data.createdOne.length > 0 ? (
-              data.createdOne.map((group) => (
+              data.createdOne.map((group:Group) => (
                 <li
                   key={group.id}
                   className="bg-white p-4 rounded-lg shadow-md flex flex-col gap-2"

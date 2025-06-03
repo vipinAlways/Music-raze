@@ -13,7 +13,7 @@ import Loader from "@/components/Loader";
 import { changeFavList } from "../actionFn/getAllGrpName";
 import Image from "next/image";
 
-interface Group {
+export interface Group {
   id :string;
   avatar:string;
   groupName: string;
