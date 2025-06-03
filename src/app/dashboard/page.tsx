@@ -12,7 +12,7 @@ import {Minus, Pause, Play } from "lucide-react";
 import Loader from "@/components/Loader";
 import { changeFavList } from "../actionFn/getAllGrpName";
 import Image from "next/image";
-import { Group } from "@prisma/client";
+
 
 interface Song {
   image_url: string;
@@ -253,7 +253,7 @@ function Page() {
         <h1 className="lg:text-4xl text-2xl px-2 ">Enrolled Groups</h1>
         <div className="w-full flex-nowrap flex overflow-y-hidden overflow-auto  ">
           {data?.addedOne &&
-            data?.addedOne.map((group: Group) => (
+            data?.addedOne.map((group) => (
               <Link
                 href={`/group/${group.id}`}
                 key={group.id}
