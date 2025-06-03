@@ -76,8 +76,8 @@ function Create() {
     queryFn: async () => await fetchIcons(groupName),
   });
   return (
-    <div className="bg-[#d7c5b6]/20 backdrop-blur-xl opacity-80 max-md:h-[70vh] h-fit  lg:w-[60%] sm:w-4/5 max-md:mt-5 flex py-10  items-center justify-center mx-auto rounded-xl">
-      <Tabs defaultValue="Create Group" className="lg:w-[60%] sm:w-3/5 hello h-fit">
+    <div className="lg:w-[60%] sm:w-4/5 max-md:mt-5 flex px-3 items-center justify-center mx-auto overflow-y-auto overflow-x-hidden">
+      <Tabs defaultValue="Create Group" className="lg:w-[60%] sm:w-3/5  lg:h-[80vh] max-sm:h-[80vh] ">
         <TabsList className="grid w-full grid-col-1">
           <TabsTrigger value="Create Group">Create Group</TabsTrigger>
         </TabsList>
@@ -111,8 +111,8 @@ function Create() {
                 />
               </div>
 
-               <div className="grid grid-cols-4 gap-2">
-                  {groupName !== "" && icons?.map((icon: any, index: number) => {
+               <div className="flex flex-wrap gap-4 items-center">
+                  { icons?.map((icon: any, index: number) => {
                     const iconUrl =
                       icon.raster_sizes[icon.raster_sizes.length - 1].formats[0]
                         .preview_url;
@@ -124,7 +124,7 @@ function Create() {
                         key={index}
                         type="button"
                         onClick={() => setAvatar(iconUrl)}
-                        className={`border-2 rounded-lg p-1 focus:border-blue-500 ${
+                        className={`border-2 rounded-lg p-1 focus:border-blue-500 hover:border-blue-400 h-16 w-16 ${
                           isSelected ? "border-blue-500" : "border-transparent"
                         }`}
                       >

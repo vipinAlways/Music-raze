@@ -27,7 +27,7 @@ interface PageProps {
 
 function Page({ params }: PageProps) {
   const { groupID } = params;
-  console.log("groupID", groupID);
+
   const [isMember, setIsMember] = useState(false);
 
   const queryClient = useQueryClient();
@@ -104,7 +104,6 @@ function Page({ params }: PageProps) {
     const channel = pusherClient.subscribe("end-stream");
     channel.bind("new-endStream", (updated: ActiveSongProps) => {
       if (updated) {
-        console.log(updated, "stream ended");
         queryClient.invalidateQueries({
           queryKey: ["group-data", groupID],
         });

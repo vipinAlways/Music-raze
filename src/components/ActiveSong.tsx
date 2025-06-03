@@ -117,7 +117,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
     const channel = pusherClient.subscribe("end-stream");
     channel.bind("new-endStream", (updated: ActiveSongProps) => {
       if (updated) {
-        console.log(updated, "stream ended");
+
          queryClient.invalidateQueries({
           queryKey: ["group-data", groupID],
         });
@@ -135,7 +135,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
 
     channel.bind("new-activeSong", (updated: ActiveSongProps) => {
       if (updated) {
-        console.log("Updated active stream:", updated);
+
         queryClient.invalidateQueries({
          queryKey: ["group-data", groupID],
         });
@@ -206,7 +206,7 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
           </div>
           <div
             className={cn(
-              "text-center w-full mt-3  lg:text-2xl relative",
+              "text-center w-full mt-3  lg:text-2xl flex items-center justify-center flex-col gap-3 ",
               admin ? "" : ""
             )}
           >
@@ -222,9 +222,9 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
             </Button>
 
             <div
-              className={`z-30 bg-[#5b1dc5] absolute -top-12 left-1/2 -translate-x-1/2 rounded-full text-slate-200 ${hidden}  `}
+              className={`z-30 bg-[#5b1dc5] h-28 w-28 rounded-full text-slate-200   ${hidden}   `}
             >
-              <div className="h-28 rounded-full w-28  lg:text-4xl flex items-center justify-center top-12 ">
+              <div className="h-full rounded-full w-full  lg:text-4xl flex items-center justify-center top-12 ">
                 {countDown}
               </div>
             </div>

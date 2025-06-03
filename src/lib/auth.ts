@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
       try {
      
         if (!user?.email) {
-          console.log('No email found for the user.');
+        
           return false; 
         }
 

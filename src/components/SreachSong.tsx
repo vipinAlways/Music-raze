@@ -101,14 +101,20 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
     mutationKey: ["add-url"],
     mutationFn: addUrl,
     onError: (error) => {
-      console.log(error, "ye hian ");
+     
       toast({
         title: "Error",
         description: error.message ?? "error while adding",
         variant: "destructive",
       });
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data);
+       toast({
+        title: "Success",
+        description: `Song added successfully ${data.title}`,
+        
+      });
       queryClient.invalidateQueries({ queryKey: ["get-songs"] });
       queryClient.invalidateQueries({ queryKey: ["get-active-stream"] });
     },
@@ -194,16 +200,15 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
                 filteredAlbums && (
                   <div
                     key={index}
-                    className="w-full h-64 justify-around flex flex-col items-center border-slate-300 border p-2 rounded-lg relative"
+                    className="w-full h-64 justify-around flex flex-col items-center gap-3  border-slate-300 border p-2 rounded-lg relative "
                   >
-                    <div className="h-40 w-full ">
+                    <div className="h-40 w-full relative  ">
                       {song.images[0]?.url ? (
                         <Image
                           src={song.images[0].url}
                           alt="track img"
-                          className="object-contain rounded-xl"
-                          height={176}
-                          width={300}
+                          className="object-cover object-center rounded-lg"
+                          fill
                         />
                       ) : (
                         <Image

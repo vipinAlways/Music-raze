@@ -137,7 +137,7 @@ export async function dropUrl(urlId: string) {
       throw new Error("not able to find that url");
     }
 
-     await pusherServer.trigger("drop-song", "new-song-add", url);
+     await pusherServer.trigger("drop-song", "new-song-remove", url);
 
     return await db.url.delete({
       where: {

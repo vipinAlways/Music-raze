@@ -10,12 +10,7 @@ const nextConfig = {
       "cdn4.iconfinder.com",
       "cdn5.iconfinder.com",
     ],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "",
-      },
-    ],
+   
   },
 };
 

@@ -91,8 +91,8 @@ function Page() {
   }
 
   return (
-    <div className="my-6 flex flex-col text-slate-300 w-full px-6  ">
-      <div className="flex items-start max-lg:items-center  sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-lg:flex-col ">
+    <div className="my-6 flex flex-col text-slate-300 w-full px-6 gap-4 ">
+      <div className="flex items-start max-lg:items-center sm:gap-4 lg:gap-0 text-xl flex-1 lg:px-4 p-2.5 max-lg:flex-col ">
         <div className="leading-6 max-md:sm:w-full sm:h-[60vh] flex flex-col items-start max-lg:items-center sm:pt-10 gap-10 lg:w-[60%]">
           <div className="text-3xl w-full space-y-2 ">
             <h1 className="w-full flex max-md:flex-col items-end gap-3 lg:text-7xl text-6xl mb-4 max-md:items-center">
@@ -103,27 +103,27 @@ function Page() {
               <p>Discover & Create groups where</p>
               <p> you and your friends can have a great time together!</p>
             </div>
-            <div className="lg:hidden block max-md:text-sm w-full text-center">
+            <div className="lg:hidden block max-md:text-base w-full text-center">
               <p>Discover & Create groups </p>
               <p> where you and your friends </p>
               <p>can have a great time together!</p>
             </div>
           </div>
           <div className="flex items-center justify-center gap-3">
-            <Button className="lg:p-3 p-2 h-fit  max-md:text-lg lg:text-2xl lg:w-64 ">
+            <Button className="lg:p-3 p-2 h-fit  max-md:text-sm lg:text-2xl lg:w-64 ">
               <Link href="/dashboard/user-group">YOUR GROUPS</Link>
             </Button>
-            <Button className="lg:p-3 p-2 h-fit lg:text-2xl max-md:text-lg lg:w-64">
+            <Button className="lg:p-3 p-2 h-fit lg:text-2xl max-md:text-sm lg:w-64">
               <Link href="/create-group">Create GROUP</Link>
             </Button>
           </div>
         </div>
 
-        <div className="lg:h-[55vh] lg:w-[30%] bg-white bg-opacity-15 rounded-lg  items-center max-md:w-full max-md:mt-5 ">
+        <div className="lg:h-[55vh] lg:w-[30%] bg-white bg-opacity-15 rounded-lg  items-center max-md:w-full max-md:mt-5 h-60 ">
           <h1 className="p-3 w-full lg:text-center bg-white bg-opacity-60 text-purple-900 lg:text-2xl rounded-tr-lg rounded-tl-lg max-md:text-lg ">
             Favorite Song
           </h1>
-          <div className="max-lg:hidden relative mt-1 h-[50vh] overflow-auto songlist flex flex-col items-center gap-2 title">
+          <div className="max-lg:hidden relative mt-1 h-[50vh] overflow-auto songlist flex flex-col items-center gap-2 title max-md:justify-center">
             {favortieSong?.data?.length > 0 ? (
               <>
                 {isPlaying ? (
@@ -145,7 +145,7 @@ function Page() {
                   <div
                     key={index}
                     className={cn(
-                      "flex lg:min-w-full lg:max-w-60 flex-col items-center h-40 p-1 bg-[#38196e] rounded-lg justify-around relative",
+                      "flex lg:min-w-full lg:max-w-60 flex-col items-center h-40 p-1 bg-[#38196e] rounded-lg justify-around relative w-20",
                       currentSongIndex === index ? "opacity-50" : "opacity-100"
                     )}
                   >
@@ -157,13 +157,13 @@ function Page() {
                     >
                       <Minus className="hover:scale-105" />
                     </div>
-                    <div className="w-full">
+                    <div className="w-full relative">
                       <Image
                         src={song.image_url}
                         alt={song.title_url}
                         className="rounded-tr-3xl object-contain lg:h-24 w-full"
-                        height={176}
-                        width={176}
+                        fill
+                        loading="lazy"
                       />
                     </div>
                     <div className="bg-[#7C3AED] title h-10 text-slate-300 w-full text-lg text-center py-1 rounded-lg whitespace-nowrap overflow-x-auto overflow-y-hidden">
@@ -217,11 +217,11 @@ function Page() {
                       currentSongIndex === index ? "opacity-50" : "opacity-100"
                     )}
                   >
-                    <div className="h-24 relative w-full  min-w-20">
+                    <div className="h-24 relative w-full">
                       <Image
                         src={song.image_url}
                         alt={song.title_url}
-                        className="rounded-tr-3xl object-cover "
+                        className="rounded-tr-3xl object-cover object-center"
                         fill
                       />
                     </div>
@@ -250,7 +250,7 @@ function Page() {
         </div>
       </div>
       <div className="flex flex-col items-start gap-4">
-        <h1 className="lg:text-4xl text-3xl ">Enrolled Groups</h1>
+        <h1 className="lg:text-4xl text-2xl px-2 ">Enrolled Groups</h1>
         <div className="w-full flex-nowrap flex overflow-y-hidden overflow-auto  ">
           {data?.addedOne &&
             data?.addedOne.map((group: Group) => (

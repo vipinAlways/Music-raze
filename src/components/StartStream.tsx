@@ -46,7 +46,7 @@ function StartStream({ grpid }: { grpid: string }) {
 
     channel.bind("new-activeSong", (updated: ActiveSongProps) => {
       if (updated) {
-        console.log(updated);
+     
         queryClient.invalidateQueries({
           queryKey: ["get-active-stream", grpid],
         });

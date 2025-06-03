@@ -47,10 +47,10 @@ function SongsQueue({ groupID }: { groupID: string }) {
 
     const handleNewSong = (updated: any) => {
       if (updated) {
-        console.log("Pusher update received in SongsQueue:", updated);
+     
         queryClient.invalidateQueries({ queryKey: ["get-songs", groupID] });
       } else {
-        console.log("Pusher ignored: groupID doesn't match");
+      
         console.log(updated, "nahi hain kya ");
       }
     };
@@ -118,7 +118,7 @@ function SongsQueue({ groupID }: { groupID: string }) {
 
   const handleDrop = useCallback((urlID: string) => {
     dropSong.mutate(urlID);
-    console.log(urlID);
+  
   },[dropSong])
 
   useEffect(() => {
@@ -174,14 +174,14 @@ function SongsQueue({ groupID }: { groupID: string }) {
                 <div
                   className={cn(
                     "absolute top-1.5 right-1 p-1 border bg-red-600 rounded-full z-50 hover:bg-red-900",
-                    index === data.currentSongIndex ? "hidden" : "",
+                     index === data.currentSongIndex ? "bg-green-500" : "",
                     admin === true ? "" : "hidden"
                   )}
                   onClick={() => handleDrop(song.id)}
                 >
-                  <Minus className="hover:scale-105" />
+                  <Minus className={cn("hover:scale-105", index === data.currentSongIndex ? "hidden" : "",)} />
                 </div>
-                <div className="lg:h-40 h-20 w-full relative">
+                <div className="lg:h-40 h-20 w-full max-md:w-30 relative">
                   <Image
                     src={song.image}
                     alt={song.title}
