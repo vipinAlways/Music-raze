@@ -76,9 +76,9 @@ function Page({ params }: PageProps) {
   useEffect(() => {
     if (data?.members && user?.id) {
       const check = data.members.some((result :string) => result === user.id);
-      const malik = data.admin === user.id;
+      const isadmin = data.admin === user.id;
 
-      if (check || malik) {
+      if (check || isadmin) {
         setIsMember(true);
       }
     }
