@@ -10,9 +10,9 @@ import { ActiveSongProps } from "./ActiveSong";
 function StartStream({ grpid }: { grpid: string }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [hidden, setHidden] = useState("hidden");
-  const [admin, setAdmin] = useState(false);
-  const [hidden2, setHidden2] = useState("");
+  const [hidden, setHidden] = useState<string>("hidden");
+  const [admin, setAdmin] = useState<boolean>(false);
+  const [hidden2, setHidden2] = useState<string>("");
 
   const { mutate } = useMutation({
     mutationKey: ["createStream"],

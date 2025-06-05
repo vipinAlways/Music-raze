@@ -9,6 +9,7 @@ import { addUrl } from "@/app/actionFn/getAllGrpName";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { pusherClient } from "@/lib/pusher";
+import { Song } from "@/app/dashboard/page";
 
 function SearchSong({ currentgrpId }: { currentgrpId: string }) {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -196,7 +197,7 @@ function SearchSong({ currentgrpId }: { currentgrpId: string }) {
         >
           {albums.length > 0 ? (
             albums.map(
-              (song, index) =>
+              (song:any, index:number) =>
                 filteredAlbums && (
                   <div
                     key={index}

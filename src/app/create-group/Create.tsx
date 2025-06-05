@@ -20,9 +20,9 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 
 function Create() {
-  const [description, setDescription] = useState("");
-  const [groupName, setGroupName] = useState("");
-  const [avatar, setAvatar] = useState("");
+  const [description, setDescription] = useState<string>("");
+  const [groupName, setGroupName] = useState<string>("");
+  const [avatar, setAvatar] = useState<string>("");
   const { toast } = useToast();
   const router = useRouter();
 
@@ -46,23 +46,6 @@ function Create() {
     },
   });
 
-  useEffect(() => {
-    const handleSubmit = () => {
-      mutation.mutate({ groupName, description, avatar });
-    };
-
-    const handleKeydown = (event: KeyboardEvent) => {
-      if (event.key === "Enter") {
-        handleSubmit();
-      }
-    };
-
-    window.document.addEventListener("keydown", handleKeydown);
-
-    return () => {
-      window.document.removeEventListener("keydown", handleKeydown);
-    };
-  }, [avatar,groupName, description, mutation]);
 
     const fetchIcons = async (name: string) => {
     const res = await fetch(`/api/get-icons?name=${name}`);
@@ -113,7 +96,7 @@ function Create() {
 
                <div className="flex flex-wrap gap-4 items-center">
                   { icons?.map((icon: any, index: number) => {
-                    const iconUrl =
+                    const iconUrl:string =
                       icon.raster_sizes[icon.raster_sizes.length - 1].formats[0]
                         .preview_url;
                     const isSelected = icon === iconUrl;

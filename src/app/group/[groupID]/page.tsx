@@ -30,7 +30,7 @@ interface PageProps {
 function Page({ params }: PageProps) {
   const { groupID } = params;
 
-  const [isMember, setIsMember] = useState(false);
+  const [isMember, setIsMember] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
 

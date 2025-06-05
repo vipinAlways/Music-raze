@@ -24,11 +24,11 @@ export default function ActiveSong({ isAdmin, groupID }: ActiveSongProps) {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queryClient = useQueryClient();
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const [countDown, setCountDown] = useState(0);
-  const [hidden, setHidden] = useState("hidden");
-  const [hidden2, setHidden2] = useState("");
-  const [admin, setAdmin] = useState(false);
+  const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
+  const [countDown, setCountDown] = useState<number>(0);
+  const [hidden, setHidden] = useState<string>("hidden");
+  const [hidden2, setHidden2] = useState<string>("");
+  const [admin, setAdmin] = useState<boolean>(false);
 
   const { data } = useQuery({
     queryKey: ["get-active-stream"],

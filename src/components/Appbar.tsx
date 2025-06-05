@@ -62,8 +62,6 @@ function Appbar() {
 
   const handleOptionClick = (option: { id: string; groupName: string }) => {
     setInputValue(option.groupName);
-    // setGroupID(option.id);
-
   };
 
   return (
@@ -147,7 +145,7 @@ function Appbar() {
           />
           {showOptions && filteredOptions.length > 0 && (
             <ul className="absolute z-10 w-full bg-[#7C3AED] rounded-xl lg:mt-24 mt-28 max-h-48 overflow-y-auto ">
-              {filteredOptions.map((option) =>
+              {filteredOptions.map((option:{id:string,groupName:string}) =>
                 isLoading ? (
                   <div key={option.id}>
                     <li className="px-4 py-2 hover:bg-[#5b1dc5] cursor-pointer"></li>

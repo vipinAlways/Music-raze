@@ -22,7 +22,7 @@ export interface Group {
 
 }
 
-interface Song {
+export interface Song {
   image_url: string;
   title_url: string;
   Audio_url: string;
@@ -149,7 +149,7 @@ function Page() {
                     <Play />
                   </Button>
                 )}
-                {favortieSong.data.map((song, index) => (
+                {favortieSong.data.map((song:Song, index:number) => (
                   <div
                     key={index}
                     className={cn(
@@ -217,7 +217,7 @@ function Page() {
                     <Play />
                   </Button>
                 )}
-                {favortieSong.data.map((song, index) => (
+                {favortieSong.data.map((song:Song, index:number) => (
                   <div
                     key={index}
                     className={cn(
