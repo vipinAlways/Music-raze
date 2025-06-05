@@ -1,7 +1,7 @@
 'use server'
 import { getServerSession, User } from "next-auth";
 import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db";
+import { db } from "@/db";
 
 export async function GetCreatedGrp() {
   const session = await getServerSession(authOptions);

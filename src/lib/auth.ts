@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from "@/db";
 import { NextAuthOptions } from "next-auth";
 import Google from "next-auth/providers/google";
 

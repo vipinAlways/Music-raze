@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/lib/db";
+import { db } from "@/db";
 import { getServerSession, User } from "next-auth";
 import { authOptions } from "@/lib/auth"
 
