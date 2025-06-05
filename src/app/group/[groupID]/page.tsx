@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getGroup } from "../../actionFn/getAllGrpName";
 import SreachSong from "@/components/SreachSong";
@@ -24,6 +24,8 @@ interface PageProps {
     groupID: string;
   };
 }
+
+
 
 function Page({ params }: PageProps) {
   const { groupID } = params;
@@ -73,7 +75,7 @@ function Page({ params }: PageProps) {
 
   useEffect(() => {
     if (data?.members && user?.id) {
-      const check = data.members.some((result) => result === user.id);
+      const check = data.members.some((result :string) => result === user.id);
       const malik = data.admin === user.id;
 
       if (check || malik) {
