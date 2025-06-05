@@ -6,7 +6,7 @@
     "start:all": "pnpm dlx prisma migrate dev && pnpm dlx prisma generate",
     "docker": "docker run -p 5432:5432 -e POSTGRES_PASSWORD=randompassword postgres",
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
