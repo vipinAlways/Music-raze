@@ -50,7 +50,7 @@ function Appbar() {
     setInputValue(value);
 
     if (value) {
-      const filtered = options.filter((option) =>
+      const filtered = options.filter((option: { id: string; groupName: string }) =>
         option.groupName.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredOptions(filtered);
